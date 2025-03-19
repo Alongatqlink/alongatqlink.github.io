@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2575.4">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; min-height: 14.0px}
+  </style>
+</head>
+<body>
+<p class="p1">&lt;!DOCTYPE html&gt;</p>
+<p class="p1">&lt;html lang="zh-TW"&gt;</p>
+<p class="p1">&lt;head&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta charset="UTF-8"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;meta name="robots" content="noindex"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;title&gt;VIP 認證測試頁面&lt;/title&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;style&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>body { padding: 20px; }</p>
+<p class="p1"><span class="Apple-converted-space">    </span>.form-container { max-width: 500px; margin: auto; }</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</p>
+<p class="p1">&lt;/head&gt;</p>
+<p class="p1">&lt;body&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;div class="form-container"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;h1&gt;VIP 會員認證&lt;/h1&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;form id="vip-form"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="form-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label for="dealerCode"&gt;經銷商編號&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" class="form-control" id="dealerCode" placeholder="請輸入經銷商編號" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;div class="form-group"&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;label for="productSerial"&gt;產品序號&lt;/label&gt;</p>
+<p class="p1"><span class="Apple-converted-space">        </span>&lt;input type="text" class="form-control" id="productSerial" placeholder="請輸入產品序號" required&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>&lt;button type="submit" class="btn btn-primary"&gt;提交認證&lt;/button&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;/form&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>&lt;div id="result" class="mt-3"&gt;&lt;/div&gt;</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</p>
+<p class="p2"><span class="Apple-converted-space">  </span></p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;script&gt;</p>
+<p class="p1"><span class="Apple-converted-space">    </span>// 表單提交事件</p>
+<p class="p1"><span class="Apple-converted-space">    </span>document.getElementById('vip-form').addEventListener('submit', function(e) {</p>
+<p class="p1"><span class="Apple-converted-space">      </span>e.preventDefault();</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var dealerCode = document.getElementById('dealerCode').value;</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var productSerial = document.getElementById('productSerial').value;</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 建立資料物件</p>
+<p class="p1"><span class="Apple-converted-space">      </span>var data = { dealerCode: dealerCode, productSerial: productSerial };</p>
+<p class="p2"><span class="Apple-converted-space">      </span></p>
+<p class="p1"><span class="Apple-converted-space">      </span>// 呼叫後端 Google Apps Script API（替換為你實際部署的 URL）</p>
+<p class="p1"><span class="Apple-converted-space">      </span>fetch('https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec', {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>method: 'POST',</p>
+<p class="p1"><span class="Apple-converted-space">        </span>mode: 'no-cors',<span class="Apple-converted-space">  </span>// 測試期間使用 no-cors 模式</p>
+<p class="p1"><span class="Apple-converted-space">        </span>headers: { 'Content-Type': 'application/json' },</p>
+<p class="p1"><span class="Apple-converted-space">        </span>body: JSON.stringify(data)</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}).then(function(response) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('result').innerText = '已提交，請稍候確認認證狀態。';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>}).catch(function(error) {</p>
+<p class="p1"><span class="Apple-converted-space">        </span>console.error('Error:', error);</p>
+<p class="p1"><span class="Apple-converted-space">        </span>document.getElementById('result').innerText = '提交失敗，請重試。';</p>
+<p class="p1"><span class="Apple-converted-space">      </span>});</p>
+<p class="p1"><span class="Apple-converted-space">    </span>});</p>
+<p class="p1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</p>
+<p class="p1">&lt;/body&gt;</p>
+<p class="p1">&lt;/html&gt;</p>
+</body>
+</html>
