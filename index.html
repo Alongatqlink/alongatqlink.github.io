@@ -50,21 +50,25 @@
       // 呼叫後端 Google Apps Script API
       // 請將 YOUR_DEPLOYED_SCRIPT_ID 替換為你實際部署的 Web App ID
       fetch('https://script.google.com/macros/s/AKfycbwVKtU0nhWCAgm1YH03QYc9Z9yX-pKFQHxV1mwHIKavGqs1UUSvtLkSdlVuDX6EtCg4/exec', {
-        method: 'POST',
-        mode: 'cors', // 測試時可使用 no-cors 模式
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
-      .then(function(response) {
-        // 注意：使用 no-cors 模式下無法取得回應內容
-        document.getElementById('result').innerText = '已提交，請稍候確認認證狀態。';
-      })
-      .catch(function(error) {
-        console.error('Error:', error);
-        document.getElementById('result').innerText = '提交失敗，請重試。';
-      });
+  method: 'POST',
+  mode: 'cors', // 改成 cors 以便前端能讀取回傳
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ 
+    dealerCode: document.getElementById('dealerCode').value, 
+    productSerial: document.getElementById('productSerial').value 
+  })
+})
+.then(response => response.json())
+.then(data => {
+  console.log('後端回應:', data);
+  // 這裡可根據 data.result 顯示成功或錯誤訊息
+  document.getElementById('result').innerText = data.result === "success" ? "認證成功！" : "認證失敗：" + data.error;
+})
+.catch(error => {
+  console.error('錯誤:', error);
+  document.getElementById('result').innerText = "提交失敗，請重試。";
+});
+
     });
   </script>
 </body>
