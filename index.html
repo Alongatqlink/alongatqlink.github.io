@@ -49,9 +49,9 @@
 
       // 呼叫後端 Google Apps Script API
       // 請將 YOUR_DEPLOYED_SCRIPT_ID 替換為你實際部署的 Web App ID
-      fetch('https://script.google.com/macros/s/YOUR_DEPLOYED_SCRIPT_ID/exec', {
+      fetch('https://script.google.com/macros/s/AKfycbz3iRH-eL8XDcvLa_Z4WTIDk_lE5D0BXvbVJ98zVXN7gILXNaPsNbI8rqotpNjBkEZl/exec', {
         method: 'POST',
-        mode: 'no-cors', // 測試時可使用 no-cors 模式
+        mode: 'cors', // 測試時可使用 no-cors 模式
         headers: {
           'Content-Type': 'application/json'
         },
