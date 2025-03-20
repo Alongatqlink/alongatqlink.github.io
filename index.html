@@ -2,74 +2,74 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="robots" content="noindex">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VIP 認證測試頁面</title>
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <title>VIP 會員認證</title>
   <style>
-    body {
-      padding: 20px;
-    }
-    .form-container {
-      max-width: 500px;
-      margin: auto;
-    }
+    body { padding: 20px; }
+    .form-container { max-width: 500px; margin: auto; }
   </style>
 </head>
 <body>
   <div class="form-container">
     <h1>VIP 會員認證</h1>
-    <form id="vip-form">
-      <div class="form-group">
-        <label for="dealerCode">經銷商編號</label>
-        <input type="text" class="form-control" id="dealerCode" placeholder="請輸入經銷商編號" required>
+    <form onsubmit="sendData(event)">
+      <div>
+        <label>經銷商編號</label>
+        <input type="text" id="dealerCode" required>
       </div>
-      <div class="form-group">
-        <label for="productSerial">產品序號</label>
-        <input type="text" class="form-control" id="productSerial" placeholder="請輸入產品序號" required>
+      <div>
+        <label>產品序號</label>
+        <input type="text" id="productSerial" required>
       </div>
-      <button type="submit" class="btn btn-primary">提交認證</button>
+      <button type="submit">提交認證</button>
     </form>
-    <div id="result" class="mt-3"></div>
+    <div id="result" style="margin-top: 10px; color: red;"></div>
   </div>
-  
+
   <script>
-    // 監聽表單提交事件
-    document.getElementById('vip-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      var dealerCode = document.getElementById('dealerCode').value;
-      var productSerial = document.getElementById('productSerial').value;
-      
-      // 建立資料物件
-      var data = {
-        dealerCode: dealerCode,
-        productSerial: productSerial
-      };
+    function sendData(e) {
+      e.preventDefault(); // 阻止表單預設跳頁
 
-      // 呼叫後端 Google Apps Script API
-      // 請將 YOUR_DEPLOYED_SCRIPT_ID 替換為你實際部署的 Web App ID
-      fetch('https://script.google.com/macros/s/AKfycbwVKtU0nhWCAgm1YH03QYc9Z9yX-pKFQHxV1mwHIKavGqs1UUSvtLkSdlVuDX6EtCg4/exec', {
-  method: 'POST',
-  mode: 'cors', // 改成 cors 以便前端能讀取回傳
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ 
-    dealerCode: document.getElementById('dealerCode').value, 
-    productSerial: document.getElementById('productSerial').value 
-  })
-})
-.then(response => response.json())
-.then(data => {
-  console.log('後端回應:', data);
-  // 這裡可根據 data.result 顯示成功或錯誤訊息
-  document.getElementById('result').innerText = data.result === "success" ? "認證成功！" : "認證失敗：" + data.error;
-})
-.catch(error => {
-  console.error('錯誤:', error);
-  document.getElementById('result').innerText = "提交失敗，請重試。";
-});
+      // 取得表單輸入值
+      const dealerCode = document.getElementById('dealerCode').value;
+      const productSerial = document.getElementById('productSerial').value;
 
-    });
+      // 建立「表單格式」的參數（會自動編碼為 x-www-form-urlencoded）
+      const formData = new URLSearchParams();
+      formData.append('dealerCode', dealerCode);
+      formData.append('productSerial', productSerial);
+
+      // 呼叫後端 Apps Script Web App
+      fetch('https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec', {
+        method: 'POST',
+        // 不要加任何 headers: { 'Content-Type': 'application/json' } 
+        // 這樣就不會觸發預檢請求 (OPTIONS)
+        body: formData
+      })
+      .then(response => response.text()) // 後端回傳 text/plain
+      .then(text => {
+        console.log('後端回傳的文字:', text);
+
+        // 將文字解析成物件
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          document.getElementById('result').innerText = '回傳格式錯誤：無法解析為 JSON。';
+          return;
+        }
+
+        // 顯示成功或錯誤
+        if (data.result === 'success') {
+          document.getElementById('result').innerText = '認證成功！';
+        } else {
+          document.getElementById('result').innerText = '認證失敗：' + (data.error || '未知錯誤');
+        }
+      })
+      .catch(error => {
+        console.error('錯誤:', error);
+        document.getElementById('result').innerText = '提交失敗，請稍後重試。';
+      });
+    }
   </script>
 </body>
 </html>
