@@ -18,6 +18,12 @@
       margin: 50px auto;
       padding: 20px;
     }
+     
+    /* 覆蓋 Select2 placeholder 的顏色、字體樣式 */
+    .select2-container--bootstrap4 .select2-selection__placeholder {
+      color: #6c757d; /* 與 Bootstrap placeholder 相同 */
+      font-style: normal; /* 移除斜體 */
+      
     /* 覆蓋 Select2 預設樣式，讓外觀更像 .form-control */
     .select2-container--bootstrap4 .select2-selection--single {
       height: calc(2.25rem + 2px);
@@ -153,21 +159,25 @@
   ];
 
  $(document).ready(function() {
-    // 1. 將 Dealer Code 加入下拉選單
+    // 將 Dealer Code 加入下拉
     var $select = $("#dealerCode");
     dealerCodes.forEach(function(code) {
       $select.append(new Option(code, code));
     });
 
-    // 2. 初始化 Select2
+    // 初始化 Select2
     $select.select2({
       placeholder: "e.g. DealerABC",
-      // 移除 allowClear => 不會顯示 "x" 清除按鈕
       theme: "bootstrap4"
+    });
+
+    // 當下拉展開時，動態給搜尋框加上提示
+    $select.on('select2:open', function() {
+      // 找到下拉展開後的搜尋框
+      $('.select2-search__field').attr('placeholder', 'Type here to search Dealer Code...');
     });
   });
 
-  // 提交表單
   function handleSubmit(event) {
     event.preventDefault();
     var selectedDealer = $("#dealerCode").val();
