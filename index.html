@@ -145,29 +145,27 @@
     "Dealer111"
   ];
 
-    // 處理 DOM 載入完成
-  $(document).ready(function() {
+ $(document).ready(function() {
     // 1. 將 Dealer Code 加入下拉選單
     var $select = $("#dealerCode");
     dealerCodes.forEach(function(code) {
       $select.append(new Option(code, code));
     });
 
-    // 2. 初始化 Select2，指定 placeholder 與 bootstrap4 主題
+    // 2. 初始化 Select2
     $select.select2({
-      placeholder: "Select Dealer Code",
-      allowClear: true,
+      placeholder: "e.g. DealerABC",
+      // 移除 allowClear => 不會顯示 "x" 清除按鈕
       theme: "bootstrap4"
     });
   });
 
-  // 處理表單送出
+  // 提交表單
   function handleSubmit(event) {
     event.preventDefault();
     var selectedDealer = $("#dealerCode").val();
     var productSerial = $("#productSerial").val();
     alert("Dealer: " + selectedDealer + "\nProduct Serial: " + productSerial);
-    // 這裡可以進一步把表單資料送到後端
   }
 </script>
 
