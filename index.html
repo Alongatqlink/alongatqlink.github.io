@@ -18,6 +18,12 @@
       margin: 50px auto;
       padding: 20px;
     }
+
+    /* 讓 Select2 的 placeholder 顏色、大小更像其他欄位的 placeholder */
+    .select2-container--bootstrap4 .select2-selection__placeholder {
+      color: #6c757d; /* 與 Bootstrap placeholder 顏色相近 */
+      font-style: italic; /* 模仿 placeholder 斜體 */
+    }
   </style>
 </head>
 <body>
@@ -25,11 +31,11 @@
 <div class="form-container">
   <h1>VIP Registration</h1>
   <form onsubmit="handleSubmit(event)">
-    <!-- Dealer Code: 搜尋式下拉選單 -->
+    <!-- Dealer Code (Select2) -->
     <div class="form-group">
       <label for="dealerCode">Dealer Code (required)</label>
       <select id="dealerCode" class="form-control" style="width: 100%;">
-        <!-- 預設空白，讓 Select2 以 placeholder 顯示 -->
+        <!-- 預設空白，讓 Select2 用 placeholder 顯示 -->
         <option value=""></option>
       </select>
     </div>
