@@ -12,16 +12,24 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css">
 
-  <style>
+   <style>
     .form-container {
       max-width: 600px; 
       margin: 50px auto;
       padding: 20px;
     }
-
-    /* 讓 Select2 的 placeholder 顏色、大小更像其他欄位的 placeholder */
-    .select2-container--bootstrap4 .select2-selection__placeholder {
-      color: #6c757d; /* 與 Bootstrap placeholder 顏色相近 */
+    /* 覆蓋 Select2 預設樣式，讓外觀更像 .form-control */
+    .select2-container--bootstrap4 .select2-selection--single {
+      height: calc(2.25rem + 2px);
+      border: 1px solid #ced4da;
+      border-radius: .25rem;
+      padding: .375rem .75rem;
+      line-height: 1.5;
+      background-color: #fff;
+    }
+    .select2-container--bootstrap4 .select2-selection__rendered {
+      margin-top: -2px;
+      padding-left: 0;
     }
   </style>
 </head>
