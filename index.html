@@ -139,17 +139,15 @@
     "Dealer111"
   ];
 
-  // 將 Dealer Code 加入下拉選單
-  var $select = null;
-
+    // 處理 DOM 載入完成
   $(document).ready(function() {
-    // 1. 找到下拉選單
-    $select = $("#dealerCode");
-    // 2. 動態新增 Dealer Code 選項
+    // 1. 將 Dealer Code 加入下拉選單
+    var $select = $("#dealerCode");
     dealerCodes.forEach(function(code) {
       $select.append(new Option(code, code));
     });
-    // 3. 初始化 Select2 + Bootstrap4 theme
+
+    // 2. 初始化 Select2，指定 placeholder 與 bootstrap4 主題
     $select.select2({
       placeholder: "Select Dealer Code",
       allowClear: true,
