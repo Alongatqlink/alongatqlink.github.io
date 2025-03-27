@@ -18,57 +18,85 @@
   <div class="form-container">
     <h1>VIP Registration</h1>
     <form onsubmit="handleSubmit(event)">
+      <!-- Dealer Code: 下拉選單，選項依據你的名單 -->
       <div class="form-group">
         <label for="dealerCode">Dealer Code (required)</label>
-        <input type="text" class="form-control" id="dealerCode" required>
+        <select class="form-control" id="dealerCode" required>
+          <option value="">Select Dealer Code</option>
+          <option value="Dealer001">Dealer001</option>
+          <option value="Dealer002">Dealer002</option>
+          <option value="Dealer003">Dealer003</option>
+          <!-- 可依需求新增更多選項 -->
+        </select>
       </div>
+
+      <!-- Model: 產品型號 -->
       <div class="form-group">
         <label for="model">Model</label>
         <input type="text" class="form-control" id="model" placeholder="e.g. ABC-123">
       </div>
+
+      <!-- Product Serial: 產品序號 -->
       <div class="form-group">
         <label for="productSerial">Product Serial (required)</label>
         <input type="text" class="form-control" id="productSerial" required>
       </div>
+
+      <!-- Consumer Name: 消費者姓名 -->
       <div class="form-group">
         <label for="consumerName">Consumer Name</label>
-        <input type="text" class="form-control" id="consumerName">
+        <input type="text" class="form-control" id="consumerName" placeholder="Enter your name">
       </div>
+
+      <!-- Phone / WhatsApp Number -->
       <div class="form-group">
         <label for="phoneNumber">Phone / WhatsApp Number</label>
-        <input type="text" class="form-control" id="phoneNumber">
+        <input type="text" class="form-control" id="phoneNumber" placeholder="e.g. +234XXXXXXXX">
       </div>
+
+      <!-- Purchase Date: 購買日期 -->
       <div class="form-group">
         <label for="purchaseDate">Purchase Date</label>
         <input type="date" class="form-control" id="purchaseDate">
       </div>
+
+      <!-- City: 聯絡城市，採用文字輸入 -->
       <div class="form-group">
         <label for="city">City</label>
-        <input type="text" class="form-control" id="city">
+        <input type="text" class="form-control" id="city" placeholder="Enter city">
       </div>
+
+      <!-- State: 聯絡州，下拉選單 (固定) -->
       <div class="form-group">
         <label for="state">State</label>
-        <input type="text" class="form-control" id="state">
+        <select class="form-control" id="state">
+          <option value="">Select State</option>
+          <option value="Lagos">Lagos</option>
+          <option value="Abuja">Abuja</option>
+          <option value="Rivers">Rivers</option>
+          <option value="Kano">Kano</option>
+          <option value="Oyo">Oyo</option>
+          <!-- 根據實際需求新增其他州 -->
+        </select>
       </div>
+
       <button type="submit" class="btn btn-primary">Submit Registration</button>
     </form>
-    <div id="result" class="mt-3 text-danger"></div>
+    <div id="result" class="mt-3"></div>
   </div>
 
   <script>
-    // 1. 前端驗證非法字元 (簡單示範)
-    //    你可改用更嚴謹的 Regex or rules
+    // 簡單前端驗證：檢查輸入值中是否含有非法字元
     function isInvalidInput(value) {
-      // 不允許空白開頭、只允許英數與常見符號 (可再調整)
-      // 這只是示範, 你可以改 stricter or simpler
+      // 此範例只允許英數字、空白、及 -_,.() 等常見符號，你可依需求調整
       const pattern = /^[a-zA-Z0-9\s\-\_,.()\/]*$/;
       return !pattern.test(value);
     }
 
     function handleSubmit(e) {
-      e.preventDefault();
+      e.preventDefault(); // 阻止預設表單送出
 
-      // 2. 取得表單值
+      // 取得表單各欄位值
       const dealerCode    = document.getElementById('dealerCode').value.trim();
       const model         = document.getElementById('model').value.trim();
       const productSerial = document.getElementById('productSerial').value.trim();
@@ -78,21 +106,21 @@
       const city          = document.getElementById('city').value.trim();
       const state         = document.getElementById('state').value.trim();
 
-      // 3. 前端檢查：必填 & 不可非法字元
+      // 基本檢查：必填欄位
       if (!dealerCode || !productSerial) {
         document.getElementById('result').innerText = "Dealer Code and Product Serial are required.";
         return;
       }
-      // 簡單示範: 檢查幾個主要欄位
+
+      // 前端簡單非法字元檢查 (可視需求擴充)
       if (isInvalidInput(dealerCode) || isInvalidInput(productSerial) ||
-          isInvalidInput(model)      || isInvalidInput(consumerName)   ||
-          isInvalidInput(phoneNumber)|| isInvalidInput(city)           ||
-          isInvalidInput(state)) {
+          isInvalidInput(model) || isInvalidInput(consumerName) ||
+          isInvalidInput(phoneNumber) || isInvalidInput(city) || isInvalidInput(state)) {
         document.getElementById('result').innerText = "Invalid characters detected.";
         return;
       }
 
-      // 4. 用表單格式送出 (URLSearchParams) -> 不觸發 CORS 預檢
+      // 使用 URLSearchParams 將資料以表單格式送出 (application/x-www-form-urlencoded)
       const formData = new URLSearchParams();
       formData.append('dealerCode', dealerCode);
       formData.append('model', model);
@@ -103,7 +131,7 @@
       formData.append('city', city);
       formData.append('state', state);
 
-      // 5. 呼叫後端 Apps Script
+      // 呼叫後端 Apps Script Web App (請將 URL 替換為你的部署 exec URL)
       fetch('https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec', {
         method: 'POST',
         body: formData
@@ -119,13 +147,10 @@
         }
         if (data.result === "success") {
           document.getElementById('result').innerText = "Registration Successful!";
-          document.getElementById('result').classList.remove('text-danger');
-          document.getElementById('result').classList.add('text-success');
+          document.getElementById('result').className = "mt-3 text-success";
         } else {
-          // 顯示後端錯誤訊息 (例如序號重複)
-          document.getElementById('result').innerText = "Failed: " + (data.error || "Unknown Error");
-          document.getElementById('result').classList.remove('text-success');
-          document.getElementById('result').classList.add('text-danger');
+          document.getElementById('result').innerText = "Failed: " + (data.error || "Unknown error");
+          document.getElementById('result').className = "mt-3 text-danger";
         }
       })
       .catch(error => {
