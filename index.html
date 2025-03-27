@@ -21,13 +21,30 @@
       <!-- Dealer Code: 下拉選單，選項依據你的名單 -->
       <div class="form-group">
         <label for="dealerCode">Dealer Code (required)</label>
-        <select class="form-control" id="dealerCode" required>
-          <option value="">Select Dealer Code</option>
-          <option value="Dealer001">Dealer001</option>
-          <option value="Dealer002">Dealer002</option>
-          <option value="Dealer003">Dealer003</option>
-          <!-- 可依需求新增更多選項 -->
-        </select>
+          <select id="dealerCode" class="form-control">
+            <option value="">Select Dealer Code</option>
+          </select>
+          <script>
+            // 自定義特定的 Dealer Code 陣列
+            var dealerCodes = [
+              "DealerABC",
+              "DealerXYZ",
+              "Dealer101",
+              "Dealer202",
+              "Dealer305",
+              // 其他 Dealer Code…
+            ];
+            
+            var dealerSelect = document.getElementById("dealerCode");
+            
+            dealerCodes.forEach(function(code) {
+              var option = document.createElement("option");
+              option.value = code;
+              option.textContent = code;
+              dealerSelect.appendChild(option);
+            });
+          </script>
+
       </div>
 
       <!-- Model: 產品型號 -->
