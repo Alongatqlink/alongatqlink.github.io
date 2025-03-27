@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <style>
     .form-container {
       max-width: 600px;
@@ -19,33 +21,45 @@
     <h1>VIP Registration</h1>
     <form onsubmit="handleSubmit(event)">
       <!-- Dealer Code: 下拉選單，選項依據你的名單 -->
-      <div class="form-group">
-        <label for="dealerCode">Dealer Code (required)</label>
-          <select id="dealerCode" class="form-control">
-            <option value="">Select Dealer Code</option>
-          </select>
-          <script>
-            // 自定義特定的 Dealer Code 陣列
-            var dealerCodes = [
-              "DealerABC",
-              "DealerXYZ",
-              "Dealer101",
-              "Dealer202",
-              "Dealer305",
-              // 其他 Dealer Code…
-            ];
-            
-            var dealerSelect = document.getElementById("dealerCode");
-            
-            dealerCodes.forEach(function(code) {
-              var option = document.createElement("option");
-              option.value = code;
-              option.textContent = code;
-              dealerSelect.appendChild(option);
-            });
-          </script>
+       <div class="container">
+    <label for="dealerCode">Select Dealer Code:</label>
+    <select id="dealerCode" class="form-control" style="width: 100%;">
+      <option value="">Select Dealer Code</option>
+    </select>
+  </div>
+      <!-- 載入 jQuery -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- 載入 Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+    // 定義 10 個假 Dealer Code
+    var dealerCodes = [
+      "DealerABC",
+      "DealerXYZ",
+      "Dealer101",
+      "Dealer202",
+      "Dealer305",
+      "Dealer007",
+      "Dealer888",
+      "Dealer555",
+      "Dealer999",
+      "Dealer111"
+    ];
 
-      </div>
+    // 將 Dealer Code 加入下拉選單
+    var $select = $("#dealerCode");
+    dealerCodes.forEach(function(code) {
+      $select.append(new Option(code, code));
+    });
+
+    // 初始化 Select2，讓下拉選單變成可搜尋
+    $(document).ready(function() {
+      $select.select2({
+        placeholder: "Select Dealer Code",
+        allowClear: true
+      });
+    });
+  </script>
 
       <!-- Model: 產品型號 -->
       <div class="form-group">
