@@ -22,14 +22,19 @@
   <div class="form-container">
     <h1>VIP Registration</h1>
     <form onsubmit="handleSubmit(event)">
-      <!-- Dealer Code: 下拉選單，選項依據你的名單 -->
-       <div class="container">
-    <label for="dealerCode">Select Dealer Code:</label>
-    <select id="dealerCode" class="form-control" style="width: 100%;">
-      <option value="">Select Dealer Code</option>
-    </select>
+      <!-- Dealer Code: 搜尋式下拉選單 -->
+      <div class="form-group">
+        <label for="dealerCode">Select Dealer Code:</label>
+        <select id="dealerCode" class="form-control" style="width: 100%;">
+          <option value="">Select Dealer Code</option>
+        </select>
+      </div>
+      <!-- 其他欄位可依需求加入 -->
+      <button type="submit" class="btn btn-primary">Submit Registration</button>
+    </form>
   </div>
-      <!-- 載入 jQuery -->
+
+  <!-- 載入 jQuery -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- 載入 Select2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -48,21 +53,29 @@
       "Dealer111"
     ];
 
-    // 將 Dealer Code 加入下拉選單
+    // 將 Dealer Code 加入下拉選單中
     var $select = $("#dealerCode");
     dealerCodes.forEach(function(code) {
       $select.append(new Option(code, code));
     });
 
-    // 初始化 Select2，讓下拉選單變成可搜尋
+    // 初始化 Select2，套用 Bootstrap4 主題
     $(document).ready(function() {
-      $select.select2({
+      $("#dealerCode").select2({
         placeholder: "Select Dealer Code",
-        allowClear: true
+        allowClear: true,
+        theme: "bootstrap4"
       });
     });
-  </script>
 
+    // 處理表單送出 (示範用)
+    function handleSubmit(event) {
+      event.preventDefault();
+      var selectedCode = $("#dealerCode").val();
+      alert("Selected Dealer Code: " + selectedCode);
+      // 此處可進一步處理送出資料到後端等操作
+    }
+  </script>
       <!-- Model: 產品型號 -->
       <div class="form-group">
         <label for="model">Model</label>
