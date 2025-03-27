@@ -27,9 +27,10 @@
   <form onsubmit="handleSubmit(event)">
     <!-- Dealer Code: 搜尋式下拉選單 -->
     <div class="form-group">
-      <label for="dealerCode">Select Dealer Code:</label>
+      <label for="dealerCode">Dealer Code (required)</label>
       <select id="dealerCode" class="form-control" style="width: 100%;">
-        <option value="">Select Dealer Code</option>
+        <!-- 預設空白，讓 Select2 以 placeholder 顯示 -->
+        <option value=""></option>
       </select>
     </div>
 
