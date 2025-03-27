@@ -4,118 +4,69 @@
   <meta charset="UTF-8">
   <title>VIP Registration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS -->
+
+  <!-- Bootstrap CSS (只載入一次) -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <!-- Select2 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <!-- Select2 Bootstrap4 Theme CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css" rel="stylesheet" />
+
+  <!-- Select2 CSS + Select2 Bootstrap4 Theme -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css">
+
   <style>
     .form-container {
-      max-width: 600px;
+      max-width: 600px; 
       margin: 50px auto;
       padding: 20px;
     }
   </style>
 </head>
 <body>
-  <div class="form-container">
-    <h1>VIP Registration</h1>
-    <form onsubmit="handleSubmit(event)">
-      <!-- Dealer Code: 搜尋式下拉選單 -->
-      <div class="form-group">
-        <label for="dealerCode">Select Dealer Code:</label>
-        <select id="dealerCode" class="form-control" style="width: 100%;">
-          <option value="">Select Dealer Code</option>
-        </select>
-      </div>
-      <!-- 其他欄位可依需求加入 -->
-      <button type="submit" class="btn btn-primary">Submit Registration</button>
-    </form>
-  </div>
 
-  <!-- 載入 jQuery -->
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- 載入 Select2 JS -->
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <script>
-    // 定義 10 個假 Dealer Code
-    var dealerCodes = [
-      "DealerABC",
-      "DealerXYZ",
-      "Dealer101",
-      "Dealer202",
-      "Dealer305",
-      "Dealer007",
-      "Dealer888",
-      "Dealer555",
-      "Dealer999",
-      "Dealer111"
-    ];
+<div class="form-container">
+  <h1>VIP Registration</h1>
+  <form onsubmit="handleSubmit(event)">
+    <!-- Dealer Code: 搜尋式下拉選單 -->
+    <div class="form-group">
+      <label for="dealerCode">Select Dealer Code:</label>
+      <select id="dealerCode" class="form-control" style="width: 100%;">
+        <option value="">Select Dealer Code</option>
+      </select>
+    </div>
 
-    // 將 Dealer Code 加入下拉選單中
-    var $select = $("#dealerCode");
-    dealerCodes.forEach(function(code) {
-      $select.append(new Option(code, code));
-    });
+    <!-- Model -->
+    <div class="form-group">
+      <label for="model">Model (e.g. ABC-123)</label>
+      <input type="text" class="form-control" id="model" placeholder="e.g. ABC-123">
+    </div>
 
-    // 初始化 Select2，套用 Bootstrap4 主題
-    $(document).ready(function() {
-      $("#dealerCode").select2({
-        placeholder: "Select Dealer Code",
-        allowClear: true,
-        theme: "bootstrap4"
-      });
-    });
+    <!-- Product Serial -->
+    <div class="form-group">
+      <label for="productSerial">Product Serial (required)</label>
+      <input type="text" class="form-control" id="productSerial" placeholder="Enter product serial" required>
+    </div>
 
-    // 處理表單送出 (示範用)
-    function handleSubmit(event) {
-      event.preventDefault();
-      var selectedCode = $("#dealerCode").val();
-      alert("Selected Dealer Code: " + selectedCode);
-      // 此處可進一步處理送出資料到後端等操作
-    }
-  </script>
-      <!-- Model: 產品型號 -->
-      <div class="form-group">
-        <label for="model">Model</label>
-        <input type="text" class="form-control" id="model" placeholder="e.g. ABC-123">
-      </div>
+    <!-- Customer Name -->
+    <div class="form-group">
+      <label for="consumerName">Customer Name</label>
+      <input type="text" class="form-control" id="consumerName" placeholder="Enter your name">
+    </div>
 
-      <!-- Product Serial: 產品序號 -->
-      <div class="form-group">
-        <label for="productSerial">Product Serial (required)</label>
-        <input type="text" class="form-control" id="productSerial" required>
-      </div>
+    <!-- Phone / WhatsApp Number -->
+    <div class="form-group">
+      <label for="phoneNumber">Phone / WhatsApp Number</label>
+      <input type="text" class="form-control" id="phoneNumber" placeholder="e.g. +234XXXXXXXX">
+    </div>
 
-      <!-- Customer Name: 消費者姓名 -->
-      <div class="form-group">
-        <label for="CustomerName">Customer Name</label>
-        <input type="text" class="form-control" id="consumerName" placeholder="Enter your name">
-      </div>
+    <!-- Purchase Date -->
+    <div class="form-group">
+      <label for="purchaseDate">Purchase Date</label>
+      <input type="date" class="form-control" id="purchaseDate" placeholder="yyyy/mm/dd">
+    </div>
 
-      <!-- Phone / WhatsApp Number -->
-      <div class="form-group">
-        <label for="phoneNumber">Phone / WhatsApp Number</label>
-        <input type="text" class="form-control" id="phoneNumber" placeholder="e.g. +234XXXXXXXX">
-      </div>
-
-      <!-- Purchase Date: 購買日期 -->
-      <div class="form-group">
-        <label for="purchaseDate">Purchase Date</label>
-        <input type="date" class="form-control" id="purchaseDate" placeholder="DD/MM/YYYY">
-      </div>
-
-      <!-- City: 聯絡城市，採用文字輸入 -->
-      <div class="form-group">
-        <label for="lga">LGA</label>
-        <input type="text" class="form-control" id="lga" placeholder="Enter lga">
-      </div>
-
-      <!-- State: 聯絡州，下拉選單 (固定) -->
-      <div class="form-group">
-        <label for="state">State</label>
-        <select class="form-control" id="state">
+    <!-- State -->
+    <div class="form-group">
+      <label for="state">State</label>
+      <select id="state" class="form-control">
           <option value="">Select State</option>
           <option value="Abia">Abia</option>
           <option value="Adamawa">Adamawa</option>
@@ -157,11 +108,63 @@
           <!-- 根據實際需求新增其他州 -->
         </select>
       </div>
+    
+    <!-- LGA -->
+    <div class="form-group">
+      <label for="lga">LGA</label>
+      <input type="text" class="form-control" id="lga" placeholder="Enter lga">
+    </div>
 
-      <button type="submit" class="btn btn-primary">Submit Registration</button>
-    </form>
-    <div id="result" class="mt-3"></div>
-  </div>
+ <button type="submit" class="btn btn-primary">Submit Registration</button>
+  </form>
+</div>
+
+  <!-- jQuery (務必在 Select2 JS 之前載入) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+  // 定義 10 個假 Dealer Code
+  var dealerCodes = [
+    "DealerABC",
+    "DealerXYZ",
+    "Dealer101",
+    "Dealer202",
+    "Dealer305",
+    "Dealer007",
+    "Dealer888",
+    "Dealer555",
+    "Dealer999",
+    "Dealer111"
+  ];
+
+  // 將 Dealer Code 加入下拉選單
+  var $select = null;
+
+  $(document).ready(function() {
+    // 1. 找到下拉選單
+    $select = $("#dealerCode");
+    // 2. 動態新增 Dealer Code 選項
+    dealerCodes.forEach(function(code) {
+      $select.append(new Option(code, code));
+    });
+    // 3. 初始化 Select2 + Bootstrap4 theme
+    $select.select2({
+      placeholder: "Select Dealer Code",
+      allowClear: true,
+      theme: "bootstrap4"
+    });
+  });
+
+  // 處理表單送出
+  function handleSubmit(event) {
+    event.preventDefault();
+    var selectedDealer = $("#dealerCode").val();
+    var productSerial = $("#productSerial").val();
+    alert("Dealer: " + selectedDealer + "\nProduct Serial: " + productSerial);
+    // 這裡可以進一步把表單資料送到後端
+  }
+</script>
 
   <script>
     // 簡單前端驗證：檢查輸入值中是否含有非法字元
