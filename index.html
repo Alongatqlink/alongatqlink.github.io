@@ -139,8 +139,8 @@
     
      <!-- LGA 下拉選單，初始為空 -->
     <div class="form-group">
-      <label for="lga">LGA</label>
-      <select id="lga" class="form-control">
+      <label for="LGA">LGA</label>
+      <select id="LGA" class="form-control">
         <option value="">Select LGA</option>
       </select>
     </div>
@@ -155,7 +155,7 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   // 1. 定義每個州對應的 LGA (示範)
-  const lgaByState = {
+  const LGAByState = {
     "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala-Ngwa North", "Isiala-Ngwa South", "Isuikwato", "Ngwa", "Obi Nwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umu-Neochi", "Umuahia North", "Umuahia South"],
     "Adamawa": ["Demsa", "Fufore", "Ganaye", "Gireri", "Gombi", "Guyuk", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo-Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"],
     "Akwa Ibom": ["Abak", "Eastern Obolo", "Eket", "Esit Eket", "Essien Udim", "Etim Ekpo", "Etinan", "Ibeno", "Ibesikpo Asutan", "Ibiono Ibom", "Ika", "Ikono", "Ikot Abasi", "Ikot Ekpene", "Ini", "Itu", "Mbo", "Mkpat Enin", "Nsit Atai", "Nsit Ibom", "Nsit Ubium", "Obot Akara", "Okobo", "Onna", "Oron", "Oruk Anam", "Udung Uko", "Ukanafun", "Uruan", "Urue-Offong/Oruko", "Uyo"],
@@ -204,7 +204,7 @@
     });
 
     // 3. 初始化 LGA 下拉 (Select2)
-    $("#lga").select2({
+    $("#LGA").select2({
       placeholder: "Type to search LGA...",
       theme: "bootstrap4"
     });
@@ -212,20 +212,20 @@
     // 4. 監聽 State 改變事件
     $("#state").on("change", function() {
       const selectedState = $(this).val();
-      const $lgaSelect = $("#lga");
+      const $LGASelect = $("#LGA");
 
       // 清空舊 LGA 選項
-      $lgaSelect.html('<option value=""></option>');
+      $LGASelect.html('<option value=""></option>');
 
       // 若該州有 LGA，動態加入
-      if (selectedState && lgaByState[selectedState]) {
-        lgaByState[selectedState].forEach(function(lga) {
-          $lgaSelect.append(new Option(lga, lga));
+      if (selectedState && LGAByState[selectedState]) {
+        LGAByState[selectedState].forEach(function(LGA) {
+          $LGASelect.append(new Option(LGA, LGA));
         });
       }
 
       // 重新初始化 LGA 下拉 (Select2)
-      $lgaSelect.select2({
+      $LGASelect.select2({
         placeholder: "Type to search LGA...",
         theme: "bootstrap4"
       });
@@ -236,8 +236,8 @@
   function handleSubmit(e) {
     e.preventDefault();
     const state = $("#state").val();
-    const lga   = $("#lga").val();
-    alert("Selected State: " + state + "\nSelected LGA: " + lga);
+    const LGA   = $("#LGA").val();
+    alert("Selected State: " + state + "\nSelected LGA: " + LGA);
     // 這裡可送到後端
   }
 </script>
