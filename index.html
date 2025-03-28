@@ -307,7 +307,7 @@
       const CustomerName  = document.getElementById('CustomerName').value.trim();
       const phoneNumber   = document.getElementById('phoneNumber').value.trim();
       const purchaseDate  = document.getElementById('purchaseDate').value.trim();
-      const city          = document.getElementById('city').value.trim();
+      const LGA          = document.getElementById('LGA').value.trim();
       const state         = document.getElementById('state').value.trim();
 
       // 基本檢查：必填欄位
@@ -319,7 +319,7 @@
       // 前端簡單非法字元檢查 (可視需求擴充)
       if (isInvalidInput(dealerCode) || isInvalidInput(productSerial) ||
           isInvalidInput(model) || isInvalidInput(CustomerName) ||
-          isInvalidInput(phoneNumber) || isInvalidInput(city) || isInvalidInput(state)) {
+          isInvalidInput(phoneNumber) || isInvalidInput(LGA) || isInvalidInput(state)) {
         document.getElementById('result').innerText = "Invalid characters detected.";
         return;
       }
@@ -332,7 +332,7 @@
       formData.append('CustomerName', CustomerName);
       formData.append('phoneNumber', phoneNumber);
       formData.append('purchaseDate', purchaseDate);
-      formData.append('city', city);
+      formData.append('LGA', LGA);
       formData.append('state', state);
 
       // 呼叫後端 Apps Script Web App (請將 URL 替換為你的部署 exec URL)
