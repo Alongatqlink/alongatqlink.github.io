@@ -74,8 +74,8 @@
 
     <!-- Customer Name -->
     <div class="form-group">
-      <label for="consumerName">Customer Name</label>
-      <input type="text" class="form-control" id="consumerName" placeholder="Enter your name">
+      <label for="CustomerName">Customer Name</label>
+      <input type="text" class="form-control" id="CustomerName" placeholder="Enter your name">
     </div>
 
     <!-- Phone / WhatsApp Number -->
@@ -304,7 +304,7 @@
       const dealerCode    = document.getElementById('dealerCode').value.trim();
       const model         = document.getElementById('model').value.trim();
       const productSerial = document.getElementById('productSerial').value.trim();
-      const consumerName  = document.getElementById('consumerName').value.trim();
+      const CustomerName  = document.getElementById('CustomerName').value.trim();
       const phoneNumber   = document.getElementById('phoneNumber').value.trim();
       const purchaseDate  = document.getElementById('purchaseDate').value.trim();
       const city          = document.getElementById('city').value.trim();
@@ -318,7 +318,7 @@
 
       // 前端簡單非法字元檢查 (可視需求擴充)
       if (isInvalidInput(dealerCode) || isInvalidInput(productSerial) ||
-          isInvalidInput(model) || isInvalidInput(consumerName) ||
+          isInvalidInput(model) || isInvalidInput(CustomerName) ||
           isInvalidInput(phoneNumber) || isInvalidInput(city) || isInvalidInput(state)) {
         document.getElementById('result').innerText = "Invalid characters detected.";
         return;
@@ -329,7 +329,7 @@
       formData.append('dealerCode', dealerCode);
       formData.append('model', model);
       formData.append('productSerial', productSerial);
-      formData.append('consumerName', consumerName);
+      formData.append('CustomerName', CustomerName);
       formData.append('phoneNumber', phoneNumber);
       formData.append('purchaseDate', purchaseDate);
       formData.append('city', city);
