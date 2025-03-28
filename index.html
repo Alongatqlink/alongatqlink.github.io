@@ -86,7 +86,8 @@
     <!-- State -->
     <div class="form-group">
       <label for="state">State</label>
-      <select id="state" class="form-control">
+      <select id="state" class="form-control" style="width: 100%;">
+        <option value=""></option>
           <option value="">Select State</option>
           <option value="Abia">Abia</option>
           <option value="Adamawa">Adamawa</option>
@@ -189,43 +190,48 @@
   };
 
   $(document).ready(function() {
-    // 2. 監聽 State 下拉的 change 事件
+    // 2. 初始化 State 下拉 (Select2)
+    $("#state").select2({
+      placeholder: "Type to search State...",
+      theme: "bootstrap4"
+    });
+
+    // 3. 初始化 LGA 下拉 (Select2)
+    $("#lga").select2({
+      placeholder: "Type to search LGA...",
+      theme: "bootstrap4"
+    });
+
+    // 4. 監聽 State 改變事件
     $("#state").on("change", function() {
       const selectedState = $(this).val();
       const $lgaSelect = $("#lga");
 
-      // 清空舊選項
-      $lgaSelect.html('<option value="">Select LGA</option>');
+      // 清空舊 LGA 選項
+      $lgaSelect.html('<option value=""></option>');
 
-      // 如果該州有 LGA 陣列，動態加入
+      // 若該州有 LGA，動態加入
       if (selectedState && lgaByState[selectedState]) {
         lgaByState[selectedState].forEach(function(lga) {
           $lgaSelect.append(new Option(lga, lga));
         });
       }
 
-      // 3. 讓 LGA 下拉使用 Select2 (可搜尋)
-      // 每次改變州後都要重新初始化 Select2
+      // 重新初始化 LGA 下拉 (Select2)
       $lgaSelect.select2({
         placeholder: "Type to search LGA...",
         theme: "bootstrap4"
       });
     });
-
-    // 如果你想在頁面一開始就初始化 LGA 下拉 (沒州時空的)，可先加一段:
-    $("#lga").select2({
-      placeholder: "Select LGA",
-      theme: "bootstrap4"
-    });
   });
 
-  // 4. 示範送出表單
-  function handleSubmit(event) {
-    event.preventDefault();
+  // 5. 提交表單
+  function handleSubmit(e) {
+    e.preventDefault();
     const state = $("#state").val();
     const lga   = $("#lga").val();
     alert("Selected State: " + state + "\nSelected LGA: " + lga);
-    // 實際可把這些資料送到後端
+    // 這裡可送到後端
   }
 </script>
 
