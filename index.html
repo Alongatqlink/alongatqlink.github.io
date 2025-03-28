@@ -129,15 +129,60 @@
         </select>
       </div>
     
-    <!-- LGA -->
+     <!-- LGA 下拉選單，初始為空 -->
     <div class="form-group">
       <label for="lga">LGA</label>
-      <input type="text" class="form-control" id="lga" placeholder="Enter lga">
+      <select id="lga" class="form-control">
+        <option value="">Select LGA</option>
+      </select>
     </div>
 
- <button type="submit" class="btn btn-primary">Submit Registration</button>
+    <button type="submit" class="btn btn-primary">Submit Registration</button>
   </form>
 </div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  // 1. 定義各州對應的 LGA (僅示範部分資料)
+  //   實際上，你需要將所有 36 州 + FCT Abuja 的 LGA 填入
+  //   例如:
+  //   lgaByState["Abia"] = ["Aba North", "Aba South", "Arochukwu", ...];
+  //   ...
+  const lgaByState = {
+    "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala Ngwa North", "Isiala Ngwa South"],
+    "Adamawa": ["Demsa", "Fufure", "Ganye", "Girei", "Gombi", "Guyuk", "Hong"],
+    "Lagos": ["Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin", "Apapa", "Badagry", "Epe"],
+    "Rivers": ["Port Harcourt", "Obio/Akpor", "Okrika", "Ogu–Bolo", "Eleme", "Tai", "Gokana"]
+    // ... 其他州 ...
+  };
+
+  // 2. 監聽 state 下拉選單的 change 事件
+  $(document).ready(function() {
+    $("#state").on("change", function() {
+      const selectedState = $(this).val();
+      const $lgaSelect = $("#lga");
+      // 清空舊選項
+      $lgaSelect.html('<option value="">Select LGA</option>');
+
+      // 如果有對應的 LGA 陣列，則加入下拉選單
+      if (selectedState && lgaByState[selectedState]) {
+        lgaByState[selectedState].forEach(function(lgaName) {
+          $lgaSelect.append(new Option(lgaName, lgaName));
+        });
+      }
+    });
+  });
+
+  // 3. 示範送出表單
+  function handleSubmit(event) {
+    event.preventDefault();
+    const state = $("#state").val();
+    const lga   = $("#lga").val();
+    alert("Selected State: " + state + "\nSelected LGA: " + lga);
+    // 實際上可以把這些資料送到後端
+  }
+</script>
 
   <!-- jQuery (務必在 Select2 JS 之前載入) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
