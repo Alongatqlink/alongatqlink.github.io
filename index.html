@@ -55,7 +55,9 @@
     <!-- Model -->
     <div class="form-group">
       <label for="model">Model (e.g. ABC-123)</label>
-      <input type="text" class="form-control" id="model" placeholder="e.g. ABC-123">
+      <select id="model" class="form-control" style="width: 100%;">
+        <option value=""></option>
+      </select>
     </div>
 
     <!-- Product Serial -->
@@ -142,11 +144,11 @@
   <div id="result" class="mt-3"></div>
 </div>
 
-<!-- 載入 jQuery 與 Select2（僅一次） -->
+<!-- jQuery + Select2 JS (只載一次) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-  // 1. 初始化 Dealer Code 下拉 (Select2)
+  // === 1. 定義 Dealer Code 與 Model 選單的假資料 ===
   var dealerCodes = [
     "DealerABC",
     "DealerXYZ",
@@ -159,7 +161,32 @@
     "Dealer999",
     "Dealer111"
   ];
+  var modelCodes = [
+    "ModelAlpha",
+    "ModelBeta",
+    "ModelGamma",
+    "ModelDelta",
+    "ModelEpsilon",
+    "ModelZeta",
+    "ModelEta",
+    "ModelTheta",
+    "ModelIota",
+    "ModelKappa",
+    "ModelLambda",
+    "ModelMu",
+    "ModelNu",
+    "ModelXi",
+    "ModelOmicron",
+    "ModelPi",
+    "ModelRho",
+    "ModelSigma",
+    "ModelTau",
+    "ModelOmega"
+  ];
+
+  // === 2. 頁面載入時初始化下拉選單 ===
   $(document).ready(function() {
+    // Dealer Code
     var $dealerSelect = $("#dealerCode");
     dealerCodes.forEach(function(code) {
       $dealerSelect.append(new Option(code, code));
@@ -172,25 +199,38 @@
       $('.select2-search__field').attr('placeholder', 'Type here to search Dealer Code...');
     });
 
-    // 2. 初始化 State 下拉 (Select2)
+    // Model
+    var $modelSelect = $("#model");
+    modelCodes.forEach(function(m) {
+      $modelSelect.append(new Option(m, m));
+    });
+    $modelSelect.select2({
+      placeholder: "e.g. ABC-123",
+      theme: "bootstrap4"
+    });
+    $modelSelect.on('select2:open', function() {
+      $('.select2-search__field').attr('placeholder', 'Type here to search Model...');
+    });
+
+    // Residential State
     $("#state").select2({
       placeholder: "Type to search State...",
       theme: "bootstrap4"
     });
 
-    // 3. 初始化 LGA 下拉 (Select2) (初始為空)
+    // Residential LGA (初始為空)
     $("#LGA").select2({
       placeholder: "Type to search LGA...",
       theme: "bootstrap4"
     });
 
-    // 4. 當 State 改變時，根據選擇動態填入 LGA 選項
+    // 當 State 改變時，動態更新 LGA 選項
     $("#state").on("change", function() {
       const selectedState = $(this).val();
       const $LGASelect = $("#LGA");
       $LGASelect.html('<option value=""></option>'); // 清空舊選項
 
-      // 定義各州對應的 LGA
+      // 範例 LGAByState，可自行擴充
       const LGAByState = {
           "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala-Ngwa North", "Isiala-Ngwa South", "Isuikwato", "Ngwa", "Obi Nwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umu-Neochi", "Umuahia North", "Umuahia South"],
           "Adamawa": ["Demsa", "Fufore", "Ganaye", "Gireri", "Gombi", "Guyuk", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo-Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"],
@@ -244,17 +284,18 @@
     });
   });
 
-  // 5. 定義檢查非法字元的函式
+  // === 3. 檢查非法字元的函式 ===
   function isInvalidInput(value) {
-    // 僅允許英文字母、數字、空白及 - _ , . ( ) / 這些符號
+    // 只允許英數字、空白與 -_,./
     const pattern = /^[a-zA-Z0-9\s\-\_,.()\/]*$/;
     return !pattern.test(value);
   }
 
-  // 6. 提交表單時檢查所有欄位
+  // === 4. 表單提交時的處理函式 ===
   function handleSubmit(e) {
     e.preventDefault();
-    // 取得各欄位值，並 trim() 去除前後空白
+
+    // 取得各欄位值
     const dealerCode    = $("#dealerCode").val().trim();
     const model         = $("#model").val().trim();
     const productSerial = $("#productSerial").val().trim();
@@ -264,32 +305,39 @@
     const state         = $("#state").val().trim();
     const LGA           = $("#LGA").val().trim();
 
-    // 檢查是否有必填欄位空白
+    // 檢查是否有空值
     if (!dealerCode || !model || !productSerial || !CustomerName || !phoneNumber || !purchaseDate || !state || !LGA) {
       $("#result").text("Please fill out all required fields.").removeClass("text-success").addClass("text-danger");
       return;
     }
 
-    // 檢查所有欄位是否含有非法字元
-    if (isInvalidInput(dealerCode) || isInvalidInput(model) || isInvalidInput(productSerial) ||
-        isInvalidInput(CustomerName) || isInvalidInput(phoneNumber) || isInvalidInput(purchaseDate) ||
-        isInvalidInput(state) || isInvalidInput(LGA)) {
+    // 檢查非法字元
+    if (
+      isInvalidInput(dealerCode) ||
+      isInvalidInput(model) ||
+      isInvalidInput(productSerial) ||
+      isInvalidInput(CustomerName) ||
+      isInvalidInput(phoneNumber) ||
+      isInvalidInput(purchaseDate) ||
+      isInvalidInput(state) ||
+      isInvalidInput(LGA)
+    ) {
       $("#result").text("Invalid characters detected.").removeClass("text-success").addClass("text-danger");
       return;
     }
 
-    // 建立表單資料 (使用 URLSearchParams)
+    // 組合表單資料
     const formData = new URLSearchParams();
-    formData.append('dealerCode', dealerCode);
-    formData.append('model', model);
-    formData.append('productSerial', productSerial);
-    formData.append('CustomerName', CustomerName);
-    formData.append('phoneNumber', phoneNumber);
-    formData.append('purchaseDate', purchaseDate);
-    formData.append('state', state);
-    formData.append('LGA', LGA);
+    formData.append("dealerCode", dealerCode);
+    formData.append("model", model);
+    formData.append("productSerial", productSerial);
+    formData.append("CustomerName", CustomerName);
+    formData.append("phoneNumber", phoneNumber);
+    formData.append("purchaseDate", purchaseDate);
+    formData.append("state", state);
+    formData.append("LGA", LGA);
 
-    // 顯示成功訊息 (此處僅示範，不包含實際後端呼叫)
+    // 顯示成功訊息
     $("#result").text("Registration Successful!").removeClass("text-danger").addClass("text-success");
 
     // 如要送出到後端，請取消下行註解並替換 URL
