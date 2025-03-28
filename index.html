@@ -143,12 +143,10 @@
 
 <!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Select2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-  // 1. 定義各州對應的 LGA (僅示範部分資料)
-  //   實際上，你需要將所有 36 州 + FCT Abuja 的 LGA 填入
-  //   例如:
-  //   lgaByState["Abia"] = ["Aba North", "Aba South", "Arochukwu", ...];
-  //   ...
+  // 1. 定義每個州對應的 LGA (示範)
   const lgaByState = {
     "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala-Ngwa North", "Isiala-Ngwa South", "Isuikwato", "Ngwa", "Obi Nwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umu-Neochi", "Umuahia North", "Umuahia South"],
     "Adamawa": ["Demsa", "Fufore", "Ganaye", "Gireri", "Gombi", "Guyuk", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo-Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"],
@@ -190,30 +188,44 @@
     // ... 其他州 ...
   };
 
-  // 2. 監聽 state 下拉選單的 change 事件
   $(document).ready(function() {
+    // 2. 監聽 State 下拉的 change 事件
     $("#state").on("change", function() {
       const selectedState = $(this).val();
       const $lgaSelect = $("#lga");
+
       // 清空舊選項
       $lgaSelect.html('<option value="">Select LGA</option>');
 
-      // 如果有對應的 LGA 陣列，則加入下拉選單
+      // 如果該州有 LGA 陣列，動態加入
       if (selectedState && lgaByState[selectedState]) {
-        lgaByState[selectedState].forEach(function(lgaName) {
-          $lgaSelect.append(new Option(lgaName, lgaName));
+        lgaByState[selectedState].forEach(function(lga) {
+          $lgaSelect.append(new Option(lga, lga));
         });
       }
+
+      // 3. 讓 LGA 下拉使用 Select2 (可搜尋)
+      // 每次改變州後都要重新初始化 Select2
+      $lgaSelect.select2({
+        placeholder: "Type to search LGA...",
+        theme: "bootstrap4"
+      });
+    });
+
+    // 如果你想在頁面一開始就初始化 LGA 下拉 (沒州時空的)，可先加一段:
+    $("#lga").select2({
+      placeholder: "Select LGA",
+      theme: "bootstrap4"
     });
   });
 
-  // 3. 示範送出表單
+  // 4. 示範送出表單
   function handleSubmit(event) {
     event.preventDefault();
     const state = $("#state").val();
     const lga   = $("#lga").val();
     alert("Selected State: " + state + "\nSelected LGA: " + lga);
-    // 實際上可以把這些資料送到後端
+    // 實際可把這些資料送到後端
   }
 </script>
 
