@@ -261,7 +261,7 @@
 
     // 統一檢查是否有空值
     if (!dealerCode || !model || !productSerial || !CustomerName || !phoneNumber || !purchaseDate || !state || !LGA) {
-      $("#result").text("請填寫所有必填欄位").removeClass("text-success").addClass("text-danger");
+      $("#result").text("Please fill out all required fields.").removeClass("text-success").addClass("text-danger");
       return;
     }
     // 如有驗證非法字元也可以在這裡加入檢查
