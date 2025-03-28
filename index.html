@@ -12,31 +12,32 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.5.2/dist/select2-bootstrap4.min.css">
 
   <style>
-    .form-container {
-      max-width: 600px; 
-      margin: 50px auto;
-      padding: 20px;
-    }
+/* 1. 讓 Select2 外觀更像 .form-control (Bootstrap) */
+.select2-container--bootstrap4 .select2-selection--single {
+  display: flex !important;                /* 讓內部元素可用 align-items 垂直置中 */
+  align-items: center !important;          /* 垂直置中 */
+  height: calc(2.25rem + 2px) !important;  /* 與 .form-control 相同高度 */
+  border: 1px solid #ced4da !important;
+  border-radius: .25rem !important;
+  background-color: #fff !important;
+  padding: 0 !important;                  /* 移除預設 padding，改用內部調整 */
+  line-height: 1.5 !important;
+}
 
-    /* 覆蓋 Select2 placeholder 的顏色、字體樣式 */
-    .select2-container--bootstrap4 .select2-selection__placeholder {
-      color: #6c757d; /* 與 Bootstrap placeholder 相同 */
-      font-style: normal; /* 移除斜體 */
-    }
+/* 2. 控制文字的內距、移除負 margin */
+.select2-container--bootstrap4 .select2-selection--single .select2-selection__rendered {
+  margin-top: 0 !important;               /* 移除預設的 -2px margin-top */
+  margin-left: .75rem !important;         /* 與原生 .form-control placeholder 左內距類似 */
+  margin-right: .75rem !important;        /* 給右側一點空間 */
+  padding: 0 !important;                  /* 避免預設 padding 干擾 */
+  line-height: 1.5 !important;
+  color: #495057 !important;             /* 與 Bootstrap input 文字色相同 (可依需求) */
+}
 
-    /* 讓 Select2 更像 .form-control 的外觀 */
-    .select2-container--bootstrap4 .select2-selection--single {
-      height: calc(2.25rem + 2px);
-      border: 1px solid #ced4da;
-      border-radius: .25rem;
-      padding: .375rem .75rem;
-      line-height: 1.5;
-      background-color: #fff;
-    }
-    .select2-container--bootstrap4 .select2-selection__rendered {
-      margin-top: -2px;
-      padding-left: 0;
-    }
+/* 3. Placeholder 文字色彩 (可選) */
+.select2-container--bootstrap4 .select2-selection__placeholder {
+  color: #6c757d !important;             /* 與原生 placeholder 相同 (Bootstrap) */
+}
   </style>
 </head>
 <body>
