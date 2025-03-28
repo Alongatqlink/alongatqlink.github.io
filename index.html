@@ -144,6 +144,34 @@
   <div id="result" class="mt-3"></div>
 </div>
 
+  <!-- Confirmation Modal -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmModalLabel">Confirm Your Information</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Dealer Code:</strong> <span id="confirmDealerCode"></span></p>
+        <p><strong>Model:</strong> <span id="confirmModel"></span></p>
+        <p><strong>Product Serial:</strong> <span id="confirmProductSerial"></span></p>
+        <p><strong>Customer Name:</strong> <span id="confirmCustomerName"></span></p>
+        <p><strong>Phone Number:</strong> <span id="confirmPhoneNumber"></span></p>
+        <p><strong>Purchase Date:</strong> <span id="confirmPurchaseDate"></span></p>
+        <p><strong>Residential State:</strong> <span id="confirmState"></span></p>
+        <p><strong>Residential LGA:</strong> <span id="confirmLGA"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button id="confirmBtn" type="button" class="btn btn-primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- jQuery + Select2 JS (只載一次) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -325,20 +353,34 @@
       $("#result").text("Invalid characters detected.").removeClass("text-success").addClass("text-danger");
       return;
     }
+    
+    // 將各欄位值填入確認 Modal
+    $("#confirmDealerCode").text(dealerCode);
+    $("#confirmModel").text(model);
+    $("#confirmProductSerial").text(productSerial);
+    $("#confirmCustomerName").text(customerName);
+    $("#confirmPhoneNumber").text(phoneNumber);
+    $("#confirmPurchaseDate").text(purchaseDate);
+    $("#confirmState").text(state);
+    $("#confirmLGA").text(LGA);
 
-    // 組合表單資料
-    const formData = new URLSearchParams();
-    formData.append("dealerCode", dealerCode);
-    formData.append("model", model);
-    formData.append("productSerial", productSerial);
-    formData.append("CustomerName", CustomerName);
-    formData.append("phoneNumber", phoneNumber);
-    formData.append("purchaseDate", purchaseDate);
-    formData.append("state", state);
-    formData.append("LGA", LGA);
+    // 顯示確認 Modal
+    $("#confirmModal").modal("show");
 
-    // 顯示成功訊息
-    $("#result").text("Registration Successful!").removeClass("text-danger").addClass("text-success");
+    // 當使用者在 Modal 按下 Confirm 按鈕
+    $("#confirmBtn").off("click").on("click", function() {
+      $("#confirmModal").modal("hide");
+
+      // 組合表單資料 (使用 URLSearchParams)
+      const formData = new URLSearchParams();
+      formData.append("dealerCode", dealerCode);
+      formData.append("model", model);
+      formData.append("productSerial", productSerial);
+      formData.append("CustomerName", customerName);
+      formData.append("phoneNumber", phoneNumber);
+      formData.append("purchaseDate", purchaseDate);
+      formData.append("state", state);
+      formData.append("LGA", LGA);
 
     // 如要送出到後端，請取消下行註解並替換 URL
     fetch('https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec', {
