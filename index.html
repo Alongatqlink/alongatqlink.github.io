@@ -307,9 +307,9 @@
       const CustomerName  = document.getElementById('CustomerName').value.trim();
       const phoneNumber   = document.getElementById('phoneNumber').value.trim();
       const purchaseDate  = document.getElementById('purchaseDate').value.trim();
-      const LGA          = document.getElementById('LGA').value.trim();
       const state         = document.getElementById('state').value.trim();
-
+      const LGA          = document.getElementById('LGA').value.trim();
+      
       // 基本檢查：必填欄位
       if (!dealerCode || !productSerial) {
         document.getElementById('result').innerText = "Dealer Code and Product Serial are required.";
@@ -319,7 +319,7 @@
       // 前端簡單非法字元檢查 (可視需求擴充)
       if (isInvalidInput(dealerCode) || isInvalidInput(productSerial) ||
           isInvalidInput(model) || isInvalidInput(CustomerName) ||
-          isInvalidInput(phoneNumber) || isInvalidInput(LGA) || isInvalidInput(state)) {
+          isInvalidInput(phoneNumber) || isInvalidInput(state)|| isInvalidInput(LGA) |) {
         document.getElementById('result').innerText = "Invalid characters detected.";
         return;
       }
@@ -332,8 +332,8 @@
       formData.append('CustomerName', CustomerName);
       formData.append('phoneNumber', phoneNumber);
       formData.append('purchaseDate', purchaseDate);
-      formData.append('LGA', LGA);
       formData.append('state', state);
+      formData.append('LGA', LGA);
 
       // 呼叫後端 Apps Script Web App (請將 URL 替換為你的部署 exec URL)
       fetch('https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec', {
