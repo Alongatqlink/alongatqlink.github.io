@@ -37,6 +37,29 @@
     .select2-container--bootstrap4 .select2-selection__placeholder {
       color: #6c757d !important;
     }
+  /* ---------------------------------------- */
+/* 以下為新增的「浮水印 logo」樣式（繁體中文註解）  */
+/* ---------------------------------------- */
+
+body {
+  position: relative;             /* 建立定位上下文，讓偽元素能定位 */
+  background-color: #f8f9fa;      /* （可選）淺灰底色，讓白色表單更突出 */
+}
+
+body::before {
+  content: "";
+  position: fixed;                /* 固定在視窗，畫面滾動也不動 */
+  top: 0;
+  left: 0;
+  width: 100vw;                   /* 撐滿整個可視區域 */
+  height: 100vh;
+  background: url("logo.png")     /* 你的 logo 路徑 */
+              no-repeat center center;
+  background-size: 200px auto;    /* 根據需求調整 logo 尺寸 */
+  opacity: 0.08;                  /* 8% 透明度，不干擾閱讀 */
+  pointer-events: none;           /* 不攔截滑鼠事件，不影響表單互動 */
+  z-index: -1;                    /* 放在所有內容下面 */
+}  
   </style>
 </head>
 <body>
