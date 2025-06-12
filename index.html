@@ -194,7 +194,22 @@ body::before {
     </div>
   </div>
 </div>
-
+  <!-- Result Modal -->
+  <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-body py-4">
+          <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
+          <div id="resultMessage"></div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
 <!-- 載入 jQuery 與 Bootstrap JS（注意：請只載入一次） -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -456,21 +471,5 @@ function resetForm() {
 }
   }
 </script>
-    <!-- Result Modal：放在 Confirm Modal 之後，然後才是 jQuery/Bootstrap/js -->
-  <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-      <div class="modal-content text-center">
-        <div class="modal-body py-4">
-          <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
-          <div id="resultMessage"></div>
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal">OK</button>
-        </div>
-      </div>
-    </div>
-  </div>
 </body>
 </html>
