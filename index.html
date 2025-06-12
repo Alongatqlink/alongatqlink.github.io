@@ -408,19 +408,23 @@ body::before {
         let data;
         try {
           data = JSON.parse(text);
-        } catch (err) {
-          $("#result").text("Response parse error.").removeClass("text-success").addClass("text-danger");
+       } catch {
+          // 1. 回傳格式錯誤
+          alert("⚠️ Response format error. Please try again later.");
           return;
         }
         if (data.result === "success") {
-          $("#result").text("Registration Successful!").removeClass("text-danger").addClass("text-success");
+          // 2. 註冊成功
+          alert("✅ Registration successful!");
+          resetForm();
         } else {
-          $("#result").text("Failed: " + (data.error || "Unknown error")).removeClass("text-success").addClass("text-danger");
+          // 3. 註冊失敗
+          alert("❌ Registration failed: " + (data.error || "Unknown error."));
         }
       })
-      .catch(error => {
-        console.error(error);
-        $("#result").text("Request failed. Please try again.").removeClass("text-success").addClass("text-danger");
+      .catch(() => {
+        // 4. 網路或伺服器錯誤
+        alert("❌ Network/server error. Please try again later.");
       });
     });
   }
