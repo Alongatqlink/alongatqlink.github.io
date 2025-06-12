@@ -427,6 +427,19 @@ body::before {
         alert("❌ Network/server error. Please try again later.");
       });
     });
+    // 這個函式負責「清空整張表單」
+function resetForm() {
+  // 請幫你的 <form> 加上 id="vipForm"
+  document.getElementById("vipForm").reset();
+
+  // Select2 欄位要手動清除並觸發 change
+  $("#dealerCode, #model, #state, #LGA")
+    .val(null)
+    .trigger("change");
+
+  // 同步清掉下方訊息
+  $("#result").text("").removeClass("text-success text-danger");
+}
   }
 </script>
 </body>
