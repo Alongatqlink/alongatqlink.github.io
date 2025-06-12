@@ -66,7 +66,7 @@ body::before {
 
 <div class="form-container">
   <h1>QLINK VIP Registration</h1>
-  <form onsubmit="handleSubmit(event)">
+  <form id="vipForm" onsubmit="handleSubmit(event)">
     <!-- Dealer Code (Select2) -->
     <div class="form-group">
       <label for="dealerCode">Dealer Code</label>
@@ -430,7 +430,7 @@ body::before {
     // 這個函式負責「清空整張表單」
 function resetForm() {
   // 請幫你的 <form> 加上 id=""
-  document.getElementById("https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec").reset();
+  document.getElementById("vipForm").reset();
 
   // Select2 欄位要手動清除並觸發 change
   $("#dealerCode, #model, #state, #LGA")
