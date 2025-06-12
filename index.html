@@ -410,23 +410,37 @@ body::before {
           data = JSON.parse(text);
        } catch {
           // 1. 回傳格式錯誤
-          alert("⚠️ Response format error. Please try again later.");
+          showResult("⚠️ Response format error. Please try again later.");
           return;
         }
         if (data.result === "success") {
           // 2. 註冊成功
-          alert("✅ Registration successful!");
+          showResult("✅ Registration successful!");
           resetForm();
         } else {
           // 3. 註冊失敗
-          alert("❌ Registration failed: " + (data.error || "Unknown error."));
+          showResult("❌ Registration failed: " + (data.error || "Unknown error."));
         }
       })
       .catch(() => {
         // 4. 網路或伺服器錯誤
-        alert("❌ Network/server error. Please try again later.");
+        showResult("❌ Network/server error. Please try again later.");
       });
     });
+      // ----------------------------------------------------------------------------
+  // 「alert(...)」的替代：顯示 Bootstrap modal
+  function showResult(type, message) {
+    const iconMap = {
+      success: '<span class="text-success">✅</span>',
+      error:   '<span class="text-danger">❌</span>',
+      warning: '<span class="text-warning">⚠️</span>',
+    };
+    $("#resultIcon").html(iconMap[type] || '');
+    $("#resultMessage").text(message);
+    $("#resultModal").modal("show");
+  }
+  // ----------------------------------------------------------------------------
+
     // 這個函式負責「清空整張表單」
 function resetForm() {
   // 請幫你的 <form> 加上 id=""
@@ -442,5 +456,21 @@ function resetForm() {
 }
   }
 </script>
+    <!-- Result Modal：放在 Confirm Modal 之後，然後才是 jQuery/Bootstrap/js -->
+  <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-body py-4">
+          <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
+          <div id="resultMessage"></div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button"
+                  class="btn btn-secondary"
+                  data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
