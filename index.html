@@ -425,21 +425,21 @@ body::before {
           data = JSON.parse(text);
        } catch {
           // 1. 回傳格式錯誤
-          showResult("⚠️ Response format error. Please try again later.");
+          showResult("warning", "⚠️ Response format error. Please try again later.");
           return;
         }
         if (data.result === "success") {
           // 2. 註冊成功
-          showResult("✅ Registration successful!");
+          showResult("success", "✅ Registration successful!");
           resetForm();
         } else {
           // 3. 註冊失敗
-          showResult("❌ Registration failed: " + (data.error || "Unknown error."));
+          showResult("error", "❌ Registration failed: " + (data.error || "Unknown error."));
         }
       })
       .catch(() => {
         // 4. 網路或伺服器錯誤
-        showResult("❌ Network/server error. Please try again later.");
+        showResult("error", "❌ Network/server error. Please try again later.");
       });
     });
       // ----------------------------------------------------------------------------
