@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>QLINK VIP – Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Bootstrap 4 CSS -->
+  <link
+    rel="stylesheet"
+    href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  />
+  <style>
+    /* 跟註冊頁同樣的淺灰背景和置中容器 */
+    body {
+      background-color: #f8f9fa;
+    }
+    .form-container {
+      max-width: 600px;
+      margin: 80px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: .25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .btn-landing {
+      width: 220px;
+      padding: .75rem;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="form-container text-center">
+    <h1 class="mb-4">Welcome to QLINK VIP</h1>
+    <p class="mb-5">請選擇您的身分，開始接下來的操作</p>
+    <div class="d-flex justify-content-center">
+      <!-- 消費者入口 -->
+      <a href="consumer-signup.html"
+         class="btn btn-primary btn-landing mx-2">
+        消費者 註冊／查詢
+      </a>
+      <!-- Dealer 入口 -->
+      <a href="dealer-lookup.html"
+         class="btn btn-outline-secondary btn-landing mx-2">
+        Dealer 查詢／管理
+      </a>
+    </div>
+  </div>
+
+  <!-- jQuery + Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
