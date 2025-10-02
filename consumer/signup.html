@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>QLINK VIP Registration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS -->
+  <!-- Bootstrap CSS (single include) -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Select2 CSS + Bootstrap4 Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
@@ -15,7 +15,8 @@
       margin: 50px auto;
       padding: 20px;
     }
-    /* 讓 Select2 外觀更像原生 .form-control */
+
+    /* Make Select2 look like native .form-control */
     .select2-container--bootstrap4 .select2-selection--single {
       display: flex !important;
       align-items: center !important;
@@ -37,40 +38,45 @@
     .select2-container--bootstrap4 .select2-selection__placeholder {
       color: #6c757d !important;
     }
-  /* ---------------------------------------- */
-/* 以下為新增的「浮水印 logo」樣式（繁體中文註解）  */
-/* ---------------------------------------- */
 
-body {
-  position: relative;             /* 建立定位上下文，讓偽元素能定位 */
-  background-color: #f8f9fa;      /* （可選）淺灰底色，讓白色表單更突出 */
-}
-
-body::before {
-  content: "";
-  position: fixed;                /* 固定在視窗，畫面滾動也不動 */
-  top: 0;
-  left: 0;
-  width: 100vw;                   /* 撐滿整個可視區域 */
-  height: 100vh;
-  background: url("Screenshot 2025-02-24 at 17.34.46.png")     /* 你的 logo 路徑 */
-              no-repeat center center;
-  background-size: 550px auto;    /* 根據需求調整 logo 尺寸 */
-  opacity: 0.08;                  /* 8% 透明度，不干擾閱讀 */
-  pointer-events: none;           /* 不攔截滑鼠事件，不影響表單互動 */
-  z-index: -1;                    /* 放在所有內容下面 */
-}  
+    /* ----------------------------------------
+       Watermark logo styles
+       ----------------------------------------
+       - Use ::before as a fixed, full-viewport watermark
+       - Keep pointer-events: none so it won't block inputs
+       - Adjust background-size to fit your visual preference
+    */
+    body {
+      position: relative;          /* Create positioning context for pseudo element */
+      background-color: #f8f9fa;   /* Optional: light gray to make white card pop */
+    }
+    body::before {
+      content: "";
+      position: fixed;             /* Fixed so it doesn't scroll with content */
+      top: 0;
+      left: 0;
+      width: 100vw;                /* Cover entire viewport width */
+      height: 100vh;               /* Cover entire viewport height */
+      background:
+        url("Screenshot 2025-02-24 at 17.34.46.png") /* Replace with your logo path */
+        no-repeat center center;
+      background-size: 550px auto; /* Adjust watermark size as needed */
+      opacity: 0.08;               /* 8% opacity so form remains readable */
+      pointer-events: none;        /* Do not intercept mouse events */
+      z-index: -1;                 /* Behind everything */
+    }
   </style>
 </head>
 <body>
 
 <div class="form-container">
-  <h1>QLINK VIP Registration</h1>
-  <form id="vipForm" onsubmit="handleSubmit(event)">
+  <h1 class="h3 mb-4">QLINK VIP Registration</h1>
+
+  <form id="vipForm" onsubmit="handleSubmit(event)" novalidate>
     <!-- Dealer Code (Select2) -->
     <div class="form-group">
       <label for="dealerCode">Dealer Code</label>
-      <select id="dealerCode" class="form-control" style="width: 100%;">
+      <select id="dealerCode" class="form-control" style="width: 100%;" required>
         <option value=""></option>
       </select>
     </div>
@@ -78,7 +84,7 @@ body::before {
     <!-- Model (Select2) -->
     <div class="form-group">
       <label for="model">Model (e.g. ABC-123)</label>
-      <select id="model" class="form-control" style="width: 100%;">
+      <select id="model" class="form-control" style="width: 100%;" required>
         <option value=""></option>
       </select>
     </div>
@@ -86,33 +92,65 @@ body::before {
     <!-- Product Serial -->
     <div class="form-group">
       <label for="productSerial">Product Serial (No special characters such as *%@#$&/^~().)</label>
-      <input type="text" class="form-control" id="productSerial" placeholder="Enter product serial">
+      <input
+        type="text"
+        class="form-control"
+        id="productSerial"
+        placeholder="Enter product serial"
+        autocomplete="off"
+        inputmode="latin"
+        required
+        pattern="[A-Za-z0-9\s\-\_,.()\/]*"
+      >
+      <small class="form-text text-muted">Allowed: letters, numbers, space, and - _ , . ( ) /</small>
     </div>
 
     <!-- Customer Name -->
     <div class="form-group">
       <label for="CustomerName">Customer Name</label>
-      <input type="text" class="form-control" id="CustomerName" placeholder="Enter your name">
+      <input
+        type="text"
+        class="form-control"
+        id="CustomerName"
+        placeholder="Enter your name"
+        autocomplete="name"
+        required
+      >
     </div>
 
     <!-- Phone / WhatsApp Number -->
     <div class="form-group">
       <label for="phoneNumber">Phone / WhatsApp Number</label>
-      <input type="text" class="form-control" id="phoneNumber" placeholder="e.g. +234XXXXXXXX">
+      <input
+        type="tel"
+        class="form-control"
+        id="phoneNumber"
+        placeholder="e.g. +234XXXXXXXX"
+        autocomplete="tel"
+        required
+        pattern="[\+\d][\d\s\-]{6,}"
+      >
+      <small class="form-text text-muted">Example: +234 801 234 5678</small>
     </div>
 
     <!-- Purchase Date -->
     <div class="form-group">
       <label for="purchaseDate">Purchase Date</label>
-      <input type="date" class="form-control" id="purchaseDate" placeholder="yyyy/mm/dd">
+      <input
+        type="date"
+        class="form-control"
+        id="purchaseDate"
+        placeholder="yyyy/mm/dd"
+        required
+      >
     </div>
 
     <!-- Residential State (Select2) -->
     <div class="form-group">
       <label for="state">Residential State</label>
-      <select id="state" class="form-control" style="width: 100%;">
+      <select id="state" class="form-control" style="width: 100%;" required>
         <option value=""></option>
-        <!-- 以下示範部分州，請自行補完 -->
+        <!-- Sample states; extend as needed -->
         <option value="Abia">Abia</option>
         <option value="Adamawa">Adamawa</option>
         <option value="Akwa Ibom">Akwa Ibom</option>
@@ -156,15 +194,16 @@ body::before {
     <!-- Residential LGA (Select2) -->
     <div class="form-group">
       <label for="LGA">Residential LGA</label>
-      <select id="LGA" class="form-control" style="width: 100%;">
+      <select id="LGA" class="form-control" style="width: 100%;" required>
         <option value=""></option>
       </select>
     </div>
 
     <button type="submit" class="btn btn-primary">Submit Registration</button>
   </form>
-  <!-- 結果訊息區 -->
-  <div id="result" class="mt-3"></div>
+
+  <!-- Inline result text (non-modal) -->
+  <div id="result" class="mt-3" aria-live="polite"></div>
 </div>
 
 <!-- Confirmation Modal -->
@@ -194,256 +233,99 @@ body::before {
     </div>
   </div>
 </div>
-  <!-- Result Modal -->
-  <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-sm modal-dialog-centered">
-      <div class="modal-content text-center">
-        <div class="modal-body py-4">
-          <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
-          <div id="resultMessage"></div>
-        </div>
-        <div class="modal-footer justify-content-center">
-          <button type="button"
-                  class="btn btn-secondary"
-                  data-dismiss="modal">OK</button>
-        </div>
+
+<!-- Result Modal -->
+<div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-sm modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-body py-4">
+        <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
+        <div id="resultMessage"></div>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
       </div>
     </div>
   </div>
-<!-- 載入 jQuery 與 Bootstrap JS（注意：請只載入一次） -->
+</div>
+
+<!-- jQuery + Bootstrap JS (single include) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- 載入 Select2 JS -->
+<!-- Select2 JS -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-  // 1. 定義 Dealer Code 與 Model 的假資料
+  // ------------------------------------------------------------
+  // 1) Mock data for Dealer Code and Model
+  // ------------------------------------------------------------
   var dealerCodes = [
-    "DealerABC",
-    "DealerXYZ",
-    "Dealer101",
-    "Dealer202",
-    "Dealer305",
-    "Dealer007",
-    "Dealer888",
-    "Dealer555",
-    "Dealer999",
-    "Dealer111"
+    "DealerABC","DealerXYZ","Dealer101","Dealer202","Dealer305",
+    "Dealer007","Dealer888","Dealer555","Dealer999","Dealer111"
   ];
   var modelCodes = [
-    "ModelAlpha",
-    "ModelBeta",
-    "ModelGamma",
-    "ModelDelta",
-    "ModelEpsilon",
-    "ModelZeta",
-    "ModelEta",
-    "ModelTheta",
-    "ModelIota",
-    "ModelKappa",
-    "ModelLambda",
-    "ModelMu",
-    "ModelNu",
-    "ModelXi",
-    "ModelOmicron",
-    "ModelPi",
-    "ModelRho",
-    "ModelSigma",
-    "ModelTau",
-    "ModelOmega"
+    "ModelAlpha","ModelBeta","ModelGamma","ModelDelta","ModelEpsilon",
+    "ModelZeta","ModelEta","ModelTheta","ModelIota","ModelKappa",
+    "ModelLambda","ModelMu","ModelNu","ModelXi","ModelOmicron",
+    "ModelPi","ModelRho","ModelSigma","ModelTau","ModelOmega"
   ];
 
-  $(document).ready(function() {
-    // 初始化 Dealer Code 下拉 (Select2)
-    var $dealerSelect = $("#dealerCode");
-    dealerCodes.forEach(function(code) {
-      $dealerSelect.append(new Option(code, code));
-    });
-    $dealerSelect.select2({
-      placeholder: "e.g. DealerABC",
-      theme: "bootstrap4"
-    });
-    $dealerSelect.on('select2:open', function() {
-      $('.select2-search__field').attr('placeholder', 'Type here to search Dealer Code...');
-    });
+  // ------------------------------------------------------------
+  // 2) LGA lookup by state (partial sample data)
+  //    NOTE: Added keys for both "FCT" and "FCT Abuja"
+  // ------------------------------------------------------------
+  const LGAByState = {
+    "Abia": ["Aba North","Aba South","Arochukwu","Bende","Ikwuano","Isiala-Ngwa North","Isiala-Ngwa South","Isuikwato","Ngwa","Obi Nwa","Ohafia","Osisioma","Ugwunagbo","Ukwa East","Ukwa West","Umu-Neochi","Umuahia North","Umuahia South"],
+    "Adamawa": ["Demsa","Fufore","Ganaye","Gireri","Gombi","Guyuk","Hong","Jada","Lamurde","Madagali","Maiha","Mayo-Belwa","Michika","Mubi North","Mubi South","Numan","Shelleng","Song","Toungo","Yola North","Yola South"],
+    "Akwa Ibom": ["Abak","Eastern Obolo","Eket","Esit Eket","Essien Udim","Etim Ekpo","Etinan","Ibeno","Ibesikpo Asutan","Ibiono Ibom","Ika","Ikono","Ikot Abasi","Ikot Ekpene","Ini","Itu","Mbo","Mkpat Enin","Nsit Atai","Nsit Ibom","Nsit Ubium","Obot Akara","Okobo","Onna","Oron","Oruk Anam","Udung Uko","Ukanafun","Uruan","Urue-Offong/Oruko","Uyo"],
+    "Anambra": ["Aguata","Anambra East","Anambra West","Anaocha","Awka North","Awka South","Ayamelum","Dunukofia","Ekwusigo","Idemili North","Idemili south","Ihiala","Njikoka","Nnewi North","Nnewi South","Ogbaru","Onitsha North","Onitsha South","Orumba North","Orumba South","Oyi"],
+    "Bauchi": ["Alkaleri","Bauchi","Bogoro","Damban","Darazo","Dass","Gamawa","Ganjuwa","Giade","Itas/Gadau","Jama'are","Katagum","Kirfi","Misau","Ningi","Shira","Tafawa-Balewa","Toro","Warji","Zaki"],
+    "Bayelsa": ["Brass","Ekeremor","Kolokuma/Opokuma","Nembe","Ogbia","Sagbama","Southern Jaw","Yenegoa"],
+    "Benue": ["Ado","Agatu","Apa","Buruku","Gboko","Guma","Gwer East","Gwer West","Katsina-Ala","Konshisha","Kwande","Logo","Makurdi","Obi","Ogbadibo","Ohimini","Oju","Okpokwu","Oturkpo","Tarka","Ukum","Ushongo","Vandeikya"],
+    "Borno": ["Abadam","Askira/Uba","Bama","Bayo","Biu","Chibok","Damboa","Dikwa","Gubio","Guzamala","Gwoza","Hawul","Jere","Kaga","Kala/Balge","Konduga","Kukawa","Kwaya Kusar","Mafa","Magumeri","Maiduguri","Marte","Mobbar","Monguno","Ngala","Nganzai","Shani"],
+    "Cross River": ["Abi","Akamkpa","Akpabuyo","Bakassi","Bekwara","Biase","Boki","Calabar Municipality","Calabar South","Etung","Ikom","Obanliku","Obudu","Odubra","Odukpani","Ogoja","Yala","Yarkur"],
+    "Delta": ["Aniocha","Aniocha South","Bomadi","Burutu","Ethiope East","Ethiope West","Ika North-East","Ika South","Isoko North","Isoko south","Ndokwa East","Ndokwa West","Okpe","Oshimili","Oshimili North","Patani","Sapele","Udu","Ughelli North","Ughelli South","Ukwani","Uvwie","Warri Central","Warri North","Warri South"],
+    "Ebonyi": ["Abakaliki","Afikpo","Ebonyi","Edda","Ezza","Ezza Central","Ezza South","Ishielu","Ivo","lkwo","Ohaozara","Ohaukwu","Onicha"],
+    "Edo": ["Central","Egor","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Igueben","Ikpoba-Okha","Oredo","Orhionwon","Ovia North-East","Ovia South-East","Ovia SouthWest","Uhunmwonde","Ukpoba"],
+    "Ekiti": ["Ado Ekiti","Efon","Ekiti South-West","Ekiti-East","Ekiti-West","Emure/Ise/Orun","Gbonyin","Ido/Osi","Ijero","Ikere","Ikole","Ilejemeje.","Irepodun-Ifelodun","Ise/Orun","Moba","Oye"],
+    "Enugu": ["Aninri","Enugu Eas","Enugu North","Enugu South","Ezeagu","Igbo-Ekiti","Igbo-Eze South","IgboEze North","Isi-Uzo","Nkanu","Nkanu East","Nkanu West","Nsukka","Oji-River","Udenu.","Udi Agwu","Uzo-Uwani"],
+    "FCT": ["Abaji","Abuja Municipal","Bwari","Gwagwalada","Kuje","Kwali"],
+    "FCT Abuja": ["Abaji","Abuja Municipal","Bwari","Gwagwalada","Kuje","Kwali"],
+    "Gombe": ["Akko","Balanga","Billiri","Dukku","Funakaye","Gombe","Kaltungo","Kwami","Nafada/Bajoga","Shomgom","Yamaltu/Delta."],
+    "Imo": ["Aboh-Mbaise","Ahiazu-Mbaise","Ehime-Mbano","Ezinihitte","Ideato North","Ideato South","Ihitte/Uboma","Ikeduru","Isiala Mbano","Isu","Mbaitoli","Ngor-Okpala","Njaba","Nkwerre","Nwangele","Obowo","Oguta","Ohaji/Egbema","Okigwe","Orlu","Orsu","Oru East","Oru West","Owerri North","Owerri West","Owerri-Municipal"],
+    "Jigawa": ["Auyo","Babura","Biriniwa","Birni Kudu","Buji","Dutse","Gagarawa","Garki","Gumel","Guri","Gwaram","Gwiwa","Hadejia","Jahun","Kafin Hausa","Kaugama Kazaure","Kiri Kasamma","Kiyawa","Maigatari","Malam Madori","Miga","Ringim","Roni","Sule-Tankarkar","Taura","Yankwashi"],
+    "Kaduna": ["Birni-Gwari","Chikun","Giwa","Igabi","Ikara","jaba","Jema'a","Kachia","Kaduna North","Kaduna South","Kagarko","Kajuru","Kaura","Kauru","Kubau","Kudan","Lere","Makarfi","Sabon-Gari","Sanga","Soba","Zango-Kataf","Zaria"],
+    "Kano": ["Ajingi","Albasu","Bagwai","Bebeji","Bichi","Bunkure","Dala","Dambatta","Dawakin Kudu","Dawakin Tofa","Doguwa","Fagge","Gabasawa","Garko","Garum","Gaya","Gezawa","Ghari","Gwale","Gwarzo","Kabo","Kano Municipal","Karaye","Kibiya","Kiru","kumbotso","Kunchi","Kura","Madobi","Makoda","Mallam","Minjibir","Nasarawa","Rano","Rimin Gado","Rogo","Shanono","Sumaila","Takali","Tarauni","Tofa","Tsanyawa","Tudun Wada","Ungogo","Warawa","Wudil"],
+    "Katsina": ["Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dan Musa","Dandume","Danja","Daura","Dutsi","Dutsin-Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara","Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazuu","Musawa","Rimi","Sabuwa","Safana","Sandamu","Zango"],
+    "Kebbi": ["Aleiro","Arewa-Dandi","Argungu","Augie","Bagudo","Birnin Kebbi","Bunza","Dandi","Fakai","Gwandu","Jega","Kalgo","Koko/Besse","Maiyama","Ngaski","Sakaba","Shanga","Suru","Wasagu/Danko","Yauri","Zuru"],
+    "Kogi": ["Adavi","Ajaokuta","Ankpa","Bassa","Dekina","Ibaji","Idah","Igalamela-Odolu","Ijumu","Kabba/Bunu","Kogi","Lokoja","Mopa-Muro","Ofu","Ogori/Mangongo","Okehi","Okene","Olamabolo","Omala","Yagba East","Yagba West"],
+    "Kwara": ["Asa","Baruten","Edu","Ekiti","Ifelodun","Ilorin East","Ilorin West","Irepodun","Isin","Kaiama","Moro","Offa","Oke-Ero","Oyun","Pategi"],
+    "Lagos": ["Agege","Ajeromi-Ifelodun","Alimosho","Amuwo-Odofin","Apapa","Badagry","Epe","Eti-Osa","Ibeju/Lekki","Ifako-Ijaye","Ikeja","Ikorodu","Kosofe","Lagos Island","Lagos Mainland","Mushin","Ojo","Oshodi-Isolo","Shomolu","Surulere"],
+    "Nasarawa": ["Akwanga","Awe","Doma","Karu","Keana","Keffi","Kokona","Lafia","Nasarawa","Nasarawa-Eggon","Obi","Toto","Wamba"],
+    "Niger": ["Agaie","Agwara","Bida","Borgu","Bosso","Chanchaga","Edati","Gbako","Gurara","Katcha","Kontagora","Lapai","Lavun","Magama","Mariga","Mashegu","Mokwa","Muya","Pailoro","Rafi","Rijau","Shiroro","Suleja","Tafa","Wushishi"],
+    "Ogun": ["Abeokuta North","Abeokuta South","Ado-Odo/Ota","Ewekoro","Ifo","Ijebu East","Ijebu North","Ijebu North East","Ijebu Ode","Ikenne","Imeko-Afon","Ipokia","Obafemi-Owode","Odeda","Odogbolu","Ogun Waterside","Remo North","Shagamu","Yewa North","Yewa South"],
+    "Ondo": ["Akoko North East","Akoko North West","Akoko South East","Akoko South West","Akure North","Akure South","Ese-Odo","Idanre","Ifedore","Ilaje","Ile-Oluji","Irele","Odigbo","Okeigbo","Okitipupa","Ondo East","Ondo West","Ose","Owo"],
+    "Osun": ["Aiyedade","Aiyedire","Atakumosa East","Atakumosa West","Boluwaduro","Boripe","Ede North","Ede South","Egbedore","Ejigbo","Ife Central","Ife East","Ife North","Ife South","Ifedayo","Ifelodun","Ila","Ilesha East","Ilesha West","Irepodun","Irewole","Isokan","Iwo","Obokun","Odo-Otin","Ola-Oluwa","Olorunda","Oriade","Orolu","Osogbo"],
+    "Oyo": ["Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan Central","Ibadan North","Ibadan North West","Ibadan South East","Ibadan South West","Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo","Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu Ogbomosho North","Ogbomosho South","Ogo Oluwa","Olorunsogo","Oluyole","Ona-Ara","Orelope","Ori Ire","Oyo East","Oyo West","Saki East","Saki West","Surulere"],
+    "Plateau": ["Barikin Ladi","Bassa","Bokkos","Jos East","Jos North","Jos South","Kanam","Kanke","Langtang North","Langtang South","Mangu","Mikang","Pankshin","Qua'an Pan","Riyom","Shendam","Wase"],
+    "Rivers": ["Abua/Odual","Ahoada East","Ahoada West","Akuku Toru","Andoni","Asari-Toru","Bonny","Degema","Eleme","Emohua","Etche","Gokana","Ikwerre","Khana","Obio/Akpor","Ogba/Egbema/Ndoni","Ogu/Bolo","Okrika","Omumma","Opobo/Nkoro","Oyigbo","Port-Harcourt","Tai"],
+    "Sokoto": ["Binji","Bodinga","Dange-shnsi","Gada","Gawabawa","Goronyo","Gudu","Illela","Isa","kebbe","Kware","Rabah","Sabon birni","Shagari","Silame","Sokoto North","Sokoto South","Tambuwal","Tqngaza","Tureta","Wamako","Wurno","Yabo"],
+    "Taraba": ["Ardo-kola","Bali","Cassol","Donga","Gashaka","Ibi","Jalingo","Karin-Lamido","Kurmi","Lau","Sardauna","Takum","Ussa","Wukari","Yorro","Zing"],
+    "Yobe": ["Bade","Bursari","Damaturu","Fika","Fune","Geidam","Gujba","Gulani","Jakusko","Karasuwa","Karawa","Machina","Nangere","Nguru Potiskum","Tarmua","Yunusari","Yusufari"],
+    "Zamfara": ["Anka","Bakura","Birnin Magaji","Bukkuyum","Bungudu","Gummi","Gusau","Kaura-Namoda","Maradun","Maru","Namoda","Shinkafi","Talata Mafara","Tsafe","Zurmi"]
+  };
 
-    // 初始化 Model 下拉 (Select2)
-    var $modelSelect = $("#model");
-    modelCodes.forEach(function(m) {
-      $modelSelect.append(new Option(m, m));
-    });
-    $modelSelect.select2({
-      placeholder: "e.g. ModelAlpha",
-      theme: "bootstrap4"
-    });
-    $modelSelect.on('select2:open', function() {
-      $('.select2-search__field').attr('placeholder', 'Type here to search Model...');
-    });
-
-    // 初始化 Residential State 下拉 (Select2)
-    $("#state").select2({
-      placeholder: "Type to search State...",
-      theme: "bootstrap4"
-    });
-
-    // 初始化 Residential LGA 下拉 (Select2) (初始為空)
-    $("#LGA").select2({
-      placeholder: "Type to search LGA...",
-      theme: "bootstrap4"
-    });
-
-    // 當 Residential State 改變時，根據選擇動態填入 Residential LGA 選項
-    $("#state").on("change", function() {
-      const selectedState = $(this).val();
-      const $LGASelect = $("#LGA");
-      $LGASelect.html('<option value=""></option>'); // 清空舊選項
-
-      // 定義各州對應的 LGA (示範部分資料)
-      const LGAByState = {
-        "Abia": ["Aba North", "Aba South", "Arochukwu", "Bende", "Ikwuano", "Isiala-Ngwa North", "Isiala-Ngwa South", "Isuikwato", "Ngwa", "Obi Nwa", "Ohafia", "Osisioma", "Ugwunagbo", "Ukwa East", "Ukwa West", "Umu-Neochi", "Umuahia North", "Umuahia South"],
-        "Adamawa": ["Demsa", "Fufore", "Ganaye", "Gireri", "Gombi", "Guyuk", "Hong", "Jada", "Lamurde", "Madagali", "Maiha", "Mayo-Belwa", "Michika", "Mubi North", "Mubi South", "Numan", "Shelleng", "Song", "Toungo", "Yola North", "Yola South"],
-        "Akwa Ibom": ["Abak", "Eastern Obolo", "Eket", "Esit Eket", "Essien Udim", "Etim Ekpo", "Etinan", "Ibeno", "Ibesikpo Asutan", "Ibiono Ibom", "Ika", "Ikono", "Ikot Abasi", "Ikot Ekpene", "Ini", "Itu", "Mbo", "Mkpat Enin", "Nsit Atai", "Nsit Ibom", "Nsit Ubium", "Obot Akara", "Okobo", "Onna", "Oron", "Oruk Anam", "Udung Uko", "Ukanafun", "Uruan", "Urue-Offong/Oruko", "Uyo"],
-        "Anambra": ["Aguata", "Anambra East", "Anambra West", "Anaocha", "Awka North", "Awka South", "Ayamelum", "Dunukofia", "Ekwusigo", "Idemili North", "Idemili south", "Ihiala", "Njikoka", "Nnewi North", "Nnewi South", "Ogbaru", "Onitsha North", "Onitsha South", "Orumba North", "Orumba South", "Oyi"],
-        "Bauchi": ["Alkaleri", "Bauchi", "Bogoro", "Damban", "Darazo", "Dass", "Gamawa", "Ganjuwa", "Giade", "Itas/Gadau", "Jama'are", "Katagum", "Kirfi", "Misau", "Ningi", "Shira", "Tafawa-Balewa", "Toro", "Warji", "Zaki"],
-        "Bayelsa": ["Brass", "Ekeremor", "Kolokuma/Opokuma", "Nembe", "Ogbia", "Sagbama", "Southern Jaw", "Yenegoa"],
-        "Benue": ["Ado", "Agatu", "Apa", "Buruku", "Gboko", "Guma", "Gwer East", "Gwer West", "Katsina-Ala", "Konshisha", "Kwande", "Logo", "Makurdi", "Obi", "Ogbadibo", "Ohimini", "Oju", "Okpokwu", "Oturkpo", "Tarka", "Ukum", "Ushongo", "Vandeikya"],
-        "Borno": ["Abadam", "Askira/Uba", "Bama", "Bayo", "Biu", "Chibok", "Damboa", "Dikwa", "Gubio", "Guzamala", "Gwoza", "Hawul", "Jere", "Kaga", "Kala/Balge", "Konduga", "Kukawa", "Kwaya Kusar", "Mafa", "Magumeri", "Maiduguri", "Marte", "Mobbar", "Monguno", "Ngala", "Nganzai", "Shani"],
-        "Cross River": ["Abi", "Akamkpa", "Akpabuyo", "Bakassi", "Bekwara", "Biase", "Boki", "Calabar Municipality", "Calabar South", "Etung", "Ikom", "Obanliku", "Obudu", "Odubra", "Odukpani", "Ogoja", "Yala", "Yarkur"],
-        "Delta": ["Aniocha", "Aniocha South", "Bomadi", "Burutu", "Ethiope East", "Ethiope West", "Ika North-East", "Ika South", "Isoko North", "Isoko south", "Ndokwa East", "Ndokwa West", "Okpe", "Oshimili", "Oshimili North", "Patani", "Sapele", "Udu", "Ughelli North", "Ughelli South", "Ukwani", "Uvwie", "Warri Central", "Warri North", "Warri South"],
-        "Ebonyi": ["Abakaliki", "Afikpo", "Ebonyi", "Edda", "Ezza", "Ezza Central", "Ezza South", "Ishielu", "Ivo", "lkwo", "Ohaozara", "Ohaukwu", "Onicha"],
-        "Edo": ["Central", "Egor", "Esan Central", "Esan North-East", "Esan South-East", "Esan West", "Etsako Central", "Etsako East", "Etsako West", "Igueben", "Ikpoba-Okha", "Oredo", "Orhionwon", "Ovia North-East", "Ovia South-East", "Ovia SouthWest", "Uhunmwonde", "Ukpoba"],
-        "Ekiti": ["Ado Ekiti", "Efon", "Ekiti South-West", "Ekiti-East", "Ekiti-West", "Emure/Ise/Orun", "Gbonyin", "Ido/Osi", "Ijero", "Ikere", "Ikole", "Ilejemeje.", "Irepodun-Ifelodun", "Ise/Orun", "Moba", "Oye"],
-        "Enugu": ["Aninri", "Enugu Eas", "Enugu North", "Enugu South", "Ezeagu", "Igbo-Ekiti", "Igbo-Eze South", "IgboEze North", "Isi-Uzo", "Nkanu", "Nkanu East", "Nkanu West", "Nsukka", "Oji-River", "Udenu.", "Udi Agwu", "Uzo-Uwani"],
-        "FCT": ["Abaji", "Abuja Municipal", "Bwari", "Gwagwalada", "Kuje", "Kwali"],
-        "Gombe": ["Akko", "Balanga", "Billiri", "Dukku", "Funakaye", "Gombe", "Kaltungo", "Kwami", "Nafada/Bajoga", "Shomgom", "Yamaltu/Delta."],
-        "Imo": ["Aboh-Mbaise", "Ahiazu-Mbaise", "Ehime-Mbano", "Ezinihitte", "Ideato North", "Ideato South", "Ihitte/Uboma", "Ikeduru", "Isiala Mbano", "Isu", "Mbaitoli", "Ngor-Okpala", "Njaba", "Nkwerre", "Nwangele", "Obowo", "Oguta", "Ohaji/Egbema", "Okigwe", "Orlu", "Orsu", "Oru East", "Oru West", "Owerri North", "Owerri West", "Owerri-Municipal"],
-        "Jigawa": ["Auyo", "Babura", "Biriniwa", "Birni Kudu", "Buji", "Dutse", "Gagarawa", "Garki", "Gumel", "Guri", "Gwaram", "Gwiwa", "Hadejia", "Jahun", "Kafin Hausa", "Kaugama Kazaure", "Kiri Kasamma", "Kiyawa", "Maigatari", "Malam Madori", "Miga", "Ringim", "Roni", "Sule-Tankarkar", "Taura", "Yankwashi"],
-        "Kaduna": ["Birni-Gwari", "Chikun", "Giwa", "Igabi", "Ikara", "jaba", "Jema'a", "Kachia", "Kaduna North", "Kaduna South", "Kagarko", "Kajuru", "Kaura", "Kauru", "Kubau", "Kudan", "Lere", "Makarfi", "Sabon-Gari", "Sanga", "Soba", "Zango-Kataf", "Zaria"],
-        "Kano": ["Ajingi", "Albasu", "Bagwai", "Bebeji", "Bichi", "Bunkure", "Dala", "Dambatta", "Dawakin Kudu", "Dawakin Tofa", "Doguwa", "Fagge", "Gabasawa", "Garko", "Garum", "Gaya", "Gezawa", "Ghari", "Gwale", "Gwarzo", "Kabo", "Kano Municipal", "Karaye", "Kibiya", "Kiru", "kumbotso", "Kunchi", "Kura", "Madobi", "Makoda", "Mallam", "Minjibir", "Nasarawa", "Rano", "Rimin Gado", "Rogo", "Shanono", "Sumaila", "Takali", "Tarauni", "Tofa", "Tsanyawa", "Tudun Wada", "Ungogo", "Warawa", "Wudil"],
-        "Katsina": ["Bakori", "Batagarawa", "Batsari", "Baure", "Bindawa", "Charanchi", "Dan Musa", "Dandume", "Danja", "Daura", "Dutsi", "Dutsin-Ma", "Faskari", "Funtua", "Ingawa", "Jibia", "Kafur", "Kaita", "Kankara", "Kankia", "Katsina", "Kurfi", "Kusada", "Mai'Adua", "Malumfashi", "Mani", "Mashi", "Matazuu", "Musawa", "Rimi", "Sabuwa", "Safana", "Sandamu", "Zango"],
-        "Kebbi": ["Aleiro", "Arewa-Dandi", "Argungu", "Augie", "Bagudo", "Birnin Kebbi", "Bunza", "Dandi", "Fakai", "Gwandu", "Jega", "Kalgo", "Koko/Besse", "Maiyama", "Ngaski", "Sakaba", "Shanga", "Suru", "Wasagu/Danko", "Yauri", "Zuru"],
-        "Kogi": ["Adavi", "Ajaokuta", "Ankpa", "Bassa", "Dekina", "Ibaji", "Idah", "Igalamela-Odolu", "Ijumu", "Kabba/Bunu", "Kogi", "Lokoja", "Mopa-Muro", "Ofu", "Ogori/Mangongo", "Okehi", "Okene", "Olamabolo", "Omala", "Yagba East", "Yagba West"],
-        "Kwara": ["Asa", "Baruten", "Edu", "Ekiti", "Ifelodun", "Ilorin East", "Ilorin West", "Irepodun", "Isin", "Kaiama", "Moro", "Offa", "Oke-Ero", "Oyun", "Pategi"],
-        "Lagos": ["Agege", "Ajeromi-Ifelodun", "Alimosho", "Amuwo-Odofin", "Apapa", "Badagry", "Epe", "Eti-Osa", "Ibeju/Lekki", "Ifako-Ijaye", "Ikeja", "Ikorodu", "Kosofe", "Lagos Island", "Lagos Mainland", "Mushin", "Ojo", "Oshodi-Isolo", "Shomolu", "Surulere"],
-        "Nasarawa": ["Akwanga", "Awe", "Doma", "Karu", "Keana", "Keffi", "Kokona", "Lafia", "Nasarawa", "Nasarawa-Eggon", "Obi", "Toto", "Wamba"],
-        "Niger": ["Agaie", "Agwara", "Bida", "Borgu", "Bosso", "Chanchaga", "Edati", "Gbako", "Gurara", "Katcha", "Kontagora", "Lapai", "Lavun", "Magama", "Mariga", "Mashegu", "Mokwa", "Muya", "Pailoro", "Rafi", "Rijau", "Shiroro", "Suleja", "Tafa", "Wushishi"],
-        "Ogun": ["Abeokuta North", "Abeokuta South", "Ado-Odo/Ota", "Ewekoro", "Ifo", "Ijebu East", "Ijebu North", "Ijebu North East", "Ijebu Ode", "Ikenne", "Imeko-Afon", "Ipokia", "Obafemi-Owode", "Odeda", "Odogbolu", "Ogun Waterside", "Remo North", "Shagamu", "Yewa North", "Yewa South"],
-        "Ondo": ["Akoko North East", "Akoko North West", "Akoko South East", "Akoko South West", "Akure North", "Akure South", "Ese-Odo", "Idanre", "Ifedore", "Ilaje", "Ile-Oluji", "Irele", "Odigbo", "Okeigbo", "Okitipupa", "Ondo East", "Ondo West", "Ose", "Owo"],
-        "Osun": ["Aiyedade", "Aiyedire", "Atakumosa East", "Atakumosa West", "Boluwaduro", "Boripe", "Ede North", "Ede South", "Egbedore", "Ejigbo", "Ife Central", "Ife East", "Ife North", "Ife South", "Ifedayo", "Ifelodun", "Ila", "Ilesha East", "Ilesha West", "Irepodun", "Irewole", "Isokan", "Iwo", "Obokun", "Odo-Otin", "Ola-Oluwa", "Olorunda", "Oriade", "Orolu", "Osogbo"],
-        "Oyo": ["Afijio", "Akinyele", "Atiba", "Atisbo", "Egbeda", "Ibadan Central", "Ibadan North", "Ibadan North West", "Ibadan South East", "Ibadan South West", "Ibarapa Central", "Ibarapa East", "Ibarapa North", "Ido", "Irepo", "Iseyin", "Itesiwaju", "Iwajowa", "Kajola", "Lagelu Ogbomosho North", "Ogbomosho South", "Ogo Oluwa", "Olorunsogo", "Oluyole", "Ona-Ara", "Orelope", "Ori Ire", "Oyo East", "Oyo West", "Saki East", "Saki West", "Surulere"],
-        "Plateau": ["Barikin Ladi", "Bassa", "Bokkos", "Jos East", "Jos North", "Jos South", "Kanam", "Kanke", "Langtang North", "Langtang South", "Mangu", "Mikang", "Pankshin", "Qua'an Pan", "Riyom", "Shendam", "Wase"],
-        "Rivers": ["Abua/Odual", "Ahoada East", "Ahoada West", "Akuku Toru", "Andoni", "Asari-Toru", "Bonny", "Degema", "Eleme", "Emohua", "Etche", "Gokana", "Ikwerre", "Khana", "Obio/Akpor", "Ogba/Egbema/Ndoni", "Ogu/Bolo", "Okrika", "Omumma", "Opobo/Nkoro", "Oyigbo", "Port-Harcourt", "Tai"],
-        "Sokoto": ["Binji", "Bodinga", "Dange-shnsi", "Gada", "Gawabawa", "Goronyo", "Gudu", "Illela", "Isa", "kebbe", "Kware", "Rabah", "Sabon birni", "Shagari", "Silame", "Sokoto North", "Sokoto South", "Tambuwal", "Tqngaza", "Tureta", "Wamako", "Wurno", "Yabo"],
-        "Taraba": ["Ardo-kola", "Bali", "Cassol", "Donga", "Gashaka", "Ibi", "Jalingo", "Karin-Lamido", "Kurmi", "Lau", "Sardauna", "Takum", "Ussa", "Wukari", "Yorro", "Zing"],
-        "Yobe": ["Bade", "Bursari", "Damaturu", "Fika", "Fune", "Geidam", "Gujba", "Gulani", "Jakusko", "Karasuwa", "Karawa", "Machina", "Nangere", "Nguru Potiskum", "Tarmua", "Yunusari", "Yusufari"],
-        "Zamfara": ["Anka", "Bakura", "Birnin Magaji", "Bukkuyum", "Bungudu", "Gummi", "Gusau", "Kaura-Namoda", "Maradun", "Maru", "Namoda", "Shinkafi", "Talata Mafara", "Tsafe", "Zurmi"],
-      };
-
-      if (selectedState && LGAByState[selectedState]) {
-        LGAByState[selectedState].forEach(function(lga) {
-          $LGASelect.append(new Option(lga, lga));
-        });
-      }
-      $LGASelect.select2({
-        placeholder: "Type to search LGA...",
-        theme: "bootstrap4"
-      });
-    });
-  });
-
-  // 定義檢查非法字元的函式
+  // ------------------------------------------------------------
+  // 3) Utility: validate allowed characters for text inputs
+  //    Allowed: letters, numbers, space and - _ , . ( ) /
+  // ------------------------------------------------------------
   function isInvalidInput(value) {
-    // 只允許英文字母、數字、空白與 -_,.()/ 符號
     const pattern = /^[a-zA-Z0-9\s\-\_,.()\/]*$/;
     return !pattern.test(value);
   }
 
-  // 表單提交時的處理函式：先顯示確認 Modal
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    // 取得各欄位值，並 trim() 去除前後空白
-    const dealerCode    = $("#dealerCode").val().trim();
-    const model         = $("#model").val().trim();
-    const productSerial = $("#productSerial").val().trim();
-    const customerName  = $("#CustomerName").val().trim();
-    const phoneNumber   = $("#phoneNumber").val().trim();
-    const purchaseDate  = $("#purchaseDate").val().trim();
-    const state         = $("#state").val().trim();
-    const LGA           = $("#LGA").val().trim();
-
-    // 檢查必填欄位是否有空值
-    if (!dealerCode || !model || !productSerial || !customerName || !phoneNumber || !purchaseDate || !state || !LGA) {
-      $("#result").text("Please fill out all required fields.").removeClass("text-success").addClass("text-danger");
-      return;
-    }
-
-    // 檢查是否含有非法字元
-    if (isInvalidInput(dealerCode) || isInvalidInput(model) || isInvalidInput(productSerial) ||
-        isInvalidInput(customerName) || isInvalidInput(phoneNumber) || isInvalidInput(purchaseDate) ||
-        isInvalidInput(state) || isInvalidInput(LGA)) {
-      $("#result").text("Invalid characters detected.").removeClass("text-success").addClass("text-danger");
-      return;
-    }
-
-    // 將各欄位值填入確認 Modal
-    $("#confirmDealerCode").text(dealerCode);
-    $("#confirmModel").text(model);
-    $("#confirmProductSerial").text(productSerial);
-    $("#confirmCustomerName").text(customerName);
-    $("#confirmPhoneNumber").text(phoneNumber);
-    $("#confirmPurchaseDate").text(purchaseDate);
-    $("#confirmState").text(state);
-    $("#confirmLGA").text(LGA);
-
-    // 顯示確認 Modal
-    $("#confirmModal").modal("show");
-
-    // 當使用者在 Modal 按下 Confirm 按鈕
-    $("#confirmBtn").off("click").on("click", function() {
-      $("#confirmModal").modal("hide");
-
-      // 組合表單資料 (使用 URLSearchParams)
-      const formData = new URLSearchParams();
-      formData.append("dealerCode", dealerCode);
-      formData.append("model", model);
-      formData.append("productSerial", productSerial);
-      formData.append("CustomerName", customerName);
-      formData.append("phoneNumber", phoneNumber);
-      formData.append("purchaseDate", purchaseDate);
-      formData.append("state", state);
-      formData.append("LGA", LGA);
-
-      // 呼叫後端 Apps Script (請將 URL 替換為你的部署 exec URL)
-      fetch("https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec", {
-        method: "POST",
-        body: formData
-      })
-      .then(response => response.text())
-      .then(text => {
-        let data;
-        try {
-          data = JSON.parse(text);
-       } catch {
-          // 1. 回傳格式錯誤
-          showResult("warning", "Response format error. Please try again later.");
-          return;
-        }
-        if (data.result === "success") {
-          // 2. 註冊成功
-          showResult("success", "Registration successful!");
-          resetForm();
-        } else {
-          // 3. 註冊失敗
-          showResult("error", "Registration failed: " + (data.error || "Unknown error."));
-        }
-      })
-      .catch(() => {
-        // 4. 網路或伺服器錯誤
-        showResult("error", "Network/server error. Please try again later.");
-      });
-    });
-      // ----------------------------------------------------------------------------
-  // 「alert(...)」的替代：顯示 Bootstrap modal
+  // ------------------------------------------------------------
+  // 4) Result modal helper (Bootstrap modal-based alert)
+  // ------------------------------------------------------------
   function showResult(type, message) {
     const iconMap = {
       success: '<span class="text-success">✅</span>',
@@ -454,21 +336,165 @@ body::before {
     $("#resultMessage").text(message);
     $("#resultModal").modal("show");
   }
-  // ----------------------------------------------------------------------------
 
-    // 這個函式負責「清空整張表單」
-function resetForm() {
-  // 請幫你的 <form> 加上 id=""
-  document.getElementById("vipForm").reset();
+  // ------------------------------------------------------------
+  // 5) Reset the entire form (including Select2)
+  // ------------------------------------------------------------
+  function resetForm() {
+    document.getElementById("vipForm").reset();
+    $("#dealerCode, #model, #state, #LGA").val(null).trigger("change");
+    $("#result").text("").removeClass("text-success text-danger");
+  }
 
-  // Select2 欄位要手動清除並觸發 change
-  $("#dealerCode, #model, #state, #LGA")
-    .val(null)
-    .trigger("change");
+  // ------------------------------------------------------------
+  // 6) DOM ready: initialize Select2, populate options, bind events
+  // ------------------------------------------------------------
+  $(document).ready(function () {
+    // Dealer Code (Select2)
+    var $dealerSelect = $("#dealerCode");
+    dealerCodes.forEach(function (code) {
+      $dealerSelect.append(new Option(code, code));
+    });
+    $dealerSelect.select2({
+      placeholder: "e.g. DealerABC",
+      theme: "bootstrap4"
+    }).on('select2:open', function () {
+      $('.select2-search__field').attr('placeholder', 'Type here to search Dealer Code...');
+    });
 
-  // 同步清掉下方訊息
-  $("#result").text("").removeClass("text-success text-danger");
-}
+    // Model (Select2)
+    var $modelSelect = $("#model");
+    modelCodes.forEach(function (m) {
+      $modelSelect.append(new Option(m, m));
+    });
+    $modelSelect.select2({
+      placeholder: "e.g. ModelAlpha",
+      theme: "bootstrap4"
+    }).on('select2:open', function () {
+      $('.select2-search__field').attr('placeholder', 'Type here to search Model...');
+    });
+
+    // State (Select2)
+    $("#state").select2({
+      placeholder: "Type to search State...",
+      theme: "bootstrap4"
+    });
+
+    // LGA (Select2) initial empty
+    $("#LGA").select2({
+      placeholder: "Type to search LGA...",
+      theme: "bootstrap4"
+    });
+
+    // When State changes, populate LGA accordingly
+    $("#state").on("change", function () {
+      const selectedState = $(this).val();
+      const $LGASelect = $("#LGA");
+      $LGASelect.html('<option value=""></option>'); // clear old options
+
+      if (selectedState) {
+        const k = LGAByState[selectedState] ? selectedState
+              : (selectedState === "FCT Abuja" ? "FCT Abuja" : selectedState);
+        const list = LGAByState[k] || [];
+        list.forEach(function (lga) {
+          $LGASelect.append(new Option(lga, lga));
+        });
+      }
+      $LGASelect.trigger("change"); // refresh Select2
+    });
+
+    // Optional: limit future dates on purchaseDate to today
+    const today = new Date().toISOString().split("T")[0];
+    $("#purchaseDate").attr("max", today);
+  });
+
+  // ------------------------------------------------------------
+  // 7) Form submit handler: open confirmation modal, then POST
+  // ------------------------------------------------------------
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    // Safe extraction with null guards + trim
+    const dealerCode    = ( $("#dealerCode").val()    || "" ).toString().trim();
+    const model         = ( $("#model").val()         || "" ).toString().trim();
+    const productSerial = ( $("#productSerial").val() || "" ).toString().trim();
+    const customerName  = ( $("#CustomerName").val()  || "" ).toString().trim();
+    const phoneNumber   = ( $("#phoneNumber").val()   || "" ).toString().trim();
+    const purchaseDate  = ( $("#purchaseDate").val()  || "" ).toString().trim();
+    const state         = ( $("#state").val()         || "" ).toString().trim();
+    const LGA           = ( $("#LGA").val()           || "" ).toString().trim();
+
+    // Basic required check (front-end)
+    if (!dealerCode || !model || !productSerial || !customerName || !phoneNumber || !purchaseDate || !state || !LGA) {
+      $("#result").text("Please fill out all required fields.").removeClass("text-success").addClass("text-danger");
+      return;
+    }
+
+    // Character whitelist check for text fields
+    if (isInvalidInput(dealerCode) || isInvalidInput(model) || isInvalidInput(productSerial) ||
+        isInvalidInput(customerName) || isInvalidInput(phoneNumber) || isInvalidInput(purchaseDate) ||
+        isInvalidInput(state) || isInvalidInput(LGA)) {
+      $("#result").text("Invalid characters detected.").removeClass("text-success").addClass("text-danger");
+      return;
+    }
+
+    // Fill confirmation modal with user-entered data
+    $("#confirmDealerCode").text(dealerCode);
+    $("#confirmModel").text(model);
+    $("#confirmProductSerial").text(productSerial);
+    $("#confirmCustomerName").text(customerName);
+    $("#confirmPhoneNumber").text(phoneNumber);
+    $("#confirmPurchaseDate").text(purchaseDate);
+    $("#confirmState").text(state);
+    $("#confirmLGA").text(LGA);
+
+    // Show confirmation modal
+    $("#confirmModal").modal("show");
+
+    // Bind confirm button (unbind previous to avoid stacking)
+    $("#confirmBtn").off("click").on("click", function () {
+      $("#confirmModal").modal("hide");
+
+      // Build form data (URLSearchParams to match Apps Script expectations)
+      const formData = new URLSearchParams();
+      formData.append("dealerCode", dealerCode);
+      formData.append("model", model);
+      formData.append("productSerial", productSerial);
+      formData.append("CustomerName", customerName);
+      formData.append("phoneNumber", phoneNumber);
+      formData.append("purchaseDate", purchaseDate);
+      formData.append("state", state);
+      formData.append("LGA", LGA);
+
+      // TODO: Replace the URL with your deployed Apps Script exec URL
+      fetch("https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec", {
+        method: "POST",
+        body: formData
+      })
+      .then(response => response.text())
+      .then(text => {
+        let data;
+        try {
+          data = JSON.parse(text);
+        } catch {
+          // 1) Response is not valid JSON
+          showResult("warning", "Response format error. Please try again later.");
+          return;
+        }
+        if (data.result === "success") {
+          // 2) Registration successful
+          showResult("success", "Registration successful!");
+          resetForm();
+        } else {
+          // 3) Registration failed
+          showResult("error", "Registration failed: " + (data.error || "Unknown error."));
+        }
+      })
+      .catch(() => {
+        // 4) Network or server error
+        showResult("error", "Network/server error. Please try again later.");
+      });
+    });
   }
 </script>
 </body>
