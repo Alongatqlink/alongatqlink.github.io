@@ -10,10 +10,38 @@
     href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
   />
   <style>
-    /* Use same light-gray background and centered container as signup page */
+    /* -------------------------------------------------------
+       Global page styles
+       ------------------------------------------------------- */
     body {
-      background-color: #f8f9fa;
+      background-color: #f8f9fa; /* light gray background */
+      position: relative;        /* positioning context for pseudo-element */
+      min-height: 100vh;         /* ensure footer sticks at bottom */
+      display: flex;
+      flex-direction: column;
     }
+
+    /* -------------------------------------------------------
+       Watermark logo (same as signup page)
+       ------------------------------------------------------- */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url("Screenshot 2025-02-24 at 17.34.46.png")
+                  no-repeat center center;
+      background-size: 550px auto;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* -------------------------------------------------------
+       Landing container
+       ------------------------------------------------------- */
     .form-container {
       max-width: 600px;
       margin: 80px auto;
@@ -22,22 +50,49 @@
       border-radius: .25rem;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
+
     h1 {
       font-size: 2rem;
       font-weight: 700;
     }
+
     .btn-landing {
       width: 220px;
       padding: .75rem;
       font-size: 1.1rem;
     }
+
+    /* -------------------------------------------------------
+       Footer styles
+       ------------------------------------------------------- */
+    footer {
+      margin-top: auto;                /* push footer to bottom */
+      background: #e9ecef;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #495057;
+      border-top: 1px solid #dee2e6;
+    }
+    footer a {
+      color: #495057;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
 
+  <!-- -------------------------------------------------------
+       Main landing card
+       ------------------------------------------------------- -->
   <div class="form-container text-center">
     <h1 class="mb-4">Welcome to QLINK VIP</h1>
     <p class="mb-5">Please select your role to continue</p>
+
+    <!-- Role selection buttons -->
     <div class="d-flex justify-content-center">
       <!-- Consumer entry -->
       <a href="consumer-signup.html"
@@ -52,7 +107,19 @@
     </div>
   </div>
 
-  <!-- jQuery + Bootstrap JS -->
+  <!-- -------------------------------------------------------
+       Footer
+       ------------------------------------------------------- -->
+  <footer>
+    <div>© 2025 QLINK. All rights reserved.</div>
+    <div>
+      Contact us: <a href="mailto:support@qlink.com">support@qlink.com</a>
+    </div>
+  </footer>
+
+  <!-- -------------------------------------------------------
+       JS dependencies
+       ------------------------------------------------------- -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
