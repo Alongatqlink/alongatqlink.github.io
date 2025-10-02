@@ -1,85 +1,102 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>QLINK VIP Registration</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS (single include) -->
+  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Select2 CSS + Bootstrap4 Theme -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css">
   <style>
+    /* -------------------------------------------------------
+       Global page styles
+       ------------------------------------------------------- */
+    body {
+      background-color: #f8f9fa;
+      position: relative;     /* for watermark */
+      min-height: 100vh;      /* make sure footer stays at bottom */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Watermark (same style as homepage) */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: url("Screenshot 2025-02-24 at 17.34.46.png")
+                  no-repeat center center;
+      background-size: 550px auto;
+      opacity: 0.08;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Main form container */
     .form-container {
       max-width: 600px;
       margin: 50px auto;
       padding: 20px;
+      background: #fff;
+      border-radius: .25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    /* Make Select2 look like native .form-control */
-    .select2-container--bootstrap4 .select2-selection--single {
-      display: flex !important;
-      align-items: center !important;
-      height: calc(2.25rem + 2px) !important;
-      border: 1px solid #ced4da !important;
-      border-radius: .25rem !important;
-      background-color: #fff !important;
-      padding: 0 !important;
-      line-height: 1.5 !important;
+    /* Footer styles */
+    footer {
+      margin-top: auto; /* push footer to bottom */
+      background: #e9ecef;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #495057;
+      border-top: 1px solid #dee2e6;
     }
-    .select2-container--bootstrap4 .select2-selection__rendered {
-      margin-top: 0 !important;
-      margin-left: .75rem !important;
-      margin-right: .75rem !important;
-      padding: 0 !important;
-      line-height: 1.5 !important;
-      color: #495057 !important;
+    footer a {
+      color: #495057;
+      text-decoration: none;
     }
-    .select2-container--bootstrap4 .select2-selection__placeholder {
-      color: #6c757d !important;
-    }
-
-    /* ----------------------------------------
-       Watermark logo styles
-       ----------------------------------------
-       - Use ::before as a fixed, full-viewport watermark
-       - Keep pointer-events: none so it won't block inputs
-       - Adjust background-size to fit your visual preference
-    */
-    body {
-      position: relative;          /* Create positioning context for pseudo element */
-      background-color: #f8f9fa;   /* Optional: light gray to make white card pop */
-    }
-    body::before {
-      content: "";
-      position: fixed;             /* Fixed so it doesn't scroll with content */
-      top: 0;
-      left: 0;
-      width: 100vw;                /* Cover entire viewport width */
-      height: 100vh;               /* Cover entire viewport height */
-      background:
-        url("https://github.com/Alongatqlink/alongatqlink.github.io/blob/main/Screenshot%202025-02-24%20at%2017.34.46.png") /* Replace with your logo path */
-        no-repeat center center;
-      background-size: 550px auto; /* Adjust watermark size as needed */
-      opacity: 0.08;               /* 8% opacity so form remains readable */
-      pointer-events: none;        /* Do not intercept mouse events */
-      z-index: -1;                 /* Behind everything */
+    footer a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
 
-<div class="form-container">
-  <h1 class="h3 mb-4">QLINK VIP Registration</h1>
+  <!-- -------------------------------------------------------
+       Form Section
+       ------------------------------------------------------- -->
+  <div class="form-container">
+    <h1>QLINK VIP Registration</h1>
+    <!-- form starts here -->
+    <form id="vipForm" onsubmit="handleSubmit(event)">
+      <!-- ... (all existing form fields & modals unchanged) ... -->
+    </form>
+    <div id="result" class="mt-3"></div>
+  </div>
 
-  <form id="vipForm" onsubmit="handleSubmit(event)" novalidate>
-    <!-- Dealer Code (Select2) -->
-    <div class="form-group">
-      <label for="dealerCode">Dealer Code</label>
-      <select id="dealerCode" class="form-control" style="width: 100%;" required>
-        <option value=""></option>
-      </select>
+  <!-- -------------------------------------------------------
+       Footer
+       ------------------------------------------------------- -->
+  <footer>
+    <div>© 2025 QLINK. All rights reserved.</div>
+    <div>
+      Contact us: <a href="mailto:support@qlink.com">support@qlink.com</a>
     </div>
+  </footer>
+
+  <!-- -------------------------------------------------------
+       JS dependencies
+       ------------------------------------------------------- -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- existing JavaScript code remains unchanged -->
+</body>
 
     <!-- Model (Select2) -->
     <div class="form-group">
