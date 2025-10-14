@@ -408,7 +408,7 @@
     $dealer.empty().append('<option value=""></option>');
     dealerCodes.forEach(c => $dealer.append(new Option(c, c)));
     $dealer.select2({
-      placeholder: 'e.g. Dealer ABC',
+      placeholder: 'Select your dealer',
       theme: 'bootstrap4',
       dropdownParent: $parent
     }).on('select2:open', () => {
