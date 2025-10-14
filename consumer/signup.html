@@ -171,9 +171,11 @@
         <div id="phoneError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
       </div>
 
-      <!-- Purchase Date -->
+      <!-- Purchase Date (visible + hidden) -->
       <div class="form-group">
         <label for="purchaseDateDisplay">Purchase Date</label>
+
+        <!-- Visible input (always DD/MM/YYYY for users) -->
         <input
           type="text"
           class="form-control"
@@ -182,7 +184,13 @@
           inputmode="numeric"
           autocomplete="off"
           required
+          onpointerdown="if (this.type !== 'date') { this.type='date'; this.showPicker && this.showPicker(); event.preventDefault(); }"
+          onfocus="this.type='date'; setTimeout(()=>{ this.showPicker && this.showPicker(); },0);
+                   if (document.getElementById('purchaseDate').value)
+                     this.value = document.getElementById('purchaseDate').value;"
+          onblur="if (!this.value) { this.type='text'; this.placeholder='dd/mm/yyyy'; }"
         />
+        <!-- Hidden input (ISO YYYY-MM-DD for backend) -->
         <input type="hidden" id="purchaseDate" name="purchaseDate" />
       </div>
 
@@ -455,45 +463,32 @@
     phoneInput.addEventListener('blur', validatePhoneField);
     window.__validatePhoneField = validatePhoneField;
 
-    // --- Purchase Date (Nigeria format dd/mm/yyyy) ---
-    const display = document.getElementById("purchaseDateDisplay");
-    const hidden = document.getElementById("purchaseDate");
-    
-    // Always open native picker when clicked
-    display.addEventListener("focus", function () {
-      this.type = "date";                 // temporarily switch type to date
-      this.showPicker?.();                // open native picker
-    });
-    
-    // When a date is chosen, reformat to dd/mm/yyyy
-    display.addEventListener("change", function () {
-      if (this.type === "date" && this.value.includes("-")) {
-        const [y, m, d] = this.value.split("-");
-        hidden.value = `${y}-${m}-${d}`;  // backend ISO format
-        this.type = "text";               // switch back for display
-        this.value = `${d}/${m}/${y}`;    // Nigeria-style format
-      }
-    });
-    
-    // Restore placeholder when cleared
-    display.addEventListener("blur", function () {
-      if (!this.value) {
-        this.type = "text";
-        this.placeholder = "dd/mm/yyyy";
+    // ---- Date display ↔ hidden sync ----
+    const display = document.getElementById('purchaseDateDisplay');
+    const hidden  = document.getElementById('purchaseDate');
+
+    display.addEventListener('change', function(){
+      if (!this.value) return;
+      if (this.type === 'date' && this.value.includes('-')) {
+        const [y,m,d] = this.value.split('-');
+        hidden.value = `${y}-${m}-${d}`;
+        this.type = 'text';
+        this.value = `${d}/${m}/${y}`;
       }
     });
 
-    // Validate dd/mm/yyyy
-    const dateMatch = display.value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (dateMatch) {
-      const [, d, m, y] = dateMatch;
-      hidden.value = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
-    } else {
-      e.preventDefault();
-      alert("Please enter a valid date in DD/MM/YYYY format.");
-      display.focus();
-      return;
-    }
+    // Convert manual DD/MM/YYYY to ISO on submit
+    document.getElementById('vipForm').addEventListener('submit', function(e){
+      const m = (display.value || '').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m){
+        const [,d,mo,y] = m;
+        hidden.value = `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      }
+      if (!hidden.value){
+        e.preventDefault();
+        alert('Please enter a valid date in DD/MM/YYYY.');
+        display.focus();
+      }
     });
   });
 
