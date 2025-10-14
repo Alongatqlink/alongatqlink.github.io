@@ -156,10 +156,11 @@
   <form id="vipForm" onsubmit="handleSubmit(event)" novalidate>
     <!-- Dealer Code (Select2) -->
     <div class="form-group">
-      <label for="dealerCode">Dealer Code (Confirm with your dealer if you don't know)</label>
+      <label for="dealerCode">Dealer Code</label>
       <select id="dealerCode" class="form-control" style="width: 100%;" required>
         <option value=""></option>
       </select>
+      <small class="form-text text-muted">Confirm with your dealer if you don't know/</small>
     </div>
 
     <!-- Model (Select2) -->
@@ -168,6 +169,22 @@
       <select id="model" class="form-control" style="width: 100%;" required>
         <option value=""></option>
       </select>
+    </div>
+
+    <!-- Product Serial -->
+    <div class="form-group">
+      <label for="productSerial">Product Serial (No special characters such as *%@#$&/^~().)</label>
+      <input
+        type="text"
+        class="form-control"
+        id="productSerial"
+        placeholder="Enter product serial"
+        autocomplete="off"
+        inputmode="latin"
+        required
+        pattern="[A-Za-z0-9\s\-\_,.()\/]*"
+      >
+      <small class="form-text text-muted">Allowed: letters, numbers, space, and - _ , . ( ) /</small>
     </div>
 
     <!-- Customer Name -->
