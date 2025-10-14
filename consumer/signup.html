@@ -170,20 +170,25 @@
       </select>
     </div>
 
-    <!-- Product Serial -->
+    <!-- Purchase Date -->
     <div class="form-group">
-      <label for="productSerial">Product Serial</label>
+      <label for="purchaseDateDisplay">Purchase Date</label>
+    
+      <!-- Visible input (always shows Nigeria format: DD/MM/YYYY) -->
       <input
         type="text"
         class="form-control"
-        id="productSerial"
-        placeholder="Enter product serial"
+        id="purchaseDateDisplay"
+        placeholder="dd/mm/yyyy"
+        inputmode="numeric"
         autocomplete="off"
-        inputmode="latin"
         required
-        pattern="[A-Za-z0-9\s\-\_,.()\/]*"
+        onfocus="this.type='date'; if (document.getElementById('purchaseDate').value) this.value = document.getElementById('purchaseDate').value;"
+        onblur="if (!this.value) { this.type='text'; this.placeholder='dd/mm/yyyy'; }"
       >
-      <small class="form-text text-muted">Allowed: letters, numbers, space, and - _ , . ( ) /</small>
+    
+      <!-- Hidden field actually submitted to backend (ISO: YYYY-MM-DD) -->
+      <input type="hidden" id="purchaseDate" name="purchaseDate">
     </div>
 
     <!-- Customer Name -->
@@ -616,5 +621,44 @@
     });
   }
 </script>
+    <script>
+  // Elements
+  const display = document.getElementById('purchaseDateDisplay');
+  const hidden  = document.getElementById('purchaseDate');
+  
+  // When date picked via native picker
+  display.addEventListener('change', function () {
+    if (!this.value) return;
+  
+    // If value comes from native date input it's YYYY-MM-DD
+    // Keep ISO in hidden, show DD/MM/YYYY on screen
+    if (this.type === 'date' && this.value.includes('-')) {
+      const [y, m, d] = this.value.split('-');
+      hidden.value = `${y}-${m}-${d}`;
+      this.type = 'text';
+      this.value = `${d}/${m}/${y}`;
+    }
+  });
+  
+  // On manual typing, normalize before submit
+  document.querySelector('form')?.addEventListener('submit', function (e) {
+    // If user typed DD/MM/YYYY into the text box, convert to ISO
+    const ddmmyyyy = display.value.trim();
+    const m = ddmmyyyy.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (m) {
+      const [ , d, mo, y ] = m;
+      const d2  = String(d).padStart(2, '0');
+      const m2  = String(mo).padStart(2, '0');
+      hidden.value = `${y}-${m2}-${d2}`; // ISO for backend
+    }
+  
+    // Basic guard: ensure hidden has ISO value
+    if (!hidden.value) {
+      e.preventDefault();
+      alert('Please enter a valid date in DD/MM/YYYY.');
+      display.focus();
+    }
+  });
+  </script>
 </body>
 </html>
