@@ -89,10 +89,6 @@
     .select2-container--bootstrap4 .select2-selection__placeholder { color: #6c757d !important; }
     .select2-container { width: 100% !important; }
     .select2-container--bootstrap4 .select2-dropdown { background-color: #fff; }
-    .select2-container--bootstrap4 .select2-dropdown {
-    z-index: 9999 !important;
-    position: absolute !important;
-  }
 
     /* Mobile */
     @media (max-width: 576px) {
@@ -383,46 +379,19 @@
     }
 
     // Init
-    $(document).ready(function() {
-    
-      // --- Dealer Code ---
-      var $dealerSelect = $("#dealerCode");
-      dealerCodes.forEach(c => $dealerSelect.append(new Option(c, c)));
-      $dealerSelect.select2({
-        placeholder: "e.g. Dealer ABC",
-        theme: "bootstrap4",
-        dropdownParent: $('.form-container') // ✅ ensures dropdown stays visible and scrollable
-      }).on("select2:open", function() {
-        $(".select2-search__field").attr("placeholder", "Type here to search Dealer Code...");
-      });
-    
-      // --- Model ---
-      var $modelSelect = $("#model");
-      modelCodes.forEach(m => $modelSelect.append(new Option(m, m)));
-      $modelSelect.select2({
-        placeholder: "e.g. TIGER 150",
-        theme: "bootstrap4",
-        dropdownParent: $('.form-container') // ✅ important for long lists
-      }).on("select2:open", function() {
-        $(".select2-search__field").attr("placeholder", "Type here to search Model...");
-      });
-    
-      // --- Residential State ---
-      $("#state").select2({
-        placeholder: "Type to search State...",
-        theme: "bootstrap4",
-        dropdownParent: $('.form-container') // ✅ keeps dropdown inside form bounds
-      });
-    
-      // --- Residential LGA ---
-      $("#LGA").select2({
-        placeholder: "Type to search LGA...",
-        theme: "bootstrap4",
-        dropdownParent: $('.form-container') // ✅ avoids clipping
-      });
-    });
-      // State -> LGA
-      $("#state").on("change", function(){
+    $(document).ready(function(){
+      // Populate Select2
+      $("#dealerCode").select2({ placeholder:"e.g. Dealer ABC", theme:"bootstrap4" })
+        .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Dealer Code..."); });
+      dealerCodes.forEach(c=>$("#dealerCode").append(new Option(c,c)));
+
+      $("#model").select2({ placeholder:"e.g. TIGER 150", theme:"bootstrap4" })
+        .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Model..."); });
+      modelCodes.forEach(m=>$("#model").append(new Option(m,m)));
+
+      $("#state").select2({ placeholder:"Type to search State...", theme:"bootstrap4" });
+      $("#LGA").select2({ placeholder:"Type to search LGA...", theme:"bootstrap4" });
+    $("#state").on("change", function(){
         const st = $(this).val();
         const list = LGAByState[st] || (st==="FCT Abuja" ? LGAByState["FCT Abuja"] : []);
         const $lga = $("#LGA").html('<option value=""></option>');
