@@ -170,27 +170,6 @@
       </select>
     </div>
 
-    <!-- Purchase Date -->
-    <div class="form-group">
-      <label for="purchaseDateDisplay">Purchase Date</label>
-    
-      <!-- Visible input (always shows Nigeria format: DD/MM/YYYY) -->
-      <input
-        type="text"
-        class="form-control"
-        id="purchaseDateDisplay"
-        placeholder="dd/mm/yyyy"
-        inputmode="numeric"
-        autocomplete="off"
-        required
-        onfocus="this.type='date'; if (document.getElementById('purchaseDate').value) this.value = document.getElementById('purchaseDate').value;"
-        onblur="if (!this.value) { this.type='text'; this.placeholder='dd/mm/yyyy'; }"
-      >
-    
-      <!-- Hidden field actually submitted to backend (ISO: YYYY-MM-DD) -->
-      <input type="hidden" id="purchaseDate" name="purchaseDate">
-    </div>
-
     <!-- Customer Name -->
     <div class="form-group">
       <label for="CustomerName">Customer Name</label>
@@ -223,14 +202,21 @@
 
     <!-- Purchase Date -->
     <div class="form-group">
-      <label for="purchaseDate">Purchase Date</label>
+      <label for="purchaseDateDisplay">Purchase Date</label>
+    
+      <!-- Visible input (always shows Nigeria format: DD/MM/YYYY) -->
       <input
-        type="date"
+        type="text"
         class="form-control"
-        id="purchaseDate"
-        placeholder="mm/dd/yyyy"
+        id="purchaseDateDisplay"
+        placeholder="dd/mm/yyyy"
+        inputmode="numeric"
+        autocomplete="off"
         required
+        onfocus="this.type='date'; if (document.getElementById('purchaseDate').value) this.value = document.getElementById('purchaseDate').value;"
+        onblur="if (!this.value) { this.type='text'; this.placeholder='dd/mm/yyyy'; }"
       >
+      <input type="hidden" id="purchaseDate" name="purchaseDate">
     </div>
 
     <!-- Residential State (Select2) -->
@@ -479,8 +465,8 @@
     });
 
     // Optional: limit future dates on purchaseDate to today
-    const today = new Date().toISOString().split("T")[0];
-    $("#purchaseDate").attr("max", today);
+        const today = new Date().toISOString().split("T")[0];
+        document.getElementById("purchaseDateDisplay").setAttribute("max", today);
 
     // ---- Phone guard rails (NG local: 0 + 10 digits = 11 total) ----
     const phoneInput = document.getElementById("phoneNumber");
@@ -577,7 +563,13 @@
     $("#confirmProductSerial").text(productSerial);
     $("#confirmCustomerName").text(customerName);
     $("#confirmPhoneNumber").text(phoneNumber);      // Shows local formats（0xxxxxxxxxx）
-    $("#confirmPurchaseDate").text(purchaseDate);
+    const purchaseDateISO = ($("#purchaseDate").val() || "").toString().trim();
+function toDDMMYYYY(iso){
+  if(!iso) return "";
+  const [y,m,d] = iso.split("-");
+  return `${d}/${m}/${y}`;
+}
+$("#confirmPurchaseDate").text(toDDMMYYYY(purchaseDateISO));
     $("#confirmState").text(state);
     $("#confirmLGA").text(LGA);
 
