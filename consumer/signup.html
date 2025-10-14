@@ -102,6 +102,19 @@
     @media (max-width: 576px) {
       .form-container { margin: 24px 12px; padding: 16px; }
     }
+    .form-container .select2-container--bootstrap4 .select2-selection--single {
+      background-color: transparent !important;
+    }
+    
+    /* Ensure the text area inside selection stays transparent too */
+    .form-container .select2-container--bootstrap4 .select2-selection__rendered {
+      background: transparent !important;
+    }
+    
+    /* Keep the dropdown results panel readable (white background) */
+    .select2-container--bootstrap4 .select2-dropdown {
+      background-color: #fff;
+    }
   </style>
 </head>
 <body>
