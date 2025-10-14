@@ -10,55 +10,127 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css">
   <style>
-    /* Prevent horizontal scroll on mobile */
-    html, body {
-      overflow-x: hidden;
-    }
-    
-    /* Default (desktop/tablet layout) */
+  /* -----------------------------------------------------
+     Base layout and global rules
+  ----------------------------------------------------- */
+  html, body {
+    overflow-x: hidden;            /* prevent horizontal scroll */
+  }
+  
+  body {
+    position: relative;            /* for watermark layering */
+    min-height: 100vh;             /* let footer stick to bottom */
+    display: flex;                 /* flex layout for sticky footer */
+    flex-direction: column;
+    background-color: #f8f9fa;     /* light gray background */
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  
+  /* -----------------------------------------------------
+     Form container (the main white card)
+  ----------------------------------------------------- */
+  .form-container {
+    max-width: 600px;
+    margin: 50px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: .25rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    position: relative;
+    z-index: 1; /* ensure above watermark */
+  }
+  
+  h1 {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  
+  /* -----------------------------------------------------
+     Buttons
+  ----------------------------------------------------- */
+  .btn-landing, .btn-primary {
+    width: 100%;
+    padding: .75rem;
+    font-size: 1.1rem;
+  }
+  
+  /* -----------------------------------------------------
+     Footer
+  ----------------------------------------------------- */
+  footer {
+    margin-top: auto;
+    background: #e9ecef;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #495057;
+    border-top: 1px solid #dee2e6;
+    position: relative;
+    z-index: 1; /* make sure it's above watermark */
+  }
+  
+  /* -----------------------------------------------------
+     Watermark (responsive and centered)
+  ----------------------------------------------------- */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background-image: url("../images/watermark_1.png"); /* ✅ correct path */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: min(80vw, 500px) auto; /* fluid scaling, max 500px */
+    opacity: 0.07; /* light transparency */
+    pointer-events: none;
+    z-index: -1; /* behind everything */
+  }
+  
+  /* -----------------------------------------------------
+     Select2 consistency with Bootstrap
+  ----------------------------------------------------- */
+  .select2-container--bootstrap4 .select2-selection--single {
+    display: flex !important;
+    align-items: center !important;
+    height: calc(2.25rem + 2px) !important;
+    border: 1px solid #ced4da !important;
+    border-radius: .25rem !important;
+    background-color: #fff !important;
+    padding: 0 !important;
+    line-height: 1.5 !important;
+  }
+  .select2-container--bootstrap4 .select2-selection__rendered {
+    margin-left: .75rem !important;
+    margin-right: .75rem !important;
+    padding: 0 !important;
+    line-height: 1.5 !important;
+    color: #495057 !important;
+  }
+  .select2-container--bootstrap4 .select2-selection__placeholder {
+    color: #6c757d !important;
+  }
+  .select2-container {
+    width: 100% !important;
+  }
+  
+  /* -----------------------------------------------------
+     Mobile adjustments
+  ----------------------------------------------------- */
+  @media (max-width: 576px) {
     .form-container {
-      max-width: 600px;
-      margin: 50px auto;
-      padding: 20px;
+      margin: 24px 12px;
+      padding: 16px;
     }
-    
-    /* Responsive layout for small screens */
-    @media (max-width: 576px) {
-      /* Reduce side margins and padding for better mobile fit */
-      .form-container {
-        margin: 24px 12px;
-        padding: 16px;
-      }
-    
-      /* Ensure Select2 dropdown fits 100% width */
-      .select2-container {
-        width: 100% !important;
-      }
+  
+    .select2-container {
+      width: 100% !important;
     }
-    
-      /* Watermark background (responsive and centered) */
-      body::before {
-        content: "";
-        position: fixed;
-        inset: 0; /* shorthand for top/right/bottom/left: 0 */
-        background-image: url("../images/watermark_1.png"); /* 👈 your watermark file path */
-        background-repeat: no-repeat;
-        background-position: center center;
-        background-size: min(80vw, 500px) auto; /* scale with viewport but limit max size */
-        opacity: 0.07; /* visibility */
-        pointer-events: none; /* ignore clicks */
-        z-index: 0;
-        overflow: hidden; /* ensure image won't cause scroll */
-      }
-      
-      /* Adjust watermark for small screens */
-      @media (max-width: 576px) {
-        body::before {
-          background-size: 95vw auto; /* fit width, no horizontal scroll */
-          background-position: center 30%; /* slightly higher to avoid overlapping button */
-          opacity: 0.05; /* lighter for mobile readability */
-        }
-      }
+  
+    body::before {
+      background-size: 95vw auto;      /* fit width on phones */
+      background-position: center 30%; /* move up slightly */
+      opacity: 0.05;                   /* lighter for readability */
+    }
+  }
   </style>
 </head>
 <body>
