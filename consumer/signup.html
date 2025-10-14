@@ -449,18 +449,12 @@
         phoneInput.classList.remove("is-invalid");
         return false;
       }
-      if (!re.test(v)) {
-        if (!v.startsWith("0")) {
-          phoneError.textContent = "Number must start with 0 (local Nigerian format).";
-        } else if (v.length < 11) {
-          phoneError.textContent = "Number is too short. Nigerian mobile numbers are 11 digits (e.g. 08012345678).";
-        } else {
-          phoneError.textContent = "Invalid phone number format.";
-        }
+     if (!re.test(v)) {
+        phoneError.textContent = "Invalid mobile phone number format.";
         phoneError.style.display = "block";
         phoneInput.classList.add("is-invalid");
         return false;
-      }
+      } 
       phoneError.style.display = "none";
       phoneInput.classList.remove("is-invalid");
       return true;
