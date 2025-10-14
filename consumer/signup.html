@@ -281,14 +281,9 @@
 <!-- jQuery + Bootstrap JS (single include) -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Select2 JS -->
+<!-- Select2 JS (single include) -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<!-- jQuery + Bootstrap JS (single include) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Select2 JS -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
   // ------------------------------------------------------------
   // 1) Mock data for Dealer Code and Model
@@ -298,7 +293,11 @@
     "Dealer007","Dealer888","Dealer555","Dealer999","Dealer111"
   ];
   var modelCodes = [
-    "TARGET 110", "VELOCITY 110", "REIZ 110", "WISDOM 110", "AGRO 200", "AGRO 150", "RKT 200", "CHAMPION 200", "TIGER 150", "TIGER 160", "MONSTER 2.0", "GD 110", "CRUISER 125", "SPRINT 150", "D-SUPER 150", "TIGER 200", "QG 125", "QG 125-I", "QGL-G12", "QGL-G8", "LUCKY ULTRA 110", "UD ULTRA 110", "XPREZ 125"
+    "TARGET 110", "VELOCITY 110", "REIZ 110", "WISDOM 110", "AGRO 200",
+    "AGRO 150", "RKT 200", "CHAMPION 200", "TIGER 150", "TIGER 160",
+    "MONSTER 2.0", "GD 110", "CRUISER 125", "SPRINT 150", "D-SUPER 150",
+    "TIGER 200", "QG 125", "QG 125-I", "QGL-G12", "QGL-G8",
+    "LUCKY ULTRA 110", "UD ULTRA 110", "XPREZ 125"
   ];
 
   // ------------------------------------------------------------
@@ -387,36 +386,28 @@
     dealerCodes.forEach(function (code) {
       $dealerSelect.append(new Option(code, code));
     });
-    $dealerSelect.select2({
-      placeholder: "e.g. Dealer ABC",
-      theme: "bootstrap4"
-    }).on('select2:open', function () {
-      $('.select2-search__field').attr('placeholder', 'Type here to search Dealer Code...');
-    });
+    $dealerSelect
+      .select2({ placeholder: "e.g. Dealer ABC", theme: "bootstrap4" })
+      .on("select2:open", function () {
+        $(".select2-search__field").attr("placeholder", "Type here to search Dealer Code...");
+      });
 
     // Model (Select2)
     var $modelSelect = $("#model");
     modelCodes.forEach(function (m) {
       $modelSelect.append(new Option(m, m));
     });
-    $modelSelect.select2({
-      placeholder: "e.g. TIGER 150",
-      theme: "bootstrap4"
-    }).on('select2:open', function () {
-      $('.select2-search__field').attr('placeholder', 'Type here to search Model...');
-    });
+    $modelSelect
+      .select2({ placeholder: "e.g. TIGER 150", theme: "bootstrap4" })
+      .on("select2:open", function () {
+        $(".select2-search__field").attr("placeholder", "Type here to search Model...");
+      });
 
     // State (Select2)
-    $("#state").select2({
-      placeholder: "Type to search State...",
-      theme: "bootstrap4"
-    });
+    $("#state").select2({ placeholder: "Type to search State...", theme: "bootstrap4" });
 
     // LGA (Select2) initial empty
-    $("#LGA").select2({
-      placeholder: "Type to search LGA...",
-      theme: "bootstrap4"
-    });
+    $("#LGA").select2({ placeholder: "Type to search LGA...", theme: "bootstrap4" });
 
     // When State changes, populate LGA accordingly
     $("#state").on("change", function () {
