@@ -36,28 +36,29 @@
       }
     }
     
-    /* Watermark background (responsive size and position) */
-    body::before {
-      content: ""; /* required for pseudo-element to render */
-      position: fixed;
-      inset: 0; /* shorthand for top/right/bottom/left: 0 */
-      background-image: url("../images/watermark_1.png"); 
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: clamp(240px, 90vw, 550px) auto; /* fluid scaling */
-      opacity: 0.08;
-      pointer-events: none; /* prevent interference with clicks */
-      z-index: 0;
-    }
-    
-    /* Adjust watermark for small screens */
-    @media (max-width: 576px) {
+      /* Watermark background (responsive and centered) */
       body::before {
-        background-size: 110vw auto;      /* slightly larger on mobile */
-        background-position: center 20%;  /* move up a bit to avoid covering bottom */
-        opacity: 0.06;                    /* lighter opacity on mobile */
+        content: "";
+        position: fixed;
+        inset: 0; /* shorthand for top/right/bottom/left: 0 */
+        background-image: url("../images/313274.jpg"); /* 👈 your watermark file path */
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: min(80vw, 500px) auto; /* scale with viewport but limit max size */
+        opacity: 0.07; /* visibility */
+        pointer-events: none; /* ignore clicks */
+        z-index: 0;
+        overflow: hidden; /* ensure image won't cause scroll */
       }
-    }
+      
+      /* Adjust watermark for small screens */
+      @media (max-width: 576px) {
+        body::before {
+          background-size: 95vw auto; /* fit width, no horizontal scroll */
+          background-position: center 30%; /* slightly higher to avoid overlapping button */
+          opacity: 0.05; /* lighter for mobile readability */
+        }
+      }
   </style>
 </head>
 <body>
