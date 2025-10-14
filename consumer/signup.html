@@ -146,11 +146,14 @@
         type="tel"
         class="form-control"
         id="phoneNumber"
-        placeholder="e.g. +234XXXXXXXX"
+        placeholder="e.g. 08012345678"
         autocomplete="tel"
         required
-        pattern="[\+\d][\d\s\-]{6,}"
+        maxlength="11"
+        inputmode="numeric"
       >
+      <small id="phoneHelp" class="form-text text-muted">Enter local Nigerian number starting with 0 (11 digits).</small>
+      <div id="phoneError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
     </div>
 
     <!-- Purchase Date -->
