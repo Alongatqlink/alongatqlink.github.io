@@ -387,117 +387,110 @@
     }
 
     // Init
-    $(document).ready(function () {
-      const $parent = $('.form-container');
-    
-      // --- Dealer Code ---
-      const $dealer = $('#dealerCode');
-      $dealer.empty().append('<option value=""></option>');
-      dealerCodes.forEach(c => $dealer.append(new Option(c, c)));
-      $dealer.select2({
-        placeholder: 'e.g. Dealer ABC',
-        theme: 'bootstrap4',
-        dropdownParent: $parent
-      }).on('select2:open', function () {
-        $('.select2-search__field').attr('placeholder', 'Type here to search Dealer Code...');
-      });
-    
-      // --- Model ---
-      const $model = $('#model');
-      $model.empty().append('<option value=""></option>');
-      modelCodes.forEach(m => $model.append(new Option(m, m)));
-      $model.select2({
-        placeholder: 'e.g. TIGER 150',
-        theme: 'bootstrap4',
-        dropdownParent: $parent
-      }).on('select2:open', function () {
-        $('.select2-search__field').attr('placeholder', 'Type here to search Model...');
-      });
-    
-      // --- State ---
-      $('#state').select2({
-        placeholder: 'Type to search State...',
-        theme: 'bootstrap4',
-        dropdownParent: $parent
-      });
-    
-      // --- LGA ---
-      $('#LGA').select2({
-        placeholder: 'Type to search LGA...',
-        theme: 'bootstrap4',
-        dropdownParent: $parent
-      });
-    
-      // --- State → LGA ---
-      $('#state').on('change', function () {
-        const st   = $(this).val();
-        const list = LGAByState[st] || (st === 'FCT Abuja' ? LGAByState['FCT Abuja'] : []);
-        const $lga = $('#LGA');
-    
-        $lga.html('<option value=""></option>');     // reset options
-        (list || []).forEach(l => $lga.append(new Option(l, l)));
-    
-        // Clear current selection &刷新 Select2
-        $lga.val(null).trigger('change.select2');
-      });
+  $(document).ready(function () {
+    const $parent = $('.form-container');
+
+    // --- Dealer Code ---
+    const $dealer = $('#dealerCode');
+    $dealer.empty().append('<option value=""></option>');
+    dealerCodes.forEach(c => $dealer.append(new Option(c, c)));
+    $dealer.select2({
+      placeholder: 'e.g. Dealer ABC',
+      theme: 'bootstrap4',
+      dropdownParent: $parent
+    }).on('select2:open', () => {
+      $('.select2-search__field').attr('placeholder','Type here to search Dealer Code...');
     });
 
-      // Limit future dates on display input
-      const today = new Date().toISOString().split("T")[0];
-      document.getElementById("purchaseDateDisplay").setAttribute("max", today);
+    // --- Model ---
+    const $model = $('#model');
+    $model.empty().append('<option value=""></option>');
+    modelCodes.forEach(m => $model.append(new Option(m, m)));
+    $model.select2({
+      placeholder: 'e.g. TIGER 150',
+      theme: 'bootstrap4',
+      dropdownParent: $parent
+    }).on('select2:open', () => {
+      $('.select2-search__field').attr('placeholder','Type here to search Model...');
+    });
 
-      // Phone guard rails (Nigeria local: 11 digits, starts with 0)
-      const phoneInput = document.getElementById("phoneNumber");
-      let phoneError = document.getElementById("phoneError");
-      phoneInput.setAttribute("inputmode","numeric");
-      phoneInput.setAttribute("maxlength","11");
+    // --- State ---
+    $('#state').select2({
+      placeholder: 'Type to search State...',
+      theme: 'bootstrap4',
+      dropdownParent: $parent
+    });
 
-      function validatePhoneField(){
-        const v = phoneInput.value || "";
-        const ok = /^0\d{10}$/.test(v);
-        if(!v){ phoneError.style.display="none"; phoneInput.classList.remove("is-invalid"); return false; }
-        if(!ok){ phoneError.textContent="Invalid mobile phone number format."; phoneError.style.display="block"; phoneInput.classList.add("is-invalid"); return false; }
-        phoneError.style.display="none"; phoneInput.classList.remove("is-invalid"); return true;
+    // --- LGA ---
+    $('#LGA').select2({
+      placeholder: 'Type to search LGA...',
+      theme: 'bootstrap4',
+      dropdownParent: $parent
+    });
+
+    // --- State → LGA ---
+    $('#state').on('change', function () {
+      const st   = $(this).val();
+      const list = LGAByState[st] || (st === 'FCT Abuja' ? LGAByState['FCT Abuja'] : []);
+      const $lga = $('#LGA');
+      $lga.html('<option value=""></option>');
+      (list || []).forEach(l => $lga.append(new Option(l, l)));
+      $lga.val(null).trigger('change.select2');
+    });
+
+    // ---- Date: limit to today on visible input ----
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('purchaseDateDisplay').setAttribute('max', today);
+
+    // ---- Phone guard rails ----
+    const phoneInput = document.getElementById('phoneNumber');
+    const phoneError = document.getElementById('phoneError');
+    phoneInput.setAttribute('inputmode','numeric');
+    phoneInput.setAttribute('maxlength','11');
+
+    function validatePhoneField(){
+      const v = phoneInput.value || '';
+      const ok = /^0\d{10}$/.test(v);
+      if (!v) { phoneError.style.display='none'; phoneInput.classList.remove('is-invalid'); return false; }
+      if (!ok){ phoneError.textContent='Invalid mobile phone number format.'; phoneError.style.display='block'; phoneInput.classList.add('is-invalid'); return false; }
+      phoneError.style.display='none'; phoneInput.classList.remove('is-invalid'); return true;
+    }
+    phoneInput.addEventListener('input', function(){
+      let v = this.value.replace(/\D/g,'').slice(0,11);
+      this.value = v;
+      validatePhoneField();
+    });
+    phoneInput.addEventListener('blur', validatePhoneField);
+    window.__validatePhoneField = validatePhoneField;
+
+    // ---- Date display ↔ hidden sync ----
+    const display = document.getElementById('purchaseDateDisplay');
+    const hidden  = document.getElementById('purchaseDate');
+
+    display.addEventListener('change', function(){
+      if (!this.value) return;
+      if (this.type === 'date' && this.value.includes('-')) {
+        const [y,m,d] = this.value.split('-');
+        hidden.value = `${y}-${m}-${d}`;
+        this.type = 'text';
+        this.value = `${d}/${m}/${y}`;
       }
-      phoneInput.addEventListener("input", function(){
-        let v = this.value.replace(/\D/g,"");
-        if(v.length>11) v=v.slice(0,11);
-        this.value = v;
-        validatePhoneField();
-      });
-      phoneInput.addEventListener("blur", validatePhoneField);
-      window.__validatePhoneField = validatePhoneField;
-
-      // Date display -> hidden sync
-      const display = document.getElementById("purchaseDateDisplay");
-      const hidden  = document.getElementById("purchaseDate");
-
-      display.addEventListener("change", function(){
-        if(!this.value) return;
-        // If coming from native picker, value is YYYY-MM-DD
-        if(this.type === "date" && this.value.includes("-")){
-          const [y,m,d] = this.value.split("-");
-          hidden.value = `${y}-${m}-${d}`;
-          this.type = "text";
-          this.value = `${d}/${m}/${y}`;
-        }
-      });
-
-      // Convert manual DD/MM/YYYY to ISO on submit
-      document.querySelector("#vipForm").addEventListener("submit", function(e){
-        const ddmmyyyy = display.value.trim();
-        const m = ddmmyyyy.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-        if(m){
-          const [,d,mo,y] = m;
-          hidden.value = `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
-        }
-        if(!hidden.value){
-          e.preventDefault();
-          alert("Please enter a valid date in DD/MM/YYYY.");
-          display.focus();
-        }
-      });
     });
+
+    // Convert manual DD/MM/YYYY to ISO on submit
+    document.getElementById('vipForm').addEventListener('submit', function(e){
+      const m = (display.value || '').trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+      if (m){
+        const [,d,mo,y] = m;
+        hidden.value = `${y}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      }
+      if (!hidden.value){
+        e.preventDefault();
+        alert('Please enter a valid date in DD/MM/YYYY.');
+        display.focus();
+      }
+    });
+  });
 
     // Submit handler (confirm -> post)
     function handleSubmit(e){
