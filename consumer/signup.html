@@ -10,81 +10,53 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css">
   <style>
+    /* Prevent horizontal scroll on mobile */
+    html, body {
+      overflow-x: hidden;
+    }
+    
+    /* Default (desktop/tablet layout) */
     .form-container {
-  width: 50vw;
-  max-width: 600px;
-  margin: 50px auto;
-  padding: 20px;
-}
-
-    /* Make Select2 look like native .form-control */
-    .select2-container--bootstrap4 .select2-selection--single {
-      display: flex !important;
-      align-items: center !important;
-      height: calc(2.25rem + 2px) !important;
-      border: 1px solid #ced4da !important;
-      border-radius: .25rem !important;
-      background-color: #fff !important;
-      padding: 0 !important;
-      line-height: 1.5 !important;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
     }
-    .select2-container--bootstrap4 .select2-selection__rendered {
-      margin-top: 0 !important;
-      margin-left: .75rem !important;
-      margin-right: .75rem !important;
-      padding: 0 !important;
-      line-height: 1.5 !important;
-      color: #495057 !important;
+    
+    /* Responsive layout for small screens */
+    @media (max-width: 576px) {
+      /* Reduce side margins and padding for better mobile fit */
+      .form-container {
+        margin: 24px 12px;
+        padding: 16px;
+      }
+    
+      /* Ensure Select2 dropdown fits 100% width */
+      .select2-container {
+        width: 100% !important;
+      }
     }
-    .select2-container--bootstrap4 .select2-selection__placeholder {
-      color: #6c757d !important;
-    }
-
-    /* ----------------------------------------
-       Watermark logo styles
-       ---------------------------------------- */
-    body {
-      position: relative;          /* positioning context for pseudo element */
-      background-color: #f8f9fa;   /* light gray to make white card pop */
-      /* Footer stick-to-bottom (same behavior as homepage) */
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
+    
+    /* Watermark background (responsive size and position) */
     body::before {
-      content: "";
-      position: fixed;             /* Fixed so it doesn't scroll with content */
-      top: 0;
-      left: 0;
-      width: 100vw;                /* Cover entire viewport width */
-      height: 100vh;               /* Cover entire viewport height */
-      background:
-        url("../images/watermark_1.png") /* Replace with your logo path */
-        no-repeat center center;
-      background-size: 550px auto; /* Adjust watermark size as needed */
-      opacity: 0.08;               /* 8% opacity so form remains readable */
-      pointer-events: none;        /* Do not intercept mouse events */
-      z-index: -1;                 /* Behind everything */
+      content: ""; /* required for pseudo-element to render */
+      position: fixed;
+      inset: 0; /* shorthand for top/right/bottom/left: 0 */
+      background-image: url("../images/watermark_1.png"); 
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: clamp(240px, 90vw, 550px) auto; /* fluid scaling */
+      opacity: 0.08;
+      pointer-events: none; /* prevent interference with clicks */
+      z-index: 0;
     }
-
-    /* ----------------------------------------
-       Footer (same as homepage)
-       ---------------------------------------- */
-    footer {
-      margin-top: auto;            /* push footer to bottom */
-      background: #e9ecef;
-      padding: 15px 0;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #495057;
-      border-top: 1px solid #dee2e6;
-    }
-    footer a {
-      color: #495057;
-      text-decoration: none;
-    }
-    footer a:hover {
-      text-decoration: underline;
+    
+    /* Adjust watermark for small screens */
+    @media (max-width: 576px) {
+      body::before {
+        background-size: 110vw auto;      /* slightly larger on mobile */
+        background-position: center 20%;  /* move up a bit to avoid covering bottom */
+        opacity: 0.06;                    /* lighter opacity on mobile */
+      }
     }
   </style>
 </head>
