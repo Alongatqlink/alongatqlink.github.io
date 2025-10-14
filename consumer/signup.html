@@ -1,676 +1,530 @@
 <!DOCTYPE html>
 <html lang="en-NG">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>QLINK VIP Registration</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Bootstrap CSS (single include) -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+
   <!-- Select2 CSS + Bootstrap4 Theme -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap4-theme@1.6.2/dist/select2-bootstrap4.min.css" />
+
   <style>
-  /* -----------------------------------------------------
-     Base layout and global rules
-  ----------------------------------------------------- */
-  html, body {
-    overflow-x: hidden;            /* prevent horizontal scroll */
-  }
-  
-  body {
-    position: relative;            /* for watermark layering */
-    min-height: 100vh;             /* let footer stick to bottom */
-    display: flex;                 /* flex layout for sticky footer */
-    flex-direction: column;
-    background-color: #f8f9fa;     /* light gray background */
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  }
-  
-  /* -----------------------------------------------------
-     Form container (the main white card)
-  ----------------------------------------------------- */
-  .form-container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-    background: #fff;
-    border-radius: .25rem;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    position: relative;
-    z-index: 1; /* ensure above watermark */
-  }
-  
-  h1 {
-    font-size: 2rem;
-    font-weight: 700;
-  }
-  
-  /* -----------------------------------------------------
-     Buttons
-  ----------------------------------------------------- */
-  .btn-landing, .btn-primary {
-    width: 100%;
-    padding: .75rem;
-    font-size: 1.1rem;
-  }
-  
-  /* -----------------------------------------------------
-     Footer
-  ----------------------------------------------------- */
-  footer {
-    margin-top: auto;
-    background: #e9ecef;
-    padding: 15px 0;
-    text-align: center;
-    font-size: 0.9rem;
-    color: #495057;
-    border-top: 1px solid #dee2e6;
-    position: relative;
-    z-index: 1; /* make sure it's above watermark */
-  }
-  
-  /* -----------------------------------------------------
-     Watermark (responsive and centered)
-  ----------------------------------------------------- */
-  .form-container::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    background-image: url("../images/watermark_1.png"); /* ✅ correct path */
-    background-repeat: no-repeat;
-    background-position: center center;
-    background-size: min(80vw, 500px) auto; /* fluid scaling, max 500px */
-    opacity: 0.03; /* light transparency */
-    pointer-events: none;
-    z-index: 0;
-  }
-  
-  /* -----------------------------------------------------
-     Select2 consistency with Bootstrap
-  ----------------------------------------------------- */
-  .select2-container--bootstrap4 .select2-selection--single {
-    display: flex !important;
-    align-items: center !important;
-    height: calc(2.25rem + 2px) !important;
-    border: 1px solid #ced4da !important;
-    border-radius: .25rem !important;
-    background-color: #fff !important;
-    padding: 0 !important;
-    line-height: 1.5 !important;
-  }
-  .select2-container--bootstrap4 .select2-selection__rendered {
-    margin-left: .75rem !important;
-    margin-right: .75rem !important;
-    padding: 0 !important;
-    line-height: 1.5 !important;
-    color: #495057 !important;
-  }
-  .select2-container--bootstrap4 .select2-selection__placeholder {
-    color: #6c757d !important;
-  }
-  .select2-container {
-    width: 100% !important;
-  }
-  
-  /* -----------------------------------------------------
-     Mobile adjustments
-  ----------------------------------------------------- */
-  @media (max-width: 576px) {
+    /* Base layout */
+    html, body { overflow-x: hidden; }
+    body {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background-color: #f8f9fa;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    /* Card */
     .form-container {
-      margin: 24px 12px;
-      padding: 16px;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: .25rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      position: relative;
+      z-index: 1; /* above watermark */
     }
-  
-    .select2-container {
-      width: 100% !important;
+
+    h1 { font-size: 2rem; font-weight: 700; }
+
+    /* Buttons */
+    .btn-landing, .btn-primary { width: 100%; padding: .75rem; font-size: 1.1rem; }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      background: #e9ecef;
+      padding: 15px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #495057;
+      border-top: 1px solid #dee2e6;
+      z-index: 1;
+      position: relative;
     }
-  
-    body::before {
-      background-size: 95vw auto;      /* fit width on phones */
-      background-position: center 30%; /* move up slightly */
-      opacity: 0.05;                   /* lighter for readability */
+
+    /* Watermark */
+    .form-container::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background-image: url("../images/watermark_1.png");
+      background-repeat: no-repeat;
+      background-position: center center;
+      background-size: min(80vw, 500px) auto;
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: 0;
     }
-  }
-    /* Make Select2 inputs transparent to match other fields */
-.form-container .select2-container--bootstrap4 .select2-selection--single {
-  background-color: transparent !important;
-}
 
-/* Ensure the text area inside selection stays transparent too */
-.form-container .select2-container--bootstrap4 .select2-selection__rendered {
-  background: transparent !important;
-}
+    /* Select2 + Bootstrap consistency */
+    .select2-container--bootstrap4 .select2-selection--single {
+      display: flex !important;
+      align-items: center !important;
+      height: calc(2.25rem + 2px) !important;
+      border: 1px solid #ced4da !important;
+      border-radius: .25rem !important;
+      background-color: #fff !important;
+      padding: 0 !important;
+      line-height: 1.5 !important;
+    }
+    .select2-container--bootstrap4 .select2-selection__rendered {
+      margin: 0 .75rem !important;
+      padding: 0 !important;
+      line-height: 1.5 !important;
+      color: #495057 !important;
+      background: transparent !important; /* transparent text area */
+    }
+    .select2-container--bootstrap4 .select2-selection__placeholder { color: #6c757d !important; }
+    .select2-container { width: 100% !important; }
+    .select2-container--bootstrap4 .select2-dropdown { background-color: #fff; }
 
-/* Keep the dropdown results panel readable (white background) */
-.select2-container--bootstrap4 .select2-dropdown {
-  background-color: #fff;
-}
-
+    /* Mobile */
+    @media (max-width: 576px) {
+      .form-container { margin: 24px 12px; padding: 16px; }
+    }
   </style>
 </head>
 <body>
+  <div class="form-container">
+    <h1 class="h3 mb-4">QLINK VIP Registration</h1>
 
-<div class="form-container">
-  <h1 class="h3 mb-4">QLINK VIP Registration</h1>
-
-  <form id="vipForm" onsubmit="handleSubmit(event)" novalidate>
-    <!-- Dealer Code (Select2) -->
-    <div class="form-group">
-      <label for="dealerCode">Dealer Code</label>
-      <select id="dealerCode" class="form-control" style="width: 100%;" required>
-        <option value=""></option>
-      </select>
-      <small class="form-text text-muted">Confirm with your dealer if you don't know</small>
-    </div>
-
-    <!-- Model (Select2) -->
-    <div class="form-group">
-      <label for="model">Model</label>
-      <select id="model" class="form-control" style="width: 100%;" required>
-        <option value=""></option>
-      </select>
-    </div>
-
-    <!-- Engine Serial -->
-    <div class="form-group">
-      <label for="productSerial">Engine Serial</label>
-      <input
-        type="text"
-        class="form-control"
-        id="productSerial"
-        placeholder="Enter Engine Serial"
-        autocomplete="off"
-        inputmode="latin"
-        required
-        pattern="[A-Za-z0-9\s\-\_,.()\/]*"
-      >
-      <small class="form-text text-muted">Allowed: letters, numbers, space, and - _ , . ( ) /</small>
-    </div>
-
-    <!-- Customer Name -->
-    <div class="form-group">
-      <label for="CustomerName">Customer Name</label>
-      <input
-        type="text"
-        class="form-control"
-        id="CustomerName"
-        placeholder="Enter your name"
-        autocomplete="name"
-        required
-      >
-    </div>
-
-    <!-- Mobile Phone / WhatsApp Number -->
-    <div class="form-group">
-      <label for="phoneNumber">Phone / WhatsApp Number</label>
-      <input
-        type="tel"
-        class="form-control"
-        id="phoneNumber"
-        placeholder="e.g. 08012345678"
-        autocomplete="tel"
-        required
-        maxlength="11"
-        inputmode="numeric"
-      >
-      <small id="phoneHelp" class="form-text text-muted">Enter a valid mobile phone number.</small>
-      <div id="phoneError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
-    </div>
-
-    <!-- Purchase Date -->
-    <div class="form-group">
-      <label for="purchaseDateDisplay">Purchase Date</label>
-    
-    <!-- Visible input (always shows Nigeria format: DD/MM/YYYY) -->
-    <input
-      type="text"
-      class="form-control"
-      id="purchaseDateDisplay"
-      placeholder="dd/mm/yyyy"
-      inputmode="numeric"
-      autocomplete="off"
-      required
-      onpointerdown="if (this.type !== 'date') { this.type='date'; this.showPicker && this.showPicker(); event.preventDefault(); }"
-      onfocus="this.type='date'; setTimeout(()=>{ this.showPicker && this.showPicker(); },0);
-               if (document.getElementById('purchaseDate').value)
-                 this.value = document.getElementById('purchaseDate').value;"
-      onblur="if (!this.value) { this.type='text'; this.placeholder='dd/mm/yyyy'; }"
-    />
-      <input type="hidden" id="purchaseDate" name="purchaseDate">
-    </div>
-
-    <!-- Residential State (Select2) -->
-    <div class="form-group">
-      <label for="state">Residential State</label>
-      <select id="state" class="form-control" style="width: 100%;" required>
-        <option value=""></option>
-        <!-- Sample states; extend as needed -->
-        <option value="Abia">Abia</option>
-        <option value="Adamawa">Adamawa</option>
-        <option value="Akwa Ibom">Akwa Ibom</option>
-        <option value="Anambra">Anambra</option>
-        <option value="Bauchi">Bauchi</option>
-        <option value="Bayelsa">Bayelsa</option>
-        <option value="Benue">Benue</option>
-        <option value="Borno">Borno</option>
-        <option value="Cross River">Cross River</option>
-        <option value="Delta">Delta</option>
-        <option value="Ebonyi">Ebonyi</option>
-        <option value="Edo">Edo</option>
-        <option value="Ekiti">Ekiti</option>
-        <option value="Enugu">Enugu</option>
-        <option value="Gombe">Gombe</option>
-        <option value="Imo">Imo</option>
-        <option value="Jigawa">Jigawa</option>
-        <option value="Kaduna">Kaduna</option>
-        <option value="Kano">Kano</option>
-        <option value="Katsina">Katsina</option>
-        <option value="Kebbi">Kebbi</option>
-        <option value="Kogi">Kogi</option>
-        <option value="Kwara">Kwara</option>
-        <option value="Lagos">Lagos</option>
-        <option value="Nasarawa">Nasarawa</option>
-        <option value="Niger">Niger</option>
-        <option value="Ogun">Ogun</option>
-        <option value="Ondo">Ondo</option>
-        <option value="Osun">Osun</option>
-        <option value="Oyo">Oyo</option>
-        <option value="Plateau">Plateau</option>
-        <option value="Rivers">Rivers</option>
-        <option value="Sokoto">Sokoto</option>
-        <option value="Taraba">Taraba</option>
-        <option value="Yobe">Yobe</option>
-        <option value="Zamfara">Zamfara</option>
-        <option value="FCT Abuja">FCT Abuja</option>
-      </select>
-    </div>
-
-    <!-- Residential LGA (Select2) -->
-    <div class="form-group">
-      <label for="LGA">Residential LGA</label>
-      <select id="LGA" class="form-control" style="width: 100%;" required>
-        <option value=""></option>
-      </select>
-    </div>
-
-    <!-- Warning message above submit button -->
-  <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">
-    *Please ensure all details are accurate. Incorrect serial or mobile number will lead to 
-    <b>disqualification from promotions or warranty services</b>.
-  </p>
-
-    <button type="submit" class="btn btn-primary">Submit Registration</button>
-  </form>
-
-  <!-- Inline result text (non-modal) -->
-  <div id="result" class="mt-3" aria-live="polite"></div>
-</div>
-
-<!-- Confirmation Modal -->
-<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="confirmModalLabel">Confirm Your Information</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+    <form id="vipForm" onsubmit="handleSubmit(event)" novalidate>
+      <!-- Dealer Code (Select2) -->
+      <div class="form-group">
+        <label for="dealerCode">Dealer Code</label>
+        <select id="dealerCode" class="form-control" required>
+          <option value=""></option>
+        </select>
+        <small class="form-text text-muted">Confirm with your dealer if you don't know</small>
       </div>
-      <div class="modal-body">
-        <p><strong>Dealer Code:</strong> <span id="confirmDealerCode"></span></p>
-        <p><strong>Model:</strong> <span id="confirmModel"></span></p>
-        <p><strong>Product Serial:</strong> <span id="confirmProductSerial"></span></p>
-        <p><strong>Customer Name:</strong> <span id="confirmCustomerName"></span></p>
-        <p><strong>Phone Number:</strong> <span id="confirmPhoneNumber"></span></p>
-        <p><strong>Purchase Date:</strong> <span id="confirmPurchaseDate"></span></p>
-        <p><strong>Residential State:</strong> <span id="confirmState"></span></p>
-        <p><strong>Residential LGA:</strong> <span id="confirmLGA"></span></p>
+
+      <!-- Model (Select2) -->
+      <div class="form-group">
+        <label for="model">Model</label>
+        <select id="model" class="form-control" required>
+          <option value=""></option>
+        </select>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <button id="confirmBtn" type="button" class="btn btn-primary">Confirm</button>
+
+      <!-- Engine Serial -->
+      <div class="form-group">
+        <label for="productSerial">Engine Serial</label>
+        <input
+          type="text"
+          class="form-control"
+          id="productSerial"
+          placeholder="Enter Engine Serial"
+          autocomplete="off"
+          required
+          pattern="[A-Za-z0-9\s\-\_,.()\/]*"
+        />
+        <small class="form-text text-muted">Allowed: letters, numbers, space, and - _ , . ( ) /</small>
+      </div>
+
+      <!-- Customer Name -->
+      <div class="form-group">
+        <label for="CustomerName">Customer Name</label>
+        <input
+          type="text"
+          class="form-control"
+          id="CustomerName"
+          placeholder="Enter your name"
+          autocomplete="name"
+          required
+        />
+      </div>
+
+      <!-- Phone / WhatsApp -->
+      <div class="form-group">
+        <label for="phoneNumber">Phone / WhatsApp Number</label>
+        <input
+          type="tel"
+          class="form-control"
+          id="phoneNumber"
+          placeholder="e.g. 08012345678"
+          autocomplete="tel"
+          required
+          maxlength="11"
+          inputmode="numeric"
+        />
+        <small id="phoneHelp" class="form-text text-muted">Enter a valid mobile phone number.</small>
+        <div id="phoneError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
+      </div>
+
+      <!-- Purchase Date (visible + hidden) -->
+      <div class="form-group">
+        <label for="purchaseDateDisplay">Purchase Date</label>
+
+        <!-- Visible input (always DD/MM/YYYY for users) -->
+        <input
+          type="text"
+          class="form-control"
+          id="purchaseDateDisplay"
+          placeholder="dd/mm/yyyy"
+          inputmode="numeric"
+          autocomplete="off"
+          required
+          onpointerdown="if (this.type !== 'date') { this.type='date'; this.showPicker && this.showPicker(); event.preventDefault(); }"
+          onfocus="this.type='date'; setTimeout(()=>{ this.showPicker && this.showPicker(); },0);
+                   if (document.getElementById('purchaseDate').value)
+                     this.value = document.getElementById('purchaseDate').value;"
+          onblur="if (!this.value) { this.type='text'; this.placeholder='dd/mm/yyyy'; }"
+        />
+        <!-- Hidden input (ISO YYYY-MM-DD for backend) -->
+        <input type="hidden" id="purchaseDate" name="purchaseDate" />
+      </div>
+
+      <!-- Residential State -->
+      <div class="form-group">
+        <label for="state">Residential State</label>
+        <select id="state" class="form-control" required>
+          <option value=""></option>
+          <option value="Abia">Abia</option>
+          <option value="Adamawa">Adamawa</option>
+          <option value="Akwa Ibom">Akwa Ibom</option>
+          <option value="Anambra">Anambra</option>
+          <option value="Bauchi">Bauchi</option>
+          <option value="Bayelsa">Bayelsa</option>
+          <option value="Benue">Benue</option>
+          <option value="Borno">Borno</option>
+          <option value="Cross River">Cross River</option>
+          <option value="Delta">Delta</option>
+          <option value="Ebonyi">Ebonyi</option>
+          <option value="Edo">Edo</option>
+          <option value="Ekiti">Ekiti</option>
+          <option value="Enugu">Enugu</option>
+          <option value="Gombe">Gombe</option>
+          <option value="Imo">Imo</option>
+          <option value="Jigawa">Jigawa</option>
+          <option value="Kaduna">Kaduna</option>
+          <option value="Kano">Kano</option>
+          <option value="Katsina">Katsina</option>
+          <option value="Kebbi">Kebbi</option>
+          <option value="Kogi">Kogi</option>
+          <option value="Kwara">Kwara</option>
+          <option value="Lagos">Lagos</option>
+          <option value="Nasarawa">Nasarawa</option>
+          <option value="Niger">Niger</option>
+          <option value="Ogun">Ogun</option>
+          <option value="Ondo">Ondo</option>
+          <option value="Osun">Osun</option>
+          <option value="Oyo">Oyo</option>
+          <option value="Plateau">Plateau</option>
+          <option value="Rivers">Rivers</option>
+          <option value="Sokoto">Sokoto</option>
+          <option value="Taraba">Taraba</option>
+          <option value="Yobe">Yobe</option>
+          <option value="Zamfara">Zamfara</option>
+          <option value="FCT Abuja">FCT Abuja</option>
+        </select>
+      </div>
+
+      <!-- Residential LGA -->
+      <div class="form-group">
+        <label for="LGA">Residential LGA</label>
+        <select id="LGA" class="form-control" required>
+          <option value=""></option>
+        </select>
+      </div>
+
+      <!-- Note -->
+      <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">
+        *Please ensure all details are accurate. Incorrect serial or mobile number will lead to
+        <b>disqualification from promotions or warranty services</b>.
+      </p>
+
+      <button type="submit" class="btn btn-primary">Submit Registration</button>
+    </form>
+
+    <div id="result" class="mt-3" aria-live="polite"></div>
+  </div>
+
+  <!-- Confirmation Modal -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="confirmModalLabel">Confirm Your Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Dealer Code:</strong> <span id="confirmDealerCode"></span></p>
+          <p><strong>Model:</strong> <span id="confirmModel"></span></p>
+          <p><strong>Product Serial:</strong> <span id="confirmProductSerial"></span></p>
+          <p><strong>Customer Name:</strong> <span id="confirmCustomerName"></span></p>
+          <p><strong>Phone Number:</strong> <span id="confirmPhoneNumber"></span></p>
+          <p><strong>Purchase Date:</strong> <span id="confirmPurchaseDate"></span></p>
+          <p><strong>Residential State:</strong> <span id="confirmState"></span></p>
+          <p><strong>Residential LGA:</strong> <span id="confirmLGA"></span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button id="confirmBtn" type="button" class="btn btn-primary">Confirm</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Result Modal -->
-<div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog modal-sm modal-dialog-centered">
-    <div class="modal-content text-center">
-      <div class="modal-body py-4">
-        <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
-        <div id="resultMessage"></div>
-      </div>
-      <div class="modal-footer justify-content-center">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+  <!-- Result Modal -->
+  <div class="modal fade" id="resultModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content text-center">
+        <div class="modal-body py-4">
+          <div id="resultIcon" style="font-size: 2rem; margin-bottom: .5rem;"></div>
+          <div id="resultMessage"></div>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">OK</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<!-- Footer (same as homepage) -->
-<footer>
-  <div>© 2025 QLINK. All rights reserved.</div>
-  <div>Contact us: <a href="https://www.facebook.com/QLINKMotorcycleNigeria/">Facebook</a></div>
-</footer>
+  <!-- Footer -->
+  <footer>
+    <div>© 2025 QLINK. All rights reserved.</div>
+    <div>Contact us: <a href="https://www.facebook.com/QLINKMotorcycleNigeria/">Facebook</a></div>
+  </footer>
 
-<!-- jQuery + Bootstrap JS (single include) -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Select2 JS (single include) -->
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- jQuery + Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-<script>
-  // ------------------------------------------------------------
-  // 1) Mock data for Dealer Code and Model
-  // ------------------------------------------------------------
-  var dealerCodes = [
-    "DealerABC","DealerXYZ","Dealer101","Dealer202","Dealer305",
-    "Dealer007","Dealer888","Dealer555","Dealer999","Dealer111"
-  ];
-  var modelCodes = [
-    "TARGET 110", "VELOCITY 110", "REIZ 110", "WISDOM 110", "AGRO 200",
-    "AGRO 150", "RKT 200", "CHAMPION 200", "TIGER 150", "TIGER 160",
-    "MONSTER 2.0", "GD 110", "CRUISER 125", "SPRINT 150", "D-SUPER 150",
-    "TIGER 200", "QG 125", "QG 125-I", "QGL-G12", "QGL-G8",
-    "LUCKY ULTRA 110", "UD ULTRA 110", "XPREZ 125"
-  ];
+  <script>
+    // Mock data
+    var dealerCodes = ["DealerABC","DealerXYZ","Dealer101","Dealer202","Dealer305","Dealer007","Dealer888","Dealer555","Dealer999","Dealer111"];
+    var modelCodes = ["TARGET 110","VELOCITY 110","REIZ 110","WISDOM 110","AGRO 200","AGRO 150","RKT 200","CHAMPION 200","TIGER 150","TIGER 160","MONSTER 2.0","GD 110","CRUISER 125","SPRINT 150","D-SUPER 150","TIGER 200","QG 125","QG 125-I","QGL-G12","QGL-G8","LUCKY ULTRA 110","UD ULTRA 110","XPREZ 125"];
 
-  // ------------------------------------------------------------
-  // 2) LGA lookup by state (partial sample data)
-  // ------------------------------------------------------------
-  const LGAByState = {
-    "Abia": ["Aba North","Aba South","Arochukwu","Bende","Ikwuano","Isiala-Ngwa North","Isiala-Ngwa South","Isuikwato","Ngwa","Obi Nwa","Ohafia","Osisioma","Ugwunagbo","Ukwa East","Ukwa West","Umu-Neochi","Umuahia North","Umuahia South"],
-    "Adamawa": ["Demsa","Fufore","Ganaye","Gireri","Gombi","Guyuk","Hong","Jada","Lamurde","Madagali","Maiha","Mayo-Belwa","Michika","Mubi North","Mubi South","Numan","Shelleng","Song","Toungo","Yola North","Yola South"],
-    "Akwa Ibom": ["Abak","Eastern Obolo","Eket","Esit Eket","Essien Udim","Etim Ekpo","Etinan","Ibeno","Ibesikpo Asutan","Ibiono Ibom","Ika","Ikono","Ikot Abasi","Ikot Ekpene","Ini","Itu","Mbo","Mkpat Enin","Nsit Atai","Nsit Ibom","Nsit Ubium","Obot Akara","Okobo","Onna","Oron","Oruk Anam","Udung Uko","Ukanafun","Uruan","Urue-Offong/Oruko","Uyo"],
-    "Anambra": ["Aguata","Anambra East","Anambra West","Anaocha","Awka North","Awka South","Ayamelum","Dunukofia","Ekwusigo","Idemili North","Idemili south","Ihiala","Njikoka","Nnewi North","Nnewi South","Ogbaru","Onitsha North","Onitsha South","Orumba North","Orumba South","Oyi"],
-    "Bauchi": ["Alkaleri","Bauchi","Bogoro","Damban","Darazo","Dass","Gamawa","Ganjuwa","Giade","Itas/Gadau","Jama'are","Katagum","Kirfi","Misau","Ningi","Shira","Tafawa-Balewa","Toro","Warji","Zaki"],
-    "Bayelsa": ["Brass","Ekeremor","Kolokuma/Opokuma","Nembe","Ogbia","Sagbama","Southern Jaw","Yenegoa"],
-    "Benue": ["Ado","Agatu","Apa","Buruku","Gboko","Guma","Gwer East","Gwer West","Katsina-Ala","Konshisha","Kwande","Logo","Makurdi","Obi","Ogbadibo","Ohimini","Oju","Okpokwu","Oturkpo","Tarka","Ukum","Ushongo","Vandeikya"],
-    "Borno": ["Abadam","Askira/Uba","Bama","Bayo","Biu","Chibok","Damboa","Dikwa","Gubio","Guzamala","Gwoza","Hawul","Jere","Kaga","Kala/Balge","Konduga","Kukawa","Kwaya Kusar","Mafa","Magumeri","Maiduguri","Marte","Mobbar","Monguno","Ngala","Nganzai","Shani"],
-    "Cross River": ["Abi","Akamkpa","Akpabuyo","Bakassi","Bekwara","Biase","Boki","Calabar Municipality","Calabar South","Etung","Ikom","Obanliku","Obudu","Odubra","Odukpani","Ogoja","Yala","Yarkur"],
-    "Delta": ["Aniocha","Aniocha South","Bomadi","Burutu","Ethiope East","Ethiope West","Ika North-East","Ika South","Isoko North","Isoko south","Ndokwa East","Ndokwa West","Okpe","Oshimili","Oshimili North","Patani","Sapele","Udu","Ughelli North","Ughelli South","Ukwani","Uvwie","Warri Central","Warri North","Warri South"],
-    "Ebonyi": ["Abakaliki","Afikpo","Ebonyi","Edda","Ezza","Ezza Central","Ezza South","Ishielu","Ivo","lkwo","Ohaozara","Ohaukwu","Onicha"],
-    "Edo": ["Central","Egor","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Igueben","Ikpoba-Okha","Oredo","Orhionwon","Ovia North-East","Ovia South-East","Ovia SouthWest","Uhunmwonde","Ukpoba"],
-    "Ekiti": ["Ado Ekiti","Efon","Ekiti South-West","Ekiti-East","Ekiti-West","Emure/Ise/Orun","Gbonyin","Ido/Osi","Ijero","Ikere","Ikole","Ilejemeje.","Irepodun-Ifelodun","Ise/Orun","Moba","Oye"],
-    "Enugu": ["Aninri","Enugu Eas","Enugu North","Enugu South","Ezeagu","Igbo-Ekiti","Igbo-Eze South","IgboEze North","Isi-Uzo","Nkanu","Nkanu East","Nkanu West","Nsukka","Oji-River","Udenu.","Udi Agwu","Uzo-Uwani"],
-    "FCT": ["Abaji","Abuja Municipal","Bwari","Gwagwalada","Kuje","Kwali"],
-    "FCT Abuja": ["Abaji","Abuja Municipal","Bwari","Gwagwalada","Kuje","Kwali"],
-    "Gombe": ["Akko","Balanga","Billiri","Dukku","Funakaye","Gombe","Kaltungo","Kwami","Nafada/Bajoga","Shomgom","Yamaltu/Delta."],
-    "Imo": ["Aboh-Mbaise","Ahiazu-Mbaise","Ehime-Mbano","Ezinihitte","Ideato North","Ideato South","Ihitte/Uboma","Ikeduru","Isiala Mbano","Isu","Mbaitoli","Ngor-Okpala","Njaba","Nkwerre","Nwangele","Obowo","Oguta","Ohaji/Egbema","Okigwe","Orlu","Orsu","Oru East","Oru West","Owerri North","Owerri West","Owerri-Municipal"],
-    "Jigawa": ["Auyo","Babura","Biriniwa","Birni Kudu","Buji","Dutse","Gagarawa","Garki","Gumel","Guri","Gwaram","Gwiwa","Hadejia","Jahun","Kafin Hausa","Kaugama Kazaure","Kiri Kasamma","Kiyawa","Maigatari","Malam Madori","Miga","Ringim","Roni","Sule-Tankarkar","Taura","Yankwashi"],
-    "Kaduna": ["Birni-Gwari","Chikun","Giwa","Igabi","Ikara","jaba","Jema'a","Kachia","Kaduna North","Kaduna South","Kagarko","Kajuru","Kaura","Kauru","Kubau","Kudan","Lere","Makarfi","Sabon-Gari","Sanga","Soba","Zango-Kataf","Zaria"],
-    "Kano": ["Ajingi","Albasu","Bagwai","Bebeji","Bichi","Bunkure","Dala","Dambatta","Dawakin Kudu","Dawakin Tofa","Doguwa","Fagge","Gabasawa","Garko","Garum","Gaya","Gezawa","Ghari","Gwale","Gwarzo","Kabo","Kano Municipal","Karaye","Kibiya","Kiru","kumbotso","Kunchi","Kura","Madobi","Makoda","Mallam","Minjibir","Nasarawa","Rano","Rimin Gado","Rogo","Shanono","Sumaila","Takali","Tarauni","Tofa","Tsanyawa","Tudun Wada","Ungogo","Warawa","Wudil"],
-    "Katsina": ["Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dan Musa","Dandume","Danja","Daura","Dutsi","Dutsin-Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara","Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazuu","Musawa","Rimi","Sabuwa","Safana","Sandamu","Zango"],
-    "Kebbi": ["Aleiro","Arewa-Dandi","Argungu","Augie","Bagudo","Birnin Kebbi","Bunza","Dandi","Fakai","Gwandu","Jega","Kalgo","Koko/Besse","Maiyama","Ngaski","Sakaba","Shanga","Suru","Wasagu/Danko","Yauri","Zuru"],
-    "Kogi": ["Adavi","Ajaokuta","Ankpa","Bassa","Dekina","Ibaji","Idah","Igalamela-Odolu","Ijumu","Kabba/Bunu","Kogi","Lokoja","Mopa-Muro","Ofu","Ogori/Mangongo","Okehi","Okene","Olamabolo","Omala","Yagba East","Yagba West"],
-    "Kwara": ["Asa","Baruten","Edu","Ekiti","Ifelodun","Ilorin East","Ilorin West","Irepodun","Isin","Kaiama","Moro","Offa","Oke-Ero","Oyun","Pategi"],
-    "Lagos": ["Agege","Ajeromi-Ifelodun","Alimosho","Amuwo-Odofin","Apapa","Badagry","Epe","Eti-Osa","Ibeju/Lekki","Ifako-Ijaye","Ikeja","Ikorodu","Kosofe","Lagos Island","Lagos Mainland","Mushin","Ojo","Oshodi-Isolo","Shomolu","Surulere"],
-    "Nasarawa": ["Akwanga","Awe","Doma","Karu","Keana","Keffi","Kokona","Lafia","Nasarawa","Nasarawa-Eggon","Obi","Toto","Wamba"],
-    "Niger": ["Agaie","Agwara","Bida","Borgu","Bosso","Chanchaga","Edati","Gbako","Gurara","Katcha","Kontagora","Lapai","Lavun","Magama","Mariga","Mashegu","Mokwa","Muya","Pailoro","Rafi","Rijau","Shiroro","Suleja","Tafa","Wushishi"],
-    "Ogun": ["Abeokuta North","Abeokuta South","Ado-Odo/Ota","Ewekoro","Ifo","Ijebu East","Ijebu North","Ijebu North East","Ijebu Ode","Ikenne","Imeko-Afon","Ipokia","Obafemi-Owode","Odeda","Odogbolu","Ogun Waterside","Remo North","Shagamu","Yewa North","Yewa South"],
-    "Ondo": ["Akoko North East","Akoko North West","Akoko South East","Akoko South West","Akure North","Akure South","Ese-Odo","Idanre","Ifedore","Ilaje","Ile-Oluji","Irele","Odigbo","Okeigbo","Okitipupa","Ondo East","Ondo West","Ose","Owo"],
-    "Osun": ["Aiyedade","Aiyedire","Atakumosa East","Atakumosa West","Boluwaduro","Boripe","Ede North","Ede South","Egbedore","Ejigbo","Ife Central","Ife East","Ife North","Ife South","Ifedayo","Ifelodun","Ila","Ilesha East","Ilesha West","Irepodun","Irewole","Isokan","Iwo","Obokun","Odo-Otin","Ola-Oluwa","Olorunda","Oriade","Orolu","Osogbo"],
-    "Oyo": ["Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan Central","Ibadan North","Ibadan North West","Ibadan South East","Ibadan South West","Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo","Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu Ogbomosho North","Ogbomosho South","Ogo Oluwa","Olorunsogo","Oluyole","Ona-Ara","Orelope","Ori Ire","Oyo East","Oyo West","Saki East","Saki West","Surulere"],
-    "Plateau": ["Barikin Ladi","Bassa","Bokkos","Jos East","Jos North","Jos South","Kanam","Kanke","Langtang North","Langtang South","Mangu","Mikang","Pankshin","Qua'an Pan","Riyom","Shendam","Wase"],
-    "Rivers": ["Abua/Odual","Ahoada East","Ahoada West","Akuku Toru","Andoni","Asari-Toru","Bonny","Degema","Eleme","Emohua","Etche","Gokana","Ikwerre","Khana","Obio/Akpor","Ogba/Egbema/Ndoni","Ogu/Bolo","Okrika","Omumma","Opobo/Nkoro","Oyigbo","Port-Harcourt","Tai"],
-    "Sokoto": ["Binji","Bodinga","Dange-shnsi","Gada","Gawabawa","Goronyo","Gudu","Illela","Isa","kebbe","Kware","Rabah","Sabon birni","Shagari","Silame","Sokoto North","Sokoto South","Tambuwal","Tqngaza","Tureta","Wamako","Wurno","Yabo"],
-    "Taraba": ["Ardo-kola","Bali","Cassol","Donga","Gashaka","Ibi","Jalingo","Karin-Lamido","Kurmi","Lau","Sardauna","Takum","Ussa","Wukari","Yorro","Zing"],
-    "Yobe": ["Bade","Bursari","Damaturu","Fika","Fune","Geidam","Gujba","Gulani","Jakusko","Karasuwa","Karawa","Machina","Nangere","Nguru Potiskum","Tarmua","Yunusari","Yusufari"],
-    "Zamfara": ["Anka","Bakura","Birnin Magaji","Bukkuyum","Bungudu","Gummi","Gusau","Kaura-Namoda","Maradun","Maru","Namoda","Shinkafi","Talata Mafara","Tsafe","Zurmi"]
-  };
+    // LGA map (truncated for brevity) — keep your full object here
+    const LGAByState = {
+      "Abia": ["Aba North","Aba South","Arochukwu","Bende","Ikwuano","Isiala-Ngwa North","Isiala-Ngwa South","Isuikwato","Ngwa","Obi Nwa","Ohafia","Osisioma","Ugwunagbo","Ukwa East","Ukwa West","Umu-Neochi","Umuahia North","Umuahia South"],
+      "Adamawa": ["Demsa","Fufore","Ganaye","Gireri","Gombi","Guyuk","Hong","Jada","Lamurde","Madagali","Maiha","Mayo-Belwa","Michika","Mubi North","Mubi South","Numan","Shelleng","Song","Toungo","Yola North","Yola South"],
+      "Akwa Ibom": ["Abak","Eastern Obolo","Eket","Esit Eket","Essien Udim","Etim Ekpo","Etinan","Ibeno","Ibesikpo Asutan","Ibiono Ibom","Ika","Ikono","Ikot Abasi","Ikot Ekpene","Ini","Itu","Mbo","Mkpat Enin","Nsit Atai","Nsit Ibom","Nsit Ubium","Obot Akara","Okobo","Onna","Oron","Oruk Anam","Udung Uko","Ukanafun","Uruan","Urue-Offong/Oruko","Uyo"],
+      "Anambra": ["Aguata","Anambra East","Anambra West","Anaocha","Awka North","Awka South","Ayamelum","Dunukofia","Ekwusigo","Idemili North","Idemili south","Ihiala","Njikoka","Nnewi North","Nnewi South","Ogbaru","Onitsha North","Onitsha South","Orumba North","Orumba South","Oyi"],
+      "Bauchi": ["Alkaleri","Bauchi","Bogoro","Damban","Darazo","Dass","Gamawa","Ganjuwa","Giade","Itas/Gadau","Jama'are","Katagum","Kirfi","Misau","Ningi","Shira","Tafawa-Balewa","Toro","Warji","Zaki"],
+      "Bayelsa": ["Brass","Ekeremor","Kolokuma/Opokuma","Nembe","Ogbia","Sagbama","Southern Jaw","Yenegoa"],
+      "Benue": ["Ado","Agatu","Apa","Buruku","Gboko","Guma","Gwer East","Gwer West","Katsina-Ala","Konshisha","Kwande","Logo","Makurdi","Obi","Ogbadibo","Ohimini","Oju","Okpokwu","Oturkpo","Tarka","Ukum","Ushongo","Vandeikya"],
+      "Borno": ["Abadam","Askira/Uba","Bama","Bayo","Biu","Chibok","Damboa","Dikwa","Gubio","Guzamala","Gwoza","Hawul","Jere","Kaga","Kala/Balge","Konduga","Kukawa","Kwaya Kusar","Mafa","Magumeri","Maiduguri","Marte","Mobbar","Monguno","Ngala","Nganzai","Shani"],
+      "Cross River": ["Abi","Akamkpa","Akpabuyo","Bakassi","Bekwara","Biase","Boki","Calabar Municipality","Calabar South","Etung","Ikom","Obanliku","Obudu","Odubra","Odukpani","Ogoja","Yala","Yarkur"],
+      "Delta": ["Aniocha","Aniocha South","Bomadi","Burutu","Ethiope East","Ethiope West","Ika North-East","Ika South","Isoko North","Isoko south","Ndokwa East","Ndokwa West","Okpe","Oshimili","Oshimili North","Patani","Sapele","Udu","Ughelli North","Ughelli South","Ukwani","Uvwie","Warri Central","Warri North","Warri South"],
+      "Ebonyi": ["Abakaliki","Afikpo","Ebonyi","Edda","Ezza","Ezza Central","Ezza South","Ishielu","Ivo","lkwo","Ohaozara","Ohaukwu","Onicha"],
+      "Edo": ["Central","Egor","Esan Central","Esan North-East","Esan South-East","Esan West","Etsako Central","Etsako East","Etsako West","Igueben","Ikpoba-Okha","Oredo","Orhionwon","Ovia North-East","Ovia South-East","Ovia SouthWest","Uhunmwonde","Ukpoba"],
+      "Ekiti": ["Ado Ekiti","Efon","Ekiti South-West","Ekiti-East","Ekiti-West","Emure/Ise/Orun","Gbonyin","Ido/Osi","Ijero","Ikere","Ikole","Ilejemeje.","Irepodun-Ifelodun","Ise/Orun","Moba","Oye"],
+      "Enugu": ["Aninri","Enugu Eas","Enugu North","Enugu South","Ezeagu","Igbo-Ekiti","Igbo-Eze South","IgboEze North","Isi-Uzo","Nkanu","Nkanu East","Nkanu West","Nsukka","Oji-River","Udenu.","Udi Agwu","Uzo-Uwani"],
+      "FCT": ["Abaji","Abuja Municipal","Bwari","Gwagwalada","Kuje","Kwali"],
+      "FCT Abuja": ["Abaji","Abuja Municipal","Bwari","Gwagwalada","Kuje","Kwali"],
+      "Gombe": ["Akko","Balanga","Billiri","Dukku","Funakaye","Gombe","Kaltungo","Kwami","Nafada/Bajoga","Shomgom","Yamaltu/Delta."],
+      "Imo": ["Aboh-Mbaise","Ahiazu-Mbaise","Ehime-Mbano","Ezinihitte","Ideato North","Ideato South","Ihitte/Uboma","Ikeduru","Isiala Mbano","Isu","Mbaitoli","Ngor-Okpala","Njaba","Nkwerre","Nwangele","Obowo","Oguta","Ohaji/Egbema","Okigwe","Orlu","Orsu","Oru East","Oru West","Owerri North","Owerri West","Owerri-Municipal"],
+      "Jigawa": ["Auyo","Babura","Biriniwa","Birni Kudu","Buji","Dutse","Gagarawa","Garki","Gumel","Guri","Gwaram","Gwiwa","Hadejia","Jahun","Kafin Hausa","Kaugama Kazaure","Kiri Kasamma","Kiyawa","Maigatari","Malam Madori","Miga","Ringim","Roni","Sule-Tankarkar","Taura","Yankwashi"],
+      "Kaduna": ["Birni-Gwari","Chikun","Giwa","Igabi","Ikara","jaba","Jema'a","Kachia","Kaduna North","Kaduna South","Kagarko","Kajuru","Kaura","Kauru","Kubau","Kudan","Lere","Makarfi","Sabon-Gari","Sanga","Soba","Zango-Kataf","Zaria"],
+      "Kano": ["Ajingi","Albasu","Bagwai","Bebeji","Bichi","Bunkure","Dala","Dambatta","Dawakin Kudu","Dawakin Tofa","Doguwa","Fagge","Gabasawa","Garko","Garum","Gaya","Gezawa","Ghari","Gwale","Gwarzo","Kabo","Kano Municipal","Karaye","Kibiya","Kiru","kumbotso","Kunchi","Kura","Madobi","Makoda","Mallam","Minjibir","Nasarawa","Rano","Rimin Gado","Rogo","Shanono","Sumaila","Takali","Tarauni","Tofa","Tsanyawa","Tudun Wada","Ungogo","Warawa","Wudil"],
+      "Katsina": ["Bakori","Batagarawa","Batsari","Baure","Bindawa","Charanchi","Dan Musa","Dandume","Danja","Daura","Dutsi","Dutsin-Ma","Faskari","Funtua","Ingawa","Jibia","Kafur","Kaita","Kankara","Kankia","Katsina","Kurfi","Kusada","Mai'Adua","Malumfashi","Mani","Mashi","Matazuu","Musawa","Rimi","Sabuwa","Safana","Sandamu","Zango"],
+      "Kebbi": ["Aleiro","Arewa-Dandi","Argungu","Augie","Bagudo","Birnin Kebbi","Bunza","Dandi","Fakai","Gwandu","Jega","Kalgo","Koko/Besse","Maiyama","Ngaski","Sakaba","Shanga","Suru","Wasagu/Danko","Yauri","Zuru"],
+      "Kogi": ["Adavi","Ajaokuta","Ankpa","Bassa","Dekina","Ibaji","Idah","Igalamela-Odolu","Ijumu","Kabba/Bunu","Kogi","Lokoja","Mopa-Muro","Ofu","Ogori/Mangongo","Okehi","Okene","Olamabolo","Omala","Yagba East","Yagba West"],
+      "Kwara": ["Asa","Baruten","Edu","Ekiti","Ifelodun","Ilorin East","Ilorin West","Irepodun","Isin","Kaiama","Moro","Offa","Oke-Ero","Oyun","Pategi"],
+      "Lagos": ["Agege","Ajeromi-Ifelodun","Alimosho","Amuwo-Odofin","Apapa","Badagry","Epe","Eti-Osa","Ibeju/Lekki","Ifako-Ijaye","Ikeja","Ikorodu","Kosofe","Lagos Island","Lagos Mainland","Mushin","Ojo","Oshodi-Isolo","Shomolu","Surulere"],
+      "Nasarawa": ["Akwanga","Awe","Doma","Karu","Keana","Keffi","Kokona","Lafia","Nasarawa","Nasarawa-Eggon","Obi","Toto","Wamba"],
+      "Niger": ["Agaie","Agwara","Bida","Borgu","Bosso","Chanchaga","Edati","Gbako","Gurara","Katcha","Kontagora","Lapai","Lavun","Magama","Mariga","Mashegu","Mokwa","Muya","Pailoro","Rafi","Rijau","Shiroro","Suleja","Tafa","Wushishi"],
+      "Ogun": ["Abeokuta North","Abeokuta South","Ado-Odo/Ota","Ewekoro","Ifo","Ijebu East","Ijebu North","Ijebu North East","Ijebu Ode","Ikenne","Imeko-Afon","Ipokia","Obafemi-Owode","Odeda","Odogbolu","Ogun Waterside","Remo North","Shagamu","Yewa North","Yewa South"],
+      "Ondo": ["Akoko North East","Akoko North West","Akoko South East","Akoko South West","Akure North","Akure South","Ese-Odo","Idanre","Ifedore","Ilaje","Ile-Oluji","Irele","Odigbo","Okeigbo","Okitipupa","Ondo East","Ondo West","Ose","Owo"],
+      "Osun": ["Aiyedade","Aiyedire","Atakumosa East","Atakumosa West","Boluwaduro","Boripe","Ede North","Ede South","Egbedore","Ejigbo","Ife Central","Ife East","Ife North","Ife South","Ifedayo","Ifelodun","Ila","Ilesha East","Ilesha West","Irepodun","Irewole","Isokan","Iwo","Obokun","Odo-Otin","Ola-Oluwa","Olorunda","Oriade","Orolu","Osogbo"],
+      "Oyo": ["Afijio","Akinyele","Atiba","Atisbo","Egbeda","Ibadan Central","Ibadan North","Ibadan North West","Ibadan South East","Ibadan South West","Ibarapa Central","Ibarapa East","Ibarapa North","Ido","Irepo","Iseyin","Itesiwaju","Iwajowa","Kajola","Lagelu Ogbomosho North","Ogbomosho South","Ogo Oluwa","Olorunsogo","Oluyole","Ona-Ara","Orelope","Ori Ire","Oyo East","Oyo West","Saki East","Saki West","Surulere"],
+      "Plateau": ["Barikin Ladi","Bassa","Bokkos","Jos East","Jos North","Jos South","Kanam","Kanke","Langtang North","Langtang South","Mangu","Mikang","Pankshin","Qua'an Pan","Riyom","Shendam","Wase"],
+      "Rivers": ["Abua/Odual","Ahoada East","Ahoada West","Akuku Toru","Andoni","Asari-Toru","Bonny","Degema","Eleme","Emohua","Etche","Gokana","Ikwerre","Khana","Obio/Akpor","Ogba/Egbema/Ndoni","Ogu/Bolo","Okrika","Omumma","Opobo/Nkoro","Oyigbo","Port-Harcourt","Tai"],
+      "Sokoto": ["Binji","Bodinga","Dange-shnsi","Gada","Gawabawa","Goronyo","Gudu","Illela","Isa","kebbe","Kware","Rabah","Sabon birni","Shagari","Silame","Sokoto North","Sokoto South","Tambuwal","Tqngaza","Tureta","Wamako","Wurno","Yabo"],
+      "Taraba": ["Ardo-kola","Bali","Cassol","Donga","Gashaka","Ibi","Jalingo","Karin-Lamido","Kurmi","Lau","Sardauna","Takum","Ussa","Wukari","Yorro","Zing"],
+      "Yobe": ["Bade","Bursari","Damaturu","Fika","Fune","Geidam","Gujba","Gulani","Jakusko","Karasuwa","Karawa","Machina","Nangere","Nguru Potiskum","Tarmua","Yunusari","Yusufari"],
+      "Zamfara": ["Anka","Bakura","Birnin Magaji","Bukkuyum","Bungudu","Gummi","Gusau","Kaura-Namoda","Maradun","Maru","Namoda","Shinkafi","Talata Mafara","Tsafe","Zurmi"]
+    };
 
-  // ------------------------------------------------------------
-  // 3) Utility: validate allowed characters for text inputs
-  // ------------------------------------------------------------
-  function isInvalidInput(value) {
-    const pattern = /^[a-zA-Z0-9\s\-\_,.()\/]*$/;
-    return !pattern.test(value);
-  }
+    // Allowed characters validator
+    function isInvalidInput(v){ return !/^[a-zA-Z0-9\s\-\_,.()\/]*$/.test(v); }
 
-  // ------------------------------------------------------------
-  // 4) Result modal helper (Bootstrap modal-based alert)
-  // ------------------------------------------------------------
-  function showResult(type, message) {
-    const iconMap = { success: '<span class="text-success">✅</span>', error: '<span class="text-danger">❌</span>', warning: '<span class="text-warning">⚠️</span>' };
-    $("#resultIcon").html(iconMap[type] || '');
-    $("#resultMessage").text(message);
-    $("#resultModal").modal("show");
-  }
+    // Modal helper
+    function showResult(type, message){
+      const icons = { success:'<span class="text-success">✅</span>', error:'<span class="text-danger">❌</span>', warning:'<span class="text-warning">⚠️</span>' };
+      $("#resultIcon").html(icons[type] || '');
+      $("#resultMessage").text(message);
+      $("#resultModal").modal("show");
+    }
 
-  // ------------------------------------------------------------
-  // 5) Reset the entire form (including Select2)
-  // ------------------------------------------------------------
-  function resetForm() {
-    document.getElementById("vipForm").reset();
-    $("#dealerCode, #model, #state, #LGA").val(null).trigger("change");
-    $("#result").text("").removeClass("text-success text-danger");
-  }
+    // Reset form
+    function resetForm(){
+      document.getElementById("vipForm").reset();
+      $("#dealerCode,#model,#state,#LGA").val(null).trigger("change");
+      $("#result").text("").removeClass("text-success text-danger");
+    }
 
-  // ------------------------------------------------------------
-  // 6) DOM ready: Select2 init + Phone guard rails
-  // ------------------------------------------------------------
-  $(document).ready(function () {
-    // Dealer Code (Select2)
-    var $dealerSelect = $("#dealerCode");
-    dealerCodes.forEach(function (code) { $dealerSelect.append(new Option(code, code)); });
-    $dealerSelect
-      .select2({ placeholder: "e.g. Dealer ABC", theme: "bootstrap4" })
-      .on("select2:open", function () { $(".select2-search__field").attr("placeholder", "Type here to search Dealer Code..."); });
+    // Utility: ISO -> DD/MM/YYYY
+    function toDDMMYYYY(iso){
+      if(!iso) return "";
+      const [y,m,d] = iso.split("-");
+      return `${d}/${m}/${y}`;
+    }
 
-    // Model (Select2)
-    var $modelSelect = $("#model");
-    modelCodes.forEach(function (m) { $modelSelect.append(new Option(m, m)); });
-    $modelSelect
-      .select2({ placeholder: "e.g. TIGER 150", theme: "bootstrap4" })
-      .on("select2:open", function () { $(".select2-search__field").attr("placeholder", "Type here to search Model..."); });
+    // Init
+    $(document).ready(function(){
+      // Populate Select2
+      $("#dealerCode").select2({ placeholder:"e.g. Dealer ABC", theme:"bootstrap4" })
+        .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Dealer Code..."); });
+      dealerCodes.forEach(c=>$("#dealerCode").append(new Option(c,c)));
 
-    // State (Select2)
-    $("#state").select2({ placeholder: "Type to search State...", theme: "bootstrap4" });
+      $("#model").select2({ placeholder:"e.g. TIGER 150", theme:"bootstrap4" })
+        .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Model..."); });
+      modelCodes.forEach(m=>$("#model").append(new Option(m,m)));
 
-    // LGA (Select2)
-    $("#LGA").select2({ placeholder: "Type to search LGA...", theme: "bootstrap4" });
+      $("#state").select2({ placeholder:"Type to search State...", theme:"bootstrap4" });
+      $("#LGA").select2({ placeholder:"Type to search LGA...", theme:"bootstrap4" });
 
-    // State -> LGA
-    $("#state").on("change", function () {
-      const selectedState = $(this).val();
-      const $LGASelect = $("#LGA");
-      $LGASelect.html('<option value=""></option>');
-      if (selectedState) {
-        const k = LGAByState[selectedState] ? selectedState : (selectedState === "FCT Abuja" ? "FCT Abuja" : selectedState);
-        (LGAByState[k] || []).forEach(function (lga) { $LGASelect.append(new Option(lga, lga)); });
+      // State -> LGA
+      $("#state").on("change", function(){
+        const st = $(this).val();
+        const list = LGAByState[st] || (st==="FCT Abuja" ? LGAByState["FCT Abuja"] : []);
+        const $lga = $("#LGA").html('<option value=""></option>');
+        (list||[]).forEach(l=> $lga.append(new Option(l,l)));
+        $lga.trigger("change");
+      });
+
+      // Limit future dates on display input
+      const today = new Date().toISOString().split("T")[0];
+      document.getElementById("purchaseDateDisplay").setAttribute("max", today);
+
+      // Phone guard rails (Nigeria local: 11 digits, starts with 0)
+      const phoneInput = document.getElementById("phoneNumber");
+      let phoneError = document.getElementById("phoneError");
+      phoneInput.setAttribute("inputmode","numeric");
+      phoneInput.setAttribute("maxlength","11");
+
+      function validatePhoneField(){
+        const v = phoneInput.value || "";
+        const ok = /^0\d{10}$/.test(v);
+        if(!v){ phoneError.style.display="none"; phoneInput.classList.remove("is-invalid"); return false; }
+        if(!ok){ phoneError.textContent="Invalid mobile phone number format."; phoneError.style.display="block"; phoneInput.classList.add("is-invalid"); return false; }
+        phoneError.style.display="none"; phoneInput.classList.remove("is-invalid"); return true;
       }
-      $LGASelect.trigger("change");
-    });
+      phoneInput.addEventListener("input", function(){
+        let v = this.value.replace(/\D/g,"");
+        if(v.length>11) v=v.slice(0,11);
+        this.value = v;
+        validatePhoneField();
+      });
+      phoneInput.addEventListener("blur", validatePhoneField);
+      window.__validatePhoneField = validatePhoneField;
 
-    // Optional: limit future dates on purchaseDate to today
-        const today = new Date().toISOString().split("T")[0];
-        document.getElementById("purchaseDateDisplay").setAttribute("max", today);
+      // Date display -> hidden sync
+      const display = document.getElementById("purchaseDateDisplay");
+      const hidden  = document.getElementById("purchaseDate");
 
-    // ---- Phone guard rails (NG local: 0 + 10 digits = 11 total) ----
-    const phoneInput = document.getElementById("phoneNumber");
-
-    // Create an error message holder if not present
-    let phoneError = document.getElementById("phoneError");
-    if (!phoneError) {
-      phoneError = document.createElement("div");
-      phoneError.id = "phoneError";
-      phoneError.className = "text-danger mt-1";
-      phoneError.style.display = "none";
-      phoneError.style.fontSize = "0.9rem";
-      // insert right after the phone input
-      phoneInput.parentNode.appendChild(phoneError);
-    }
-
-    // Ensure mobile keypad & length hint
-    phoneInput.setAttribute("inputmode", "numeric");
-    phoneInput.setAttribute("maxlength", "11");
-
-    phoneInput.addEventListener("input", function () {
-      // keep digits only
-      let v = this.value.replace(/\D/g, "");
-      if (v.length > 11) v = v.slice(0, 11);
-      this.value = v;
-      validatePhoneField();
-    });
-
-    phoneInput.addEventListener("blur", validatePhoneField);
-
-    function validatePhoneField() {
-      const v = phoneInput.value || "";
-      const re = /^0\d{10}$/; // must start with 0 and have total 11 digits
-
-      if (v.length === 0) {
-        phoneError.style.display = "none";
-        phoneInput.classList.remove("is-invalid");
-        return false;
-      }
-     if (!re.test(v)) {
-        phoneError.textContent = "Invalid mobile phone number format.";
-        phoneError.style.display = "block";
-        phoneInput.classList.add("is-invalid");
-        return false;
-      } 
-      phoneError.style.display = "none";
-      phoneInput.classList.remove("is-invalid");
-      return true;
-    }
-
-    // Expose to global scope for handleSubmit
-    window.__validatePhoneField = validatePhoneField;
-  });
-
-  // ------------------------------------------------------------
-  // 7) Form submit handler: open confirmation modal, then POST
-  // ------------------------------------------------------------
-  function handleSubmit(e) {
-    e.preventDefault();
-
-    // Safe extraction
-    const dealerCode    = ($("#dealerCode").val()    || "").toString().trim();
-    const model         = ($("#model").val()         || "").toString().trim();
-    const productSerial = ($("#productSerial").val() || "").toString().trim();
-    const customerName  = ($("#CustomerName").val()  || "").toString().trim();
-    const phoneNumber   = ($("#phoneNumber").val()   || "").toString().trim();
-    const purchaseDate  = ($("#purchaseDate").val()  || "").toString().trim();
-    const state         = ($("#state").val()         || "").toString().trim();
-    const LGA           = ($("#LGA").val()           || "").toString().trim();
-
-    // Required fields
-    if (!dealerCode || !model || !productSerial || !customerName || !phoneNumber || !purchaseDate || !state || !LGA) {
-      $("#result").text("Please fill out all required fields.").removeClass("text-success").addClass("text-danger");
-      return;
-    }
-
-    // Phone final validation
-    if (typeof window.__validatePhoneField === "function" && !window.__validatePhoneField()) {
-      $("#result").text("Please correct phone number.").removeClass("text-success").addClass("text-danger");
-      return;
-    }
-
-    // Character whitelist (other text fields)
-    if (isInvalidInput(dealerCode) || isInvalidInput(model) || isInvalidInput(productSerial) ||
-        isInvalidInput(customerName) || isInvalidInput(purchaseDate) ||
-        isInvalidInput(state) || isInvalidInput(LGA)) {
-      $("#result").text("Invalid characters detected.").removeClass("text-success").addClass("text-danger");
-      return;
-    }
-
-    // Fill confirmation modal
-    $("#confirmDealerCode").text(dealerCode);
-    $("#confirmModel").text(model);
-    $("#confirmProductSerial").text(productSerial);
-    $("#confirmCustomerName").text(customerName);
-    $("#confirmPhoneNumber").text(phoneNumber);      // Shows local formats（0xxxxxxxxxx）
-    const purchaseDateISO = ($("#purchaseDate").val() || "").toString().trim();
-function toDDMMYYYY(iso){
-  if(!iso) return "";
-  const [y,m,d] = iso.split("-");
-  return `${d}/${m}/${y}`;
-}
-$("#confirmPurchaseDate").text(toDDMMYYYY(purchaseDateISO));
-    $("#confirmState").text(state);
-    $("#confirmLGA").text(LGA);
-
-    // Show confirmation modal
-    $("#confirmModal").modal("show");
-
-    // Confirm -> POST
-    $("#confirmBtn").off("click").on("click", function () {
-      $("#confirmModal").modal("hide");
-
-      const formData = new URLSearchParams();
-      formData.append("dealerCode", dealerCode);
-      formData.append("model", model);
-      formData.append("productSerial", productSerial);
-      formData.append("CustomerName", customerName);
-      formData.append("phoneNumber", phoneNumber);
-      formData.append("purchaseDate", purchaseDate);
-      formData.append("state", state);
-      formData.append("LGA", LGA);
-
-      fetch("https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec", {
-        method: "POST",
-        body: formData
-      })
-      .then(r => r.text())
-      .then(text => {
-        let data;
-        try { data = JSON.parse(text); }
-        catch { showResult("warning", "Response format error. Please try again later."); return; }
-
-        if (data.result === "success") {
-          showResult("success", "Registration successful!");
-          resetForm();
-        } else {
-          showResult("error", "Registration failed: " + (data.error || "Unknown error."));
+      display.addEventListener("change", function(){
+        if(!this.value) return;
+        // If coming from native picker, value is YYYY-MM-DD
+        if(this.type === "date" && this.value.includes("-")){
+          const [y,m,d] = this.value.split("-");
+          hidden.value = `${y}-${m}-${d}`;
+          this.type = "text";
+          this.value = `${d}/${m}/${y}`;
         }
-      })
-      .catch(() => {
-        showResult("error", "Network/server error. Please try again later.");
+      });
+
+      // Convert manual DD/MM/YYYY to ISO on submit
+      document.querySelector("#vipForm").addEventListener("submit", function(e){
+        const ddmmyyyy = display.value.trim();
+        const m = ddmmyyyy.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+        if(m){
+          const [,d,mo,y] = m;
+          hidden.value = `${y}-${String(mo).padStart(2,"0")}-${String(d).padStart(2,"0")}`;
+        }
+        if(!hidden.value){
+          e.preventDefault();
+          alert("Please enter a valid date in DD/MM/YYYY.");
+          display.focus();
+        }
       });
     });
-  }
-</script>
-    <script>
-  // Elements
-  const display = document.getElementById('purchaseDateDisplay');
-  const hidden  = document.getElementById('purchaseDate');
-  
-  // When date picked via native picker
-  display.addEventListener('change', function () {
-    if (!this.value) return;
-  
-    // If value comes from native date input it's YYYY-MM-DD
-    // Keep ISO in hidden, show DD/MM/YYYY on screen
-    if (this.type === 'date' && this.value.includes('-')) {
-      const [y, m, d] = this.value.split('-');
-      hidden.value = `${y}-${m}-${d}`;
-      this.type = 'text';
-      this.value = `${d}/${m}/${y}`;
-    }
-  });
-  
-  // On manual typing, normalize before submit
-  document.querySelector('form')?.addEventListener('submit', function (e) {
-    // If user typed DD/MM/YYYY into the text box, convert to ISO
-    const ddmmyyyy = display.value.trim();
-    const m = ddmmyyyy.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
-    if (m) {
-      const [ , d, mo, y ] = m;
-      const d2  = String(d).padStart(2, '0');
-      const m2  = String(mo).padStart(2, '0');
-      hidden.value = `${y}-${m2}-${d2}`; // ISO for backend
-    }
-  
-    // Basic guard: ensure hidden has ISO value
-    if (!hidden.value) {
+
+    // Submit handler (confirm -> post)
+    function handleSubmit(e){
       e.preventDefault();
-      alert('Please enter a valid date in DD/MM/YYYY.');
-      display.focus();
+
+      const dealerCode    = ($("#dealerCode").val()    || "").toString().trim();
+      const model         = ($("#model").val()         || "").toString().trim();
+      const productSerial = ($("#productSerial").val() || "").toString().trim();
+      const customerName  = ($("#CustomerName").val()  || "").toString().trim();
+      const phoneNumber   = ($("#phoneNumber").val()   || "").toString().trim();
+      const purchaseDate  = ($("#purchaseDate").val()  || "").toString().trim(); // ISO
+      const state         = ($("#state").val()         || "").toString().trim();
+      const LGA           = ($("#LGA").val()           || "").toString().trim();
+
+      // Required
+      if(!dealerCode || !model || !productSerial || !customerName || !phoneNumber || !purchaseDate || !state || !LGA){
+        $("#result").text("Please fill out all required fields.").removeClass("text-success").addClass("text-danger");
+        return;
+      }
+
+      // Phone validation
+      if(typeof window.__validatePhoneField === "function" && !window.__validatePhoneField()){
+        $("#result").text("Please correct phone number.").removeClass("text-success").addClass("text-danger");
+        return;
+      }
+
+      // Character whitelist
+      if([dealerCode, model, productSerial, customerName, purchaseDate, state, LGA].some(isInvalidInput)){
+        $("#result").text("Invalid characters detected.").removeClass("text-success").addClass("text-danger");
+        return;
+      }
+
+      // Fill confirm modal (show date as DD/MM/YYYY)
+      $("#confirmDealerCode").text(dealerCode);
+      $("#confirmModel").text(model);
+      $("#confirmProductSerial").text(productSerial);
+      $("#confirmCustomerName").text(customerName);
+      $("#confirmPhoneNumber").text(phoneNumber);
+      $("#confirmPurchaseDate").text(toDDMMYYYY(purchaseDate));
+      $("#confirmState").text(state);
+      $("#confirmLGA").text(LGA);
+
+      $("#confirmModal").modal("show");
+
+      // Confirm -> POST
+      $("#confirmBtn").off("click").on("click", function(){
+        $("#confirmModal").modal("hide");
+
+        const formData = new URLSearchParams();
+        formData.append("dealerCode", dealerCode);
+        formData.append("model", model);
+        formData.append("productSerial", productSerial);
+        formData.append("CustomerName", customerName);
+        formData.append("phoneNumber", phoneNumber);
+        formData.append("purchaseDate", purchaseDate); // ISO
+        formData.append("state", state);
+        formData.append("LGA", LGA);
+
+        fetch("https://script.google.com/macros/s/AKfycbzECGqAyJ7Gf88Tgw1DpG4C9mW1qFQCq0OtPmmx1RGS-_esSBE8WOmwed3-Fc5kDdPH/exec", { method:"POST", body: formData })
+          .then(r => r.text())
+          .then(text => {
+            let data; try { data = JSON.parse(text); } catch { showResult("warning","Response format error. Please try again later."); return; }
+            if(data.result === "success"){ showResult("success","Registration successful!"); resetForm(); }
+            else { showResult("error","Registration failed: " + (data.error || "Unknown error.")); }
+          })
+          .catch(()=> showResult("error","Network/server error. Please try again later."));
+      });
     }
-  });
   </script>
 </body>
 </html>
