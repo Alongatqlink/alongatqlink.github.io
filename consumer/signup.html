@@ -385,26 +385,12 @@
         .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Dealer Code..."); });
       dealerCodes.forEach(c=>$("#dealerCode").append(new Option(c,c)));
 
-      $("#model").select2({
-                    placeholder: "e.g. TIGER 150",
-                    theme: "bootstrap4",
-                    dropdownParent: $('.form-container') // ✅ keeps dropdown within visible area
-                  })
-                  .on("select2:open", function () {
-                    $(".select2-search__field").attr("placeholder", "Type here to search Model...");
-                  });
+      $("#model").select2({ placeholder:"e.g. TIGER 150", theme:"bootstrap4" })
         .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Model..."); });
       modelCodes.forEach(m=>$("#model").append(new Option(m,m)));
 
-      $("#state").select2({ placeholder:"Type to search State...", 
-                           theme:"bootstrap4",
-                          dropdownParent: $('.form-container')
-                          });
-      $("#LGA").select2({ placeholder:"Type to search LGA...", 
-                         theme:"bootstrap4",
-                        dropdownParent: $('.form-container')
-                        });
-
+      $("#state").select2({ placeholder:"Type to search State...", theme:"bootstrap4" });
+      $("#LGA").select2({ placeholder:"Type to search LGA...", theme:"bootstrap4" });
       // State -> LGA
       $("#state").on("change", function(){
         const st = $(this).val();
