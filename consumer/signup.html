@@ -396,8 +396,14 @@
         .on("select2:open", ()=>{ $(".select2-search__field").attr("placeholder","Type here to search Model..."); });
       modelCodes.forEach(m=>$("#model").append(new Option(m,m)));
 
-      $("#state").select2({ placeholder:"Type to search State...", theme:"bootstrap4" });
-      $("#LGA").select2({ placeholder:"Type to search LGA...", theme:"bootstrap4" });
+      $("#state").select2({ placeholder:"Type to search State...", 
+                           theme:"bootstrap4",
+                          dropdownParent: $('.form-container')
+                          });
+      $("#LGA").select2({ placeholder:"Type to search LGA...", 
+                         theme:"bootstrap4",
+                        dropdownParent: $('.form-container')
+                        });
 
       // State -> LGA
       $("#state").on("change", function(){
