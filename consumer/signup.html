@@ -420,7 +420,7 @@
     $model.empty().append('<option value=""></option>');
     modelCodes.forEach(m => $model.append(new Option(m, m)));
     $model.select2({
-      placeholder: 'e.g. TIGER 150',
+      placeholder: 'Select your model',
       theme: 'bootstrap4',
       dropdownParent: $parent
     }).on('select2:open', () => {
