@@ -370,16 +370,7 @@
   <!-- Select2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-  // ===== Config =====
-  const MAX_SIZE_MB = 5;
-  const ALLOWED_MIMES = [
-    'application/pdf',
-    'image/jpeg','image/png','image/gif','image/webp',
-    'image/heic','image/heif'
-  ];
 
-  const GAS_URL = 'https://script.google.com/macros/s/AKfycbxrv4RKZuEbqOKnywEgzzVrmtPqjJP46oOFkEq_o7KYPTZ33YT22tHVfMZ1hUBHT6WA/exec';
-  
   // ===== DOM Elements =====
   const chooseBtn    = document.getElementById('invoiceChooseBtn');
   const fileNameEl   = document.getElementById('invoiceFilename');
@@ -394,6 +385,14 @@
   const progressBar  = document.getElementById('invoiceProgress');
   const statusText   = document.getElementById('invoiceStatus');
   const previewImg   = document.getElementById('invoicePreview');
+
+  // ===== Config =====
+  const MAX_SIZE_MB = 5;
+  const ALLOWED_MIMES = [
+    'application/pdf',
+    'image/jpeg','image/png','image/gif','image/webp',
+    'image/heic','image/heif'
+  ];  
     
   // ===== Utility Functions =====
   function resetProgress() {
