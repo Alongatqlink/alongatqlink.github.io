@@ -133,7 +133,7 @@
 
       <!-- Model (Select2) -->
       <div class="form-group">
-        <label for="model">Model3</label>
+        <label for="model">Model4</label>
         <select id="model" class="form-control" required>
           <option value=""></option>
         </select>
@@ -259,7 +259,8 @@
           <option value=""></option>
         </select>
       </div>
-
+      
+      <div class="form-group">
         <label>Upload Invoice (PDF or Image)</label>
         
         <div class="d-flex align-items-center">
@@ -268,12 +269,12 @@
           </button>
           <span id="invoiceFilename" class="ml-2 text-muted">No file chosen</span>
         </div>
-        
+      
         <small id="invoiceHelp" class="form-text text-muted">
           Allowed: PDF / JPG / PNG (Max 5MB). Make sure the invoice shows dealer, date & engine serial numbers.
         </small>
         
-        <div id="invoiceProgressWrap" style="display:none; margin-top:8px;">
+       <div id="invoiceProgressWrap" style="display:none; margin-top:8px;">
           <div class="progress" style="height:8px;">
             <div id="invoiceProgress" class="progress-bar" role="progressbar" style="width:0%;"></div>
           </div>
@@ -283,13 +284,7 @@
         <img id="invoicePreview" alt="" style="display:none; max-width:160px; margin-top:8px; border-radius:6px;" />
         
         <input type="hidden" id="invoiceUrl" name="invoiceUrl" />
-
-        <!-- preview (images only) -->
-        <img id="invoicePreview" alt="" style="display:none; max-width:160px; margin-top:8px; border-radius:6px;"/>
-      
-        <!-- keep GCS URL here to submit with the form -->
-        <input type="hidden" id="invoiceUrl" name="invoiceUrl" />
-        </div>
+      </div>
 
       <!-- Note -->
       <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">
@@ -299,6 +294,7 @@
 
       <button type="submit" class="btn btn-primary">Submit Registration</button>
     </form>
+  
     <!-- hidden iframe target for upload -->
     <iframe name="uploader_iframe" id="uploader_iframe" style="display:none;"></iframe>
     
@@ -317,7 +313,6 @@
     </form>
 
     <div id="result" class="mt-3" aria-live="polite"></div>
-  </div>
 
   <!-- Confirmation Modal -->
   <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -495,57 +490,68 @@
   // ===== Event Listeners =====
   
  // --- Replace the 'fileInput.addEventListener("change", ...)' block with this:
-const chooseBtn   = document.getElementById('invoiceChooseBtn');
-const fileNameEl  = document.getElementById('invoiceFilename');
-const uploadForm = document.getElementById('invoiceUploadForm');
-const uploadIframe = document.getElementById('uploader_iframe');
+    const chooseBtn  = document.getElementById('invoiceChooseBtn');
+    const fileNameEl = document.getElementById('invoiceFilename');
+    const fileInput  = document.getElementById('invoiceUpload'); 
+    const hiddenUrl  = document.getElementById('invoiceUrl');
+    const uploadForm = document.getElementById('invoiceUploadForm');
+    const uploadIframe = document.getElementById('uploader_iframe');
+    
+    chooseBtn.addEventListener('click', () => fileInput.click());
 
-chooseBtn.addEventListener('click', () => fileInput.click());
-
-fileInput.addEventListener('change', () => {
-  window.addEventListener('message', onMessage);
-  fileNameEl.textContent = fileInput.files[0]?.name || 'No file chosen';
-  resetProgress();
-  hiddenUrl.value = '';
-  const file = fileInput.files && fileInput.files[0];
-  showPreviewIfImage(file);
-  if (!file) return;
-
-  // simple validations
-  if (!ALLOWED_MIMES.includes(file.type)) { alert('Please upload PDF or image.'); fileInput.value=''; return; }
-  if (file.size > MAX_SIZE_MB * 1024 * 1024) { alert('File too large. Max 5MB.'); fileInput.value=''; return; }
-
-  // fake progress while uploading via iframe
-  let p = 0;
-  showProgress(1, 'Starting upload…');
-  const timer = setInterval(() => {
-    p = Math.min(99, p + Math.random() * 12);
-    showProgress(Math.floor(p), `Uploading… ${Math.floor(p)}%`);
-  }, 200);
-
-  // submit to GAS via hidden iframe (no CORS)
-  uploadForm.submit();
-
-  // listen only once for the response
-  const onMessage = (ev) => {
-    // you can further check ev.origin startsWith('https://script.google.com') if you want
-    const data = ev.data || {};
-    if (data && (data.ok === true || data.ok === false)) {
-      window.removeEventListener('message', onMessage);
-      clearInterval(timer);
-     if (data.ok) {
-        hiddenUrl.value = data.url;
-        showProgress(100, 'Uploaded ✓');
-        statusText.textContent = 'Uploaded ✓';
-      } else {
-        alert(data.error || 'Upload failed.');
+    // When a file is selected
+    fileInput.addEventListener('change', () => {
+      fileNameEl.textContent = fileInput.files[0]?.name || 'No file chosen';
+      resetProgress();
+      hiddenUrl.value = '';
+    
+      const file = fileInput.files && fileInput.files[0];
+      showPreviewIfImage(file);
+      if (!file) return;
+    
+      // Simple validations
+      if (!ALLOWED_MIMES.includes(file.type)) {
+        alert('Please upload a PDF or image.');
         fileInput.value = '';
-        resetProgress();
+        return;
       }
-    }
-  };
-  window.addEventListener('message', onMessage);
-});
+      if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+        alert('File too large. Max 5MB.');
+        fileInput.value = '';
+        return;
+      }
+      
+      // fake progress while uploading via iframe
+      let p = 0;
+      showProgress(1, 'Starting upload…');
+      const timer = setInterval(() => {
+        p = Math.min(99, p + Math.random() * 12);
+        showProgress(Math.floor(p), `Uploading… ${Math.floor(p)}%`);
+      }, 200);
+    
+      // submit to GAS via hidden iframe (no CORS)
+      uploadForm.submit();
+    
+      // listen only once for the response
+      const onMessage = (ev) => {
+        // you can further check ev.origin startsWith('https://script.google.com') if you want
+        const data = ev.data || {};
+        if (data && (data.ok === true || data.ok === false)) {
+          window.removeEventListener('message', onMessage);
+          clearInterval(timer);
+         if (data.ok) {
+            hiddenUrl.value = data.url;
+            showProgress(100, 'Uploaded ✓');
+            statusText.textContent = 'Uploaded ✓';
+          } else {
+            alert(data.error || 'Upload failed.');
+            fileInput.value = '';
+            resetProgress();
+          }
+        }
+      };
+      window.addEventListener('message', onMessage);
+    });
     
   </script>
 
