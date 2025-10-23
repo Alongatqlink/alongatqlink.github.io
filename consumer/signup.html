@@ -260,6 +260,37 @@
         </select>
       </div>
 
+      <!-- Invoice Upload -->
+      <div class="form-group" style="margin-top:16px;">
+        <label for="invoiceUpload">Upload Invoice (PDF or Image)</label>
+        <input
+          type="file"
+          id="invoiceUpload"
+          name="invoiceUpload"
+          accept=".pdf,image/*"
+          class="form-control"
+          aria-describedby="invoiceHelp"
+          required
+        />
+        <small id="invoiceHelp" class="form-text text-muted">
+          Allowed: PDF / JPG / PNG (Max 5MB). Make sure the invoice shows dealer, date & engine serial numbers.
+        </small>
+      
+        <!-- progress + status -->
+        <div id="invoiceProgressWrap" style="display:none; margin-top:8px;">
+          <div class="progress" style="height:8px;">
+            <div id="invoiceProgress" class="progress-bar" role="progressbar" style="width: 0%;"></div>
+          </div>
+          <div id="invoiceStatus" style="font-size:12px; margin-top:6px; color:#666;">Uploading…</div>
+        </div>
+
+  <!-- preview (images only) -->
+  <img id="invoicePreview" alt="" style="display:none; max-width:160px; margin-top:8px; border-radius:6px;"/>
+
+  <!-- keep GCS URL here to submit with the form -->
+  <input type="hidden" id="invoiceUrl" name="invoiceUrl" />
+</div>
+
       <!-- Note -->
       <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">
         *Please ensure all details are accurate. Incorrect serial or mobile number will lead to
