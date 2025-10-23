@@ -133,7 +133,7 @@
 
       <!-- Model (Select2) -->
       <div class="form-group">
-        <label for="model">Model4</label>
+        <label for="model">Model5</label>
         <select id="model" class="form-control" required>
           <option value=""></option>
         </select>
@@ -313,6 +313,7 @@
     </form>
 
     <div id="result" class="mt-3" aria-live="polite"></div>
+  </div>
 
   <!-- Confirmation Modal -->
   <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel" aria-hidden="true">
@@ -492,8 +493,6 @@
  // --- Replace the 'fileInput.addEventListener("change", ...)' block with this:
     const chooseBtn  = document.getElementById('invoiceChooseBtn');
     const fileNameEl = document.getElementById('invoiceFilename');
-    const fileInput  = document.getElementById('invoiceUpload'); 
-    const hiddenUrl  = document.getElementById('invoiceUrl');
     const uploadForm = document.getElementById('invoiceUploadForm');
     const uploadIframe = document.getElementById('uploader_iframe');
     
