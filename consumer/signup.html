@@ -284,12 +284,12 @@
           <div id="invoiceStatus" style="font-size:12px; margin-top:6px; color:#666;">Uploading…</div>
         </div>
 
-  <!-- preview (images only) -->
-  <img id="invoicePreview" alt="" style="display:none; max-width:160px; margin-top:8px; border-radius:6px;"/>
-
-  <!-- keep GCS URL here to submit with the form -->
-  <input type="hidden" id="invoiceUrl" name="invoiceUrl" />
-</div>
+        <!-- preview (images only) -->
+        <img id="invoicePreview" alt="" style="display:none; max-width:160px; margin-top:8px; border-radius:6px;"/>
+      
+        <!-- keep GCS URL here to submit with the form -->
+        <input type="hidden" id="invoiceUrl" name="invoiceUrl" />
+        </div>
 
       <!-- Note -->
       <p style="font-size: 0.9rem; color: #6c757d; margin-top: 10px;">
@@ -357,6 +357,166 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   <!-- Select2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script>
+  // ===== Mode Switch: 'mock' | 'drive' | 'gcs' =====
+  const MODE = 'mock';
+  const ENDPOINTS = {
+    mock:    'mock',
+    drive:   'https://script.google.com/macros/s/AKfycbx6MO56O58ezGj-tlrsbwfzZ742FHq6EOxYSuoWGdDdCIn4yg_0Z8HZcoPdS05B1EQ/exec', // Google Drive temporary storage
+    gcs:     '/upload-invoice'                                           // Backend API that uploads to GCS
+  };
+  const UPLOAD_ENDPOINT = ENDPOINTS[MODE];
+  
+  // ===== Config =====
+  const MAX_SIZE_MB = 5;
+  const ALLOWED_MIMES = [
+    'application/pdf',
+    'image/jpeg','image/png','image/gif','image/webp',
+    'image/heic','image/heif'
+  ];
+  
+  // ===== DOM Elements =====
+  const fileInput    = document.getElementById('invoiceUpload');
+  const hiddenUrl    = document.getElementById('invoiceUrl');
+  const progressWrap = document.getElementById('invoiceProgressWrap');
+  const progressBar  = document.getElementById('invoiceProgress');
+  const statusText   = document.getElementById('invoiceStatus');
+  const previewImg   = document.getElementById('invoicePreview');
+  const formEl       = document.querySelector('form');
+  const submitBtn    = document.getElementById('submitBtn');
+  
+  // ===== Utility Functions =====
+  const bytesToMB = b => (b / 1048576).toFixed(2);
+  function resetProgress(){
+    progressWrap.style.display = 'none';
+    progressBar.style.width = '0%';
+    statusText.textContent = '';
+  }
+  function showProgress(pct, text){
+    progressWrap.style.display = 'block';
+    progressBar.style.width = pct + '%';
+    if (text) statusText.textContent = text;
+  }
+  function showPreviewIfImage(file){
+    if (file && file.type.startsWith('image/')) {
+      previewImg.src = URL.createObjectURL(file);
+      previewImg.style.display = 'block';
+    } else {
+      previewImg.style.display = 'none';
+      previewImg.src = '';
+    }
+  }
+  function lockSubmit(lock){
+    if (!submitBtn) return;
+    submitBtn.disabled = !!lock;
+    submitBtn.style.opacity = lock ? 0.7 : 1;
+  }
+  
+  // ===== Main Upload Function (compatible with mock / Drive / GCS) =====
+  async function uploadInvoice(file){
+    // Frontend validation
+    if (!file) throw new Error('No file selected.');
+    if (!ALLOWED_MIMES.includes(file.type)) throw new Error('Please upload PDF or image.');
+    if (file.size > MAX_SIZE_MB * 1024 * 1024)
+      throw new Error(`File too large (${bytesToMB(file.size)} MB). Max ${MAX_SIZE_MB} MB.`);
+  
+    // --- MOCK mode (no real upload, simulated progress) ---
+    if (UPLOAD_ENDPOINT === 'mock') {
+      return new Promise(resolve => {
+        let p = 0;
+        showProgress(1, 'Simulating upload…');
+        const timer = setInterval(() => {
+          p += Math.random() * 15;
+          if (p >= 100) {
+            p = 100;
+            clearInterval(timer);
+            showProgress(100, 'Uploaded ✓');
+            const fakeUrl = `https://storage.googleapis.com/mock-bucket/${Date.now()}_${encodeURIComponent(file.name)}`;
+            resolve(fakeUrl);
+          } else {
+            showProgress(Math.floor(p), `Uploading… ${Math.floor(p)}%`);
+          }
+        }, 200);
+      });
+    }
+  
+    // --- Real upload (Drive or GCS) ---
+    return new Promise((resolve, reject) => {
+      const fd = new FormData();
+      fd.append('invoiceUpload', file); // field name must match backend field
+  
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', UPLOAD_ENDPOINT, true);
+  
+      xhr.upload.onprogress = e => {
+        if (e.lengthComputable) {
+          const pct = Math.round((e.loaded / e.total) * 100);
+          showProgress(pct, `Uploading… ${pct}%`);
+        }
+      };
+  
+      xhr.onload = () => {
+        try {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            const resp = JSON.parse(xhr.responseText || '{}');
+            const url = resp.url || resp.publicUrl; // support both key names
+            if (!url) return reject(new Error('Upload succeeded but no URL returned.'));
+            showProgress(100, 'Uploaded ✓');
+            resolve(url);
+          } else {
+            reject(new Error(`Upload failed (${xhr.status}).`));
+          }
+        } catch (e) {
+          reject(e);
+        }
+      };
+  
+      xhr.onerror = () => reject(new Error('Network error during upload.'));
+      xhr.send(fd);
+    });
+  }
+  
+  // ===== Event Listeners =====
+  
+  // When a file is selected, start uploading
+  fileInput.addEventListener('change', async () => {
+    resetProgress();
+    hiddenUrl.value = '';
+    lockSubmit(true);
+  
+    const file = fileInput.files && fileInput.files[0];
+    showPreviewIfImage(file);
+    if (!file) {
+      lockSubmit(false);
+      return;
+    }
+  
+    try {
+      showProgress(1, 'Starting upload…');
+      const url = await uploadInvoice(file);
+      hiddenUrl.value = url;
+      statusText.textContent = 'Uploaded ✓';
+    } catch (err) {
+      alert(err.message || 'Invoice upload failed.');
+      fileInput.value = '';
+      previewImg.style.display = 'none';
+      resetProgress();
+    } finally {
+      lockSubmit(false);
+    }
+  });
+  
+  // Prevent form submission until the invoice upload is complete
+  formEl.addEventListener('submit', (e) => {
+    if (!hiddenUrl.value) {
+      e.preventDefault();
+      if (!fileInput.files.length)
+        alert('Please upload your invoice (PDF or image).');
+      else
+        alert('Please wait until the invoice finishes uploading.');
+    }
+  });
+  </script>
 
   <script>
     // Mock data
