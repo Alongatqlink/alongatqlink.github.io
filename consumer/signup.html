@@ -370,8 +370,7 @@
   <!-- Select2 JS -->
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   <script>
-
-  // ===== DOM Elements =====
+  // ===== DOM =====
   const chooseBtn    = document.getElementById('invoiceChooseBtn');
   const fileNameEl   = document.getElementById('invoiceFilename');
   const fileInput    = document.getElementById('invoiceUpload');
@@ -380,7 +379,7 @@
   const uploadIframe = document.getElementById('uploader_iframe');
 
   uploadForm.action = 'https://script.google.com/macros/s/AKfycbxrv4RKZuEbqOKnywEgzzVrmtPqjJP46oOFkEq_o7KYPTZ33YT22tHVfMZ1hUBHT6WA/exec';
-  
+
   const progressWrap = document.getElementById('invoiceProgressWrap');
   const progressBar  = document.getElementById('invoiceProgress');
   const statusText   = document.getElementById('invoiceStatus');
@@ -392,22 +391,20 @@
     'application/pdf',
     'image/jpeg','image/png','image/gif','image/webp',
     'image/heic','image/heif'
-  ];  
-    
-  // ===== Utility Functions =====
-  function resetProgress() {
+  ];
+
+  // ===== UI helpers =====
+  function resetProgress(){
     progressWrap.style.display = 'none';
     progressBar.style.width = '0%';
     statusText.textContent = '';
   }
-  
-  function showProgress(pct, text) {
+  function showProgress(pct, text){
     progressWrap.style.display = 'block';
     progressBar.style.width = pct + '%';
     if (text) statusText.textContent = text;
   }
-  
-  function showPreviewIfImage(file) {
+  function showPreviewIfImage(file){
     if (file && file.type.startsWith('image/')) {
       previewImg.src = URL.createObjectURL(file);
       previewImg.style.display = 'block';
@@ -416,86 +413,92 @@
       previewImg.src = '';
     }
   }
-  
-  // ===== Event Listeners ===== 
-    chooseBtn.addEventListener('click', () => fileInput.click());
 
-    // When a file is selected
-    fileInput.addEventListener('change', () => {
-      fileNameEl.textContent = fileInput.files[0]?.name || 'No file chosen';
-      resetProgress();
-      hiddenUrl.value = '';
-    
-      const file = fileInput.files && fileInput.files[0];
-      showPreviewIfImage(file);
-      
-      if (!file) return;
-    
-      // Frontend validations
-      if (!ALLOWED_MIMES.includes(file.type)) {
-        alert('Please upload a PDF or image.');
-        fileInput.value = '';
-        fileNameEl.textContent = 'No file chosen';
-        return;
-      }  
-      if (file.size > MAX_SIZE_MB * 1024 * 1024) {
-        alert('File too large. Max 5MB.');
-        fileInput.value = '';
-        fileNameEl.textContent = 'No file chosen';
-        return;
-      }
-            
-      // fake progress while uploading via iframe
+  // ===== Events =====
+  chooseBtn.addEventListener('click', () => {
+    console.log('Choose clicked');
+    fileInput.click();
+  });
+
+  fileInput.addEventListener('change', () => {
+    fileNameEl.textContent = fileInput.files[0]?.name || 'No file chosen';
+    resetProgress();
+    hiddenUrl.value = '';
+
+    const file = fileInput.files && fileInput.files[0];
+    showPreviewIfImage(file);
+    if (!file) return;
+
+    // validations
+    if (!ALLOWED_MIMES.includes(file.type)) {
+      alert('Please upload a PDF or image.');
+      fileInput.value = '';
+      fileNameEl.textContent = 'No file chosen';
+      return;
+    }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      alert('File too large. Max 5MB.');
+      fileInput.value = '';
+      fileNameEl.textContent = 'No file chosen';
+      return;
+    }
+
+    // fake progress
     let p = 0;
     showProgress(1, 'Starting upload…');
     const progressTimer = setInterval(() => {
       p = Math.min(99, p + Math.random() * 12);
       showProgress(Math.floor(p), `Uploading… ${Math.floor(p)}%`);
     }, 200);
-    
-      // listen only once for the response
-      const onMessage = (ev) => {
-      if (!ev.origin.includes('script.google.com')) return;
+
+    // receive GAS response from iframe
+    const onMessage = (ev) => {
+      if (!ev.origin.includes('script.google.com')) {
+        console.log('Ignored message from:', ev.origin);
+        return;
       }
-     let data = ev.data;
+
+      let data = ev.data;
       if (typeof data === 'string') {
         try { data = JSON.parse(data); } catch {}
       }
-        
+
       if (data && (data.ok === true || data.ok === false)) {
+        window.removeEventListener('message', onMessage);
+        clearInterval(progressTimer);
+        clearTimeout(failTimer);
+
+        if (data.ok) {
+          hiddenUrl.value = data.url;
+          showProgress(100, 'Uploaded ✓');
+          console.log('Upload OK:', data.url);
+        } else {
+          alert(data.error || 'Upload failed.');
+          fileInput.value = '';
+          fileNameEl.textContent = 'No file chosen';
+          resetProgress();
+          console.error('Upload failed:', data.error);
+        }
+      }
+    };
+    window.addEventListener('message', onMessage);
+
+    // timeout guard
+    const failTimer = setTimeout(() => {
       window.removeEventListener('message', onMessage);
       clearInterval(progressTimer);
-      clearTimeout(failTimer);
-          
-      if (data.ok) {
-        hiddenUrl.value = data.url;
-        showProgress(100, 'Uploaded ✓');
-        console.log('Upload successful, URL:', data.url);
-      } else {
-        alert(data.error || 'Upload failed.');
-        fileInput.value = '';
-        fileNameEl.textContent = 'No file chosen';
-        resetProgress();
-      }
-    }
-  };  
- window.addEventListener('message', onMessage);    
-  
-  // 15 second timeout protection
-  const failTimer = setTimeout(() => {
-    window.removeEventListener('message', onMessage);
-    clearInterval(progressTimer);
-    resetProgress();
-    alert('Upload timeout: no response from server after 15 seconds.');
-    fileInput.value = '';
-    fileNameEl.textContent = 'No file chosen';
-    console.error('Upload timeout');
-  }, 15000);
-  
-  // Submit form to iframe
-  uploadForm.submit();
-});
-  </script>
+      resetProgress();
+      alert('Upload timeout: no response from server after 15 seconds.');
+      fileInput.value = '';
+      fileNameEl.textContent = 'No file chosen';
+      console.error('Upload timeout');
+    }, 15000);
+
+    // submit to iframe
+    console.log('Submitting form to:', uploadForm.action);
+    uploadForm.submit();
+  });
+</script>
  <script>
     // Mock data
     var dealerCodes = ["5KEL","5OSW","5OSY-B","5PAT","5PEE","5MAE","5POV","5MBA","5PRO","5RAG","5REB","5ROL","5OCI","5MBF"];
