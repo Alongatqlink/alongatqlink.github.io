@@ -263,15 +263,26 @@
       <!-- Invoice Upload -->
       <div class="form-group" style="margin-top:16px;">
         <label for="invoiceUpload">Upload Invoice (PDF or Image)</label>
-        <input
-          type="file"
-          id="invoiceUpload"
-          name="invoiceUpload"
-          accept=".pdf,image/*"
-          class="form-control"
-          aria-describedby="invoiceHelp"
-          required
-        />
+        <!-- hidden iframe target for upload -->
+        <iframe name="uploader_iframe" id="uploader_iframe" style="display:none;"></iframe>
+        
+        <form id="invoiceUploadForm"
+              action="https://script.google.com/macros/s/AKfycbx6MO56O58ezGj-tlrsbwfzZ742FHq6EOxYSuoWGdDdCIn4yg_0Z8HZcoPdS05B1EQ/exec"
+              method="post"
+              enctype="multipart/form-data"
+              target="uploader_iframe"
+              style="margin:0; padding:0; border:0;">
+          <input
+            type="file"
+            id="invoiceUpload"
+            name="invoiceUpload"
+            accept=".pdf,image/*"
+            class="form-control"
+            aria-describedby="invoiceHelp"
+            required
+          />
+        </form>
+        
         <small id="invoiceHelp" class="form-text text-muted">
           Allowed: PDF / JPG / PNG (Max 5MB). Make sure the invoice shows dealer, date & engine serial numbers.
         </small>
@@ -478,44 +489,56 @@
   
   // ===== Event Listeners =====
   
-  // When a file is selected, start uploading
-  fileInput.addEventListener('change', async () => {
-    resetProgress();
-    hiddenUrl.value = '';
-    lockSubmit(true);
-  
-    const file = fileInput.files && fileInput.files[0];
-    showPreviewIfImage(file);
-    if (!file) {
-      lockSubmit(false);
-      return;
+ // --- Replace the 'fileInput.addEventListener("change", ...)' block with this:
+const uploadForm = document.getElementById('invoiceUploadForm');
+const uploadIframe = document.getElementById('uploader_iframe');
+const GAS_URL = 'https://script.google.com/macros/s/const GAS_URL = 'https://script.google.com/macros/s/AKfycbw12345ABCDE67890FGHIJKLmnOPQ/exec';
+/exec';
+    
+fileInput.addEventListener('change', () => {
+  resetProgress();
+  hiddenUrl.value = '';
+  const file = fileInput.files && fileInput.files[0];
+  showPreviewIfImage(file);
+  if (!file) return;
+
+  // simple validations
+  if (!ALLOWED_MIMES.includes(file.type)) { alert('Please upload PDF or image.'); fileInput.value=''; return; }
+  if (file.size > MAX_SIZE_MB * 1024 * 1024) { alert('File too large. Max 5MB.'); fileInput.value=''; return; }
+
+  // fake progress while uploading via iframe
+  let p = 0;
+  showProgress(1, 'Starting upload…');
+  const timer = setInterval(() => {
+    p = Math.min(99, p + Math.random() * 12);
+    showProgress(Math.floor(p), `Uploading… ${Math.floor(p)}%`);
+  }, 200);
+
+  // submit to GAS via hidden iframe (no CORS)
+  uploadForm.submit();
+
+  // listen only once for the response
+  const onMessage = (ev) => {
+    // you can further check ev.origin startsWith('https://script.google.com') if you want
+    const data = ev.data || {};
+    if (data && (data.ok === true || data.ok === false)) {
+      window.removeEventListener('message', onMessage);
+      clearInterval(timer);
+      if (data.ok) {
+        showProgress(100, 'Uploaded ✓');
+        hiddenUrl.value = data.url || '';
+        statusText.textContent = 'Uploaded ✓';
+      } else {
+        resetProgress();
+        alert(data.error || 'Upload failed.');
+        fileInput.value = '';
+        previewImg.style.display = 'none';
+      }
     }
-  
-    try {
-      showProgress(1, 'Starting upload…');
-      const url = await uploadInvoice(file);
-      hiddenUrl.value = url;
-      statusText.textContent = 'Uploaded ✓';
-    } catch (err) {
-      alert(err.message || 'Invoice upload failed.');
-      fileInput.value = '';
-      previewImg.style.display = 'none';
-      resetProgress();
-    } finally {
-      lockSubmit(false);
-    }
-  });
-  
-  // Prevent form submission until the invoice upload is complete
-  formEl.addEventListener('submit', (e) => {
-    if (!hiddenUrl.value) {
-      e.preventDefault();
-      if (!fileInput.files.length)
-        alert('Please upload your invoice (PDF or image).');
-      else
-        alert('Please wait until the invoice finishes uploading.');
-    }
-  });
+  };
+  window.addEventListener('message', onMessage);
+});
+    
   </script>
 
   <script>
