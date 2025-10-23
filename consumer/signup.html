@@ -133,7 +133,7 @@
 
       <!-- Model (Select2) -->
       <div class="form-group">
-        <label for="model">Model7</label>
+        <label for="model">Model8</label>
         <select id="model" class="form-control" required>
           <option value=""></option>
         </select>
@@ -299,7 +299,7 @@
     <iframe name="uploader_iframe" id="uploader_iframe" style="display:none;"></iframe>
     
     <form id="invoiceUploadForm"
-      action="https://script.google.com/macros/s/AKfycbx6MO56O58ezGj-tlrsbwfzZ742FHq6EOxYSuoWGdDdCIn4yg_0Z8HZcoPdS05B1EQ/exec"
+      action="https://script.google.com/macros/s/AKfycbxrv4RKZuEbqOKnywEgzzVrmtPqjJP46oOFkEq_o7KYPTZ33YT22tHVfMZ1hUBHT6WA/exec"
       method="post"
       enctype="multipart/form-data"
       target="uploader_iframe"
@@ -374,7 +374,7 @@
   const MODE = 'drive';
   const ENDPOINTS = {
     mock:    'mock',
-    drive:   'https://script.google.com/macros/s/AKfycbx6MO56O58ezGj-tlrsbwfzZ742FHq6EOxYSuoWGdDdCIn4yg_0Z8HZcoPdS05B1EQ/exec', // Google Drive temporary storage
+    drive:   'https://script.google.com/macros/s/AKfycbxrv4RKZuEbqOKnywEgzzVrmtPqjJP46oOFkEq_o7KYPTZ33YT22tHVfMZ1hUBHT6WA/exec', // Google Drive temporary storage
     gcs:     '/upload-invoice'                                           // Backend API that uploads to GCS
   };
   const UPLOAD_ENDPOINT = ENDPOINTS[MODE];
@@ -496,7 +496,7 @@
     const uploadForm   = document.getElementById('invoiceUploadForm');
     const uploadIframe = document.getElementById('uploader_iframe');
 
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbx6MO56O58ezGj-tlrsbwfzZ742FHq6EOxYSuoWGdDdCIn4yg_0Z8HZcoPdS05B1EQ/exec';
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxrv4RKZuEbqOKnywEgzzVrmtPqjJP46oOFkEq_o7KYPTZ33YT22tHVfMZ1hUBHT6WA/exec';
     uploadForm.action = GAS_URL;
 
     
